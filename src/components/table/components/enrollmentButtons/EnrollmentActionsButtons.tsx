@@ -7,6 +7,7 @@ import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
 import { useParams } from '../../../../hooks/commons/useQueryParams';
 import Tooltip from '@material-ui/core/Tooltip';
+import { Event } from '@material-ui/icons';
 
 function EnrollmentActionsButtons() {
   const [open, setOpen] = useState<boolean>(false);
@@ -25,7 +26,13 @@ function EnrollmentActionsButtons() {
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button>
+            <Button onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Add new event</Button>
+          </span>
+        </Tooltip>
+
+        <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
+          <span>
+            <Button onClick={() => { setOpen(true); }} icon={<Event />}>View last events</Button>
           </span>
         </Tooltip>
 

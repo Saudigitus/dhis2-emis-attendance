@@ -23,17 +23,17 @@ function sideBarData (): SideBarItemProps[] {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Attendance",
+                    route: "/attendance"
                 },
                 {
                     icon: fileDocument,
                     label: "Performance",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Performance",
+                    route: "/performance"
                 },
                 {
                     icon: gauge,
