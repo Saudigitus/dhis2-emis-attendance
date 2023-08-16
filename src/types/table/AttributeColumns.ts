@@ -2,7 +2,8 @@ import { type Attribute } from '../generated/models';
 
 export enum VariablesTypes {
     DataElement = "dataElement",
-    Attribute = "attribute"
+    Attribute = "attribute",
+    Attendance = "attendance"
 }
 
 export interface CustomAttributeProps {
@@ -17,7 +18,7 @@ export interface CustomAttributeProps {
     valueType: typeof Attribute.valueType
     disabled: boolean
     visible: boolean
-    options: {
+    options?: {
         optionSet: {
             id: string
             options: [{

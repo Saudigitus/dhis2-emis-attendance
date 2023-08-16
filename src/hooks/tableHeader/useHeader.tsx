@@ -1,14 +1,25 @@
-import { useRecoilValue } from "recoil";
-import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useState, useEffect } from "react";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { formatResponse } from "../../utils/table/header/formatResponse";
+import { formatResponse, getAttendanceDays } from "../../utils/table/header/formatResponse";
+import { TableColumnState } from "../../schema/tableColumnsSchema";
+import { SelectedDateState } from "../../schema/attendanceSchema";
 
 export function useHeader() {
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const [columnHeader, setcolumnHeader] = useState()
+    const { selectedDate } = useRecoilValue(SelectedDateState)
+    const [columnHeader, setcolumnHeader] = useRecoilState(TableColumnState)
+    const [controlRender, setcontrolRender] = useState(true)
+
+    useEffect(() => {
+        if (typeof formatResponse(programConfigState) !== "undefined" && controlRender) {
+            setcolumnHeader(formatResponse(programConfigState).concat(getAttendanceDays(selectedDate)) ?? [])
+            setcontrolRender(false)
+        }
+    }, [formatResponse(programConfigState), selectedDate])
 
     return {
-        columns: formatResponse(programConfigState),
+        columns: columnHeader,
         columnHeader,
         setcolumnHeader
     }

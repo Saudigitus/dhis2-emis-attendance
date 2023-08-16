@@ -8,17 +8,15 @@ export interface ProgramStageConfig {
             displayInReports: boolean
             compulsory: boolean
             dataElement: {
-                displayInReports: boolean | undefined
                 displayName: string
                 id: string
                 valueType: string
                 optionSet: {
                     id: string
-                    options: {
-                        [x: string]: any
+                    options: [{
                         value: string
                         label: string
-                    }
+                    }]
                 }
             }
         }

@@ -3,8 +3,8 @@ import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import AttendanceViewMode from './AttendanceViewMode';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -62,9 +62,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
-                            <div>
-                                {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
-                            </div>
+                            <AttendanceViewMode column={column} value={row[column.id]} />
                         </RowCell>
                     ));
                     return (

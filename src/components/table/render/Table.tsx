@@ -14,6 +14,8 @@ import { useParams } from '../../../hooks/commons/useQueryParams';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { teiRefetch } from '../../../hooks/tei/usePostTei';
+import { EnrollmentDetailsTeisState } from '../../../schema/attendanceSchema';
+import { TableColumnState } from '../../../schema/tableColumnsSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -27,13 +29,15 @@ function Table() {
     const { getData, loading, tableData } = useTableData()
     const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const enrollmentTeis = useRecoilValue(EnrollmentDetailsTeisState)
+    const tableColumnState = useRecoilValue(TableColumnState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(teiRefetch)
 
     useEffect(() => {
         void getData(page, pageSize)
-    }, [columns, useQuery(), headerFieldsState, page, pageSize, refetch])
+    }, [useQuery(), headerFieldsState, page, pageSize, refetch])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -43,6 +47,8 @@ function Table() {
         setpageSize(parseInt(event.value, 10))
         setpage(1)
     }
+
+    console.log(enrollmentTeis, tableColumnState);
 
     return (
         <Paper>

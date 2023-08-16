@@ -13,6 +13,7 @@ function SortLabel(props: TableSortProps): React.ReactElement {
         <TableSortLabel
             active={props.active}
             direction={props.direction}
+            style={{ width: "max-content" }}
             onClick={(page: any) => { props.createSortHandler(page) }}
         >
             {props.children}

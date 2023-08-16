@@ -23,10 +23,12 @@ export const programSchema = z.object({
                         valueType: z.string(),
                         optionSet: z.object({
                             id: z.string(),
-                            options: z.object({
-                                value: z.string(),
-                                label: z.string()
-                            })
+                            options: z.array(
+                                z.object({
+                                    value: z.string(),
+                                    label: z.string()
+                                })
+                            )
                         })
                     })
                 })
