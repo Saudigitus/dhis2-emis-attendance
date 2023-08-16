@@ -9,7 +9,7 @@ import { HeaderFieldsState } from '../../../../../schema/headersSchema';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
 
 interface ContentFilterProps {
-    headers: CustomAttributeProps[]
+    headers?: CustomAttributeProps[]
 }
 
 type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
