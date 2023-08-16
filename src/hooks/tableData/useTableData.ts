@@ -1,5 +1,5 @@
 
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
@@ -7,6 +7,8 @@ import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/constants/dataStore/getSelectedKey";
+import { EnrollmentDetailsTeisState } from "../../schema/attendanceSchema";
+import { TableDataState } from "../../schema/tableColumnsSchema";
 
 type TableDataProps = Record<string, string>;
 
@@ -103,6 +105,8 @@ interface TeiQueryResults {
 export function useTableData() {
     const engine = useDataEngine();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const setEnrollmentTeis = useSetRecoilState(EnrollmentDetailsTeisState)
+    const setTableColumnState = useSetRecoilState(TableDataState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -140,7 +144,7 @@ export function useTableData() {
 
         // Map the trackedEntityIds from the events
         const trackedEntityIds = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
-
+        setEnrollmentTeis({ enrollmentDetails: trackedEntityIds })
         const trackedEntityToFetch = trackedEntityIds.toString().replaceAll(",", ";")
 
         // Get the events from the programStage attendance for the each student
@@ -153,8 +157,6 @@ export function useTableData() {
                     program: getDataStoreData?.program as unknown as string,
                     order: "createdAt:desc",
                     programStage: getDataStoreData?.attendance?.programStage as unknown as string,
-                    filter: headerFieldsState?.dataElements,
-                    filterAttributes: headerFieldsState?.attributes,
                     orgUnit: school,
                     trackedEntity: tei
                 })).catch((error) => {
@@ -187,12 +189,15 @@ export function useTableData() {
             })
             : { results: { instances: [] } }
 
-        setTableData(formatResponseRows({
+        const resultsFormatter = formatResponseRows({
             eventsInstances: eventsResults?.results?.instances,
             teiInstances: teiResults?.results?.instances,
             attendanceValues: attendanceValuesByTei?.results?.instances,
             attendanceConfig
-        }));
+        })
+
+        setTableColumnState(resultsFormatter)
+        setTableData(resultsFormatter);
 
         setLoading(false)
     }
