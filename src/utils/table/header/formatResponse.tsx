@@ -27,7 +27,8 @@ export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
             key: item.trackedEntityAttribute.id,
             type: VariablesTypes.Attribute
         }
-    }).concat(
+    })
+    .concat(
         Object.keys(originalData).length > 0
             ? originalData?.programStageDataElements?.map((programStageDataElement) => {
                 return {

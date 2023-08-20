@@ -57,7 +57,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
         <React.Fragment>
             {
                 rowsData.map((row, index) => {
-                    const cells = headerData?.filter(x => x.visible)?.map(column => (
+                    const cells = headerData?.filter(x => (x.visible && x.type !== VariablesTypes.DataElement))?.map(column => (
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}

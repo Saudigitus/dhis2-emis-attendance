@@ -13,14 +13,14 @@ interface EnrollmentDetailsProps {
 }
 
 export const SelectedDateState = atom<AttendanceProps>({
-    key: "attendance-state",
+    key: "attendanceViewEvents-state",
     default: {
         selectedDate: new Date()
     }
 })
 
 export const SelectedDateAddNewState = atom<AttendanceAddNewProps>({
-    key: "attendance-state",
+    key: "attendanceAddNewEvents-state",
     default: {
         selectedDate: new Date()
     }

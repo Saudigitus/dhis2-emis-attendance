@@ -8,7 +8,7 @@ interface attributesProps {
     value: string
 }
 
-interface attendanceFormaterProps {
+export interface attendanceFormaterProps {
     dataValues: dataValuesProps[]
     occurredAt: string
     trackedEntity: string
@@ -49,9 +49,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         const attendanceDetails = attendanceValues.filter(attendance => attendance.trackedEntity === event.trackedEntity)
-        allRows.push({ ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])), ...attendanceFormater(attendanceDetails, attendanceConfig) })
+        allRows.push({ ...(attributes((teiDetails?.attributes) ?? [])), ...attendanceFormater(attendanceDetails, attendanceConfig), trackedEntity: event.trackedEntity })
     }
-    console.log(allRows);
     return allRows;
 }
 
@@ -71,7 +70,7 @@ function attributes(data: attributesProps[]): RowsProps {
     return localData
 }
 
-function attendanceFormater(data: attendanceFormaterProps[], attendanceConfig: formatResponseRowsProps["attendanceConfig"]): RowsProps {
+export function attendanceFormater(data: attendanceFormaterProps[], attendanceConfig: formatResponseRowsProps["attendanceConfig"]): RowsProps {
     const localData: RowsProps = {}
     let status, absenceOption, eventId
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
@@ -64,7 +64,7 @@ function EnrollmentActionsButtons() {
         close={closeAnchor}
         open={Boolean(anchorElAddNew)}
         anchorEl={anchorElAddNew}
-        setValue={setSelectedDate}
+        setValue={ setSelectedDateAddNew}
       />
 
       {/* View last events */}
@@ -72,7 +72,7 @@ function EnrollmentActionsButtons() {
         close={closeAnchor}
         open={Boolean(anchorViewLast)}
         anchorEl={anchorViewLast}
-        setValue={setSelectedDateAddNew}
+        setValue={setSelectedDate}
       />
       {openImport && <ModalComponent title="Import Students" open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>

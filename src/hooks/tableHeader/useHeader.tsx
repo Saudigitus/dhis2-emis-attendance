@@ -16,7 +16,13 @@ export function useHeader() {
             setcolumnHeader(formatResponse(programConfigState).concat(getAttendanceDays(selectedDate)) ?? [])
             setcontrolRender(false)
         }
-    }, [formatResponse(programConfigState), selectedDate])
+    }, [formatResponse(programConfigState), controlRender])
+
+    useEffect(() => {
+        if (!controlRender) {
+            setcontrolRender(true)
+        }
+    }, [selectedDate])
 
     return {
         columns: columnHeader,

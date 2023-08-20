@@ -1,5 +1,6 @@
+import { attendanceFormater, attendanceFormaterProps } from './../../utils/table/rows/formatResponseRows';
 
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
@@ -7,22 +8,26 @@ import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/constants/dataStore/getSelectedKey";
-import { EnrollmentDetailsTeisState } from "../../schema/attendanceSchema";
+import { EnrollmentDetailsTeisState, SelectedDateState } from "../../schema/attendanceSchema";
 import { TableDataState } from "../../schema/tableColumnsSchema";
+import { format } from "date-fns";
 
 type TableDataProps = Record<string, string>;
 
 interface EventQueryProps {
-    page: number
-    pageSize: number
+    page?: number
+    pageSize?: number
     ouMode: string
     program: string
-    order: string
+    order?: string
     programStage: string
     orgUnit: string
     filter?: string[]
     filterAttributes?: string[]
     trackedEntity?: string
+    occurredAfter?: string
+    occurredBefore?: string
+    fields?: string
 }
 
 interface TeiQueryProps {
@@ -34,7 +39,7 @@ interface TeiQueryProps {
     order: string
 }
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
@@ -47,8 +52,10 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
             orgUnit,
             filter,
             filterAttributes,
-            fields: "*",
-            trackedEntity
+            fields,
+            trackedEntity,
+            occurredAfter,
+            occurredBefore
         }
     }
 })
@@ -63,7 +70,7 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
             pageSize,
             trackedEntity,
             orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value]"
         }
     }
 })
@@ -105,8 +112,9 @@ interface TeiQueryResults {
 export function useTableData() {
     const engine = useDataEngine();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const setEnrollmentTeis = useSetRecoilState(EnrollmentDetailsTeisState)
-    const setTableColumnState = useSetRecoilState(TableDataState)
+    const [enrollmentTeis, setEnrollmentTeis] = useRecoilState(EnrollmentDetailsTeisState)
+    const [tableColumnState, setTableColumnState] = useRecoilState(TableDataState)
+    const { selectedDate } = useRecoilValue(SelectedDateState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -133,7 +141,8 @@ export function useTableData() {
             programStage: getDataStoreData?.registration?.programStage as unknown as string,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school
+            orgUnit: school,
+            fields: "trackedEntity"
         })).catch((error) => {
             show({
                 message: `${("Could not get data")}: ${error.message}`,
@@ -152,13 +161,13 @@ export function useTableData() {
             for (const tei of trackedEntityIds) {
                 const attendanceResults: AttendanceQueryResults = await engine.query(EVENT_QUERY({
                     ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                    page,
-                    pageSize,
                     program: getDataStoreData?.program as unknown as string,
-                    order: "createdAt:desc",
                     programStage: getDataStoreData?.attendance?.programStage as unknown as string,
                     orgUnit: school,
-                    trackedEntity: tei
+                    trackedEntity: tei,
+                    occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
+                    occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
+                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
                 })).catch((error) => {
                     show({
                         message: `${("Could not get data")}: ${error.message}`,
@@ -202,9 +211,49 @@ export function useTableData() {
         setLoading(false)
     }
 
+    async function getAttendanceData() {
+        if (enrollmentTeis.enrollmentDetails?.length > 0) {
+            let localData = [...tableData]
+            setLoading(true)
+            const attendanceValuesByTei: attendanceFormaterProps[] = []
+
+            const trackedEntityIds = enrollmentTeis.enrollmentDetails
+
+            for (const tei of trackedEntityIds) {
+                const attendanceResults: AttendanceQueryResults = await engine.query(EVENT_QUERY({
+                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                    program: getDataStoreData?.program as unknown as string,
+                    programStage: getDataStoreData?.attendance?.programStage as unknown as string,
+                    orgUnit: school,
+                    trackedEntity: tei,
+                    occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
+                    occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
+                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
+                })).catch((error) => {
+                    show({
+                        message: `${("Could not get data")}: ${error.message}`,
+                        type: { critical: true }
+                    });
+                    setTimeout(hide, 5000);
+                })
+
+                attendanceValuesByTei.push(...attendanceResults?.results?.instances)
+            }
+
+            for (let tei of localData) {
+                const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity)
+                tei = { ...tei, ...attendanceFormater(attendanceDetails, attendanceConfig) }
+            }
+
+            setTableData(localData);
+            setLoading(false)
+        }
+    }
+
     return {
         getData,
         tableData,
-        loading
+        loading,
+        getAttendanceData
     }
 }
