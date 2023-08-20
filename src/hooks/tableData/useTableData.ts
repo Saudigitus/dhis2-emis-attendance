@@ -1,4 +1,4 @@
-import { attendanceFormater, attendanceFormaterProps } from './../../utils/table/rows/formatResponseRows';
+import { attendanceFormater, type attendanceFormaterProps } from './../../utils/table/rows/formatResponseRows';
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useState } from "react";

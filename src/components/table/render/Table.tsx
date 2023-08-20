@@ -14,8 +14,8 @@ import { useParams } from '../../../hooks/commons/useQueryParams';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { teiRefetch } from '../../../hooks/tei/usePostTei';
-import { EnrollmentDetailsTeisState, SelectedDateState } from '../../../schema/attendanceSchema';
-import { TableColumnState } from '../../../schema/tableColumnsSchema';
+import { SelectedDateState } from '../../../schema/attendanceSchema';
+import { useAttendanceMode } from '../../../hooks/attendanceMode/useAttendanceMode';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -29,20 +29,20 @@ function Table() {
     const { getData, loading, tableData, getAttendanceData } = useTableData()
     const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const enrollmentTeis = useRecoilValue(EnrollmentDetailsTeisState)
-    const tableColumnState = useRecoilValue(TableColumnState)
-    const { selectedDate } = useRecoilValue(SelectedDateState)
+    const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(teiRefetch)
+    const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
 
     useEffect(() => {
         void getData(page, pageSize)
+        setInitialAttendanceMode()
     }, [useQuery(), headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         void getAttendanceData()
-    }, [selectedDate])
+    }, [selectedDateViewMode])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -79,6 +79,7 @@ function Table() {
                                 <RenderRows
                                     headerData={columns}
                                     rowsData={tableData}
+                                    attendanceMode={attendanceMode}
                                 />
                             </>
                         </TableComponent>

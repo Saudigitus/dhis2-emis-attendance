@@ -3,6 +3,7 @@ import React from 'react'
 
 const useParams = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+
     const add = (key: string, value: string) => {
         searchParams.set(key, value)
         setSearchParams(searchParams)

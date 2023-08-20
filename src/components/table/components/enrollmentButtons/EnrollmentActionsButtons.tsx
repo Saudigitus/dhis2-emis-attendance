@@ -10,12 +10,14 @@ import { useSetRecoilState } from 'recoil';
 import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/attendanceSchema';
 import ModalComponent from '../../../modal/Modal';
 import ImportContent from '../../../modal/ImportContent';
+import { useAttendanceMode } from '../../../../hooks/attendanceMode/useAttendanceMode';
 
 function EnrollmentActionsButtons() {
   const { useQuery } = useParams();
   const orgUnit = useQuery().get("school")
   const setSelectedDate = useSetRecoilState(SelectedDateState)
   const setSelectedDateAddNew = useSetRecoilState(SelectedDateAddNewState)
+  const { setAttendanceMode } = useAttendanceMode()
   const [open, setOpen] = useState<boolean>(false);
   const [openImport, setOpenImport] = useState<boolean>(false);
   const [anchorElAddNew, setAnchorElAddNew] = useState<null | HTMLElement>(null);
@@ -36,13 +38,13 @@ function EnrollmentActionsButtons() {
     <div>
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorElAddNew(event.currentTarget) }}>
+          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorElAddNew(event.currentTarget); setAttendanceMode("edit") }}>
             <Button icon={<IconAddCircle24 />}>Add new event</Button>
           </span>
         </Tooltip>
 
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorViewLast(event.currentTarget) }}>
+          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorViewLast(event.currentTarget); setAttendanceMode("view") }}>
             <Button icon={<Event />}>View last events</Button>
           </span>
         </Tooltip>

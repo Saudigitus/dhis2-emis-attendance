@@ -12,6 +12,10 @@ interface EnrollmentDetailsProps {
     enrollmentDetails: string[]
 }
 
+interface AttendanceModeProps {
+    attendanceMode: "edit" | "view"
+}
+
 export const SelectedDateState = atom<AttendanceProps>({
     key: "attendanceViewEvents-state",
     default: {
@@ -30,5 +34,12 @@ export const EnrollmentDetailsTeisState = atom<EnrollmentDetailsProps>({
     key: "enrollmentDetailsTeis-state",
     default: {
         enrollmentDetails: []
+    }
+})
+
+export const AttendanceModeState = atom<AttendanceModeProps>({
+    key: "attendanceMode-state",
+    default: {
+        attendanceMode: "view"
     }
 })
