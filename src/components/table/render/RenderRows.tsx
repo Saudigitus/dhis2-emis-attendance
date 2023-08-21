@@ -6,6 +6,7 @@ import { RowCell, RowTable } from '../components';
 import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 import AttendanceViewMode from './AttendanceViewMode';
 import AttendanceEditMode from './AttendanceEditMode';
+import { useConfig } from '@dhis2/app-runtime';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows({ headerData, rowsData, attendanceMode }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
+    const { baseUrl } = useConfig()
 
     if (rowsData.length === 0) {
         return (
@@ -63,6 +65,7 @@ function RenderRows({ headerData, rowsData, attendanceMode }: RenderHeaderProps)
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
+                            onClick={() => { attendanceMode === "view" && window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
                         >
                             {attendanceMode === "view"
                                 ? <AttendanceViewMode column={column} value={row[column.id]} />

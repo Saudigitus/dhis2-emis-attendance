@@ -14,7 +14,7 @@
 
 .active-button {
     border: solid 1px #A0ADBA;
-    background-color: #F3D3B4;
+    background-color: #F3D3B4 !important;
     height: 35px;
     border-radius: 4px;
     padding: 10px 12px 10px 12px;

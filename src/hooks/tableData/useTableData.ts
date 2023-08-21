@@ -70,7 +70,7 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
             pageSize,
             trackedEntity,
             orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program]"
         }
     }
 })
@@ -124,71 +124,26 @@ export function useTableData() {
     const attendanceConfig = getSelectedKey()?.getDataStoreData?.attendance
 
     async function getData(page: number, pageSize: number) {
-        setLoading(true)
-        const attendanceValuesByTei: AttendanceQueryResults = {
-            results: {
-                instances: []
+        if (school !== null) {
+            setLoading(true)
+            const attendanceValuesByTei: AttendanceQueryResults = {
+                results: {
+                    instances: []
+                }
             }
-        }
 
-        // Get the events from the programStage registration
-        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-            page,
-            pageSize,
-            program: getDataStoreData?.program as unknown as string,
-            order: "createdAt:desc",
-            programStage: getDataStoreData?.registration?.programStage as unknown as string,
-            filter: headerFieldsState?.dataElements,
-            filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school,
-            fields: "trackedEntity"
-        })).catch((error) => {
-            show({
-                message: `${("Could not get data")}: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        })
-
-        // Map the trackedEntityIds from the events
-        const trackedEntityIds = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
-        setEnrollmentTeis({ enrollmentDetails: trackedEntityIds })
-        const trackedEntityToFetch = trackedEntityIds.toString().replaceAll(",", ";")
-
-        // Get the events from the programStage attendance for the each student
-        if (trackedEntityToFetch?.length > 0) {
-            for (const tei of trackedEntityIds) {
-                const attendanceResults: AttendanceQueryResults = await engine.query(EVENT_QUERY({
-                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                    program: getDataStoreData?.program as unknown as string,
-                    programStage: getDataStoreData?.attendance?.programStage as unknown as string,
-                    orgUnit: school,
-                    trackedEntity: tei,
-                    occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
-                    occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
-                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
-                })).catch((error) => {
-                    show({
-                        message: `${("Could not get data")}: ${error.message}`,
-                        type: { critical: true }
-                    });
-                    setTimeout(hide, 5000);
-                })
-
-                attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
-            }
-        }
-
-        // Get the list of trackedEntityIds attributes from the events
-        const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
-            ? await engine.query(TEI_QUERY({
+            // Get the events from the programStage registration
+            const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                order: "created:desc",
+                page,
                 pageSize,
                 program: getDataStoreData?.program as unknown as string,
+                order: "createdAt:desc",
+                programStage: getDataStoreData?.registration?.programStage as unknown as string,
+                filter: headerFieldsState?.dataElements,
+                filterAttributes: headerFieldsState?.attributes,
                 orgUnit: school,
-                trackedEntity: trackedEntityToFetch
+                fields: "trackedEntity"
             })).catch((error) => {
                 show({
                     message: `${("Could not get data")}: ${error.message}`,
@@ -196,19 +151,66 @@ export function useTableData() {
                 });
                 setTimeout(hide, 5000);
             })
-            : { results: { instances: [] } }
 
-        const resultsFormatter = formatResponseRows({
-            eventsInstances: eventsResults?.results?.instances,
-            teiInstances: teiResults?.results?.instances,
-            attendanceValues: attendanceValuesByTei?.results?.instances,
-            attendanceConfig
-        })
+            // Map the trackedEntityIds from the events
+            const trackedEntityIds = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
+            setEnrollmentTeis({ enrollmentDetails: trackedEntityIds })
+            const trackedEntityToFetch = trackedEntityIds.toString().replaceAll(",", ";")
 
-        setTableColumnState(resultsFormatter)
-        setTableData(resultsFormatter);
+            // Get the events from the programStage attendance for the each student
+            if (trackedEntityToFetch?.length > 0) {
+                for (const tei of trackedEntityIds) {
+                    const attendanceResults: AttendanceQueryResults = await engine.query(EVENT_QUERY({
+                        ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                        program: getDataStoreData?.program as unknown as string,
+                        programStage: getDataStoreData?.attendance?.programStage as unknown as string,
+                        orgUnit: school,
+                        trackedEntity: tei,
+                        occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
+                        occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
+                        fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
+                    })).catch((error) => {
+                        show({
+                            message: `${("Could not get data")}: ${error.message}`,
+                            type: { critical: true }
+                        });
+                        setTimeout(hide, 5000);
+                    })
 
-        setLoading(false)
+                    attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
+                }
+            }
+
+            // Get the list of trackedEntityIds attributes from the events
+            const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
+                ? await engine.query(TEI_QUERY({
+                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                    order: "created:desc",
+                    pageSize,
+                    program: getDataStoreData?.program as unknown as string,
+                    orgUnit: school,
+                    trackedEntity: trackedEntityToFetch
+                })).catch((error) => {
+                    show({
+                        message: `${("Could not get data")}: ${error.message}`,
+                        type: { critical: true }
+                    });
+                    setTimeout(hide, 5000);
+                })
+                : { results: { instances: [] } }
+
+            const resultsFormatter = formatResponseRows({
+                eventsInstances: eventsResults?.results?.instances,
+                teiInstances: teiResults?.results?.instances,
+                attendanceValues: attendanceValuesByTei?.results?.instances,
+                attendanceConfig
+            })
+
+            setTableColumnState(resultsFormatter)
+            setTableData(resultsFormatter);
+
+            setLoading(false)
+        }
     }
 
     async function getAttendanceData() {

@@ -23,6 +23,11 @@ interface formatResponseRowsProps {
     teiInstances: [{
         trackedEntity: string
         attributes: attributesProps[]
+        enrollments: [{
+            enrollment: string
+            orgUnit: string
+            program: string
+        }]
     }]
     attendanceValues: [{
         trackedEntity: string
@@ -49,7 +54,14 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         const attendanceDetails = attendanceValues.filter(attendance => attendance.trackedEntity === event.trackedEntity)
-        allRows.push({ ...(attributes((teiDetails?.attributes) ?? [])), ...attendanceFormater(attendanceDetails, attendanceConfig), trackedEntity: event.trackedEntity })
+        allRows.push({
+            ...(attributes((teiDetails?.attributes) ?? [])),
+            ...attendanceFormater(attendanceDetails, attendanceConfig),
+            trackedEntity: event.trackedEntity,
+            enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
+            orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
+            programId: teiDetails?.enrollments?.[0]?.program
+        })
     }
     return allRows;
 }
@@ -77,11 +89,11 @@ export function attendanceFormater(data: attendanceFormaterProps[], attendanceCo
     for (const event of data) {
         eventId = event.event
         for (const dataValue of event.dataValues) {
-            if (attendanceConfig.status === dataValue.dataElement) {
+            if (attendanceConfig?.status === dataValue.dataElement) {
                 status = dataValue.value
             }
 
-            if (attendanceConfig.absenceReason === dataValue.dataElement) {
+            if (attendanceConfig?.absenceReason === dataValue.dataElement) {
                 absenceOption = dataValue.value
             }
         }

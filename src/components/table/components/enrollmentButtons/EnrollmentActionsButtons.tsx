@@ -22,6 +22,7 @@ function EnrollmentActionsButtons() {
   const [openImport, setOpenImport] = useState<boolean>(false);
   const [anchorElAddNew, setAnchorElAddNew] = useState<null | HTMLElement>(null);
   const [anchorViewLast, setAnchorViewLast] = useState<null | HTMLElement>(null);
+  const [localAttendanceMode, setlocalAttendanceMode] = useState<"edit" | "view">("view");
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
     { label: "Import students", divider: true, onClick: () => { setOpenImport(true); } },
@@ -38,13 +39,13 @@ function EnrollmentActionsButtons() {
     <div>
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorElAddNew(event.currentTarget); setAttendanceMode("edit") }}>
+          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorElAddNew(event.currentTarget); setlocalAttendanceMode("edit") }}>
             <Button icon={<IconAddCircle24 />}>Add new event</Button>
           </span>
         </Tooltip>
 
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorViewLast(event.currentTarget); setAttendanceMode("view") }}>
+          <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorViewLast(event.currentTarget); setlocalAttendanceMode("view") }}>
             <Button icon={<Event />}>View last events</Button>
           </span>
         </Tooltip>
@@ -66,7 +67,9 @@ function EnrollmentActionsButtons() {
         close={closeAnchor}
         open={Boolean(anchorElAddNew)}
         anchorEl={anchorElAddNew}
-        setValue={ setSelectedDateAddNew}
+        setValue={setSelectedDateAddNew}
+        localAttendanceMode={localAttendanceMode}
+        setAttendanceMode={setAttendanceMode}
       />
 
       {/* View last events */}
@@ -75,6 +78,8 @@ function EnrollmentActionsButtons() {
         open={Boolean(anchorViewLast)}
         anchorEl={anchorViewLast}
         setValue={setSelectedDate}
+        localAttendanceMode={localAttendanceMode}
+        setAttendanceMode={setAttendanceMode}
       />
       {openImport && <ModalComponent title="Import Students" open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>

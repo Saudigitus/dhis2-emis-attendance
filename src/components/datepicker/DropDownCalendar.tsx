@@ -9,6 +9,8 @@ interface DropDownCalendarProps {
     anchorEl: HTMLElement | null
     close: () => void
     setValue: ({ selectedDate }: { selectedDate: Date }) => void
+    localAttendanceMode: "edit" | "view"
+    setAttendanceMode: (arg: "edit" | "view") => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function DropDownCalendar(props: DropDownCalendarProps) {
-    const { anchorEl, close, open, setValue } = props
+    const { anchorEl, close, open, setValue, setAttendanceMode, localAttendanceMode } = props
     const classes = useStyles();
     const [localDateSelected, setlocalDateSelected] = useState<{ selectedDate: Date }>({ selectedDate: new Date() })
 
@@ -36,8 +38,8 @@ export default function DropDownCalendar(props: DropDownCalendarProps) {
                 </div>
                 <Calendar setValue={setlocalDateSelected} value={localDateSelected} />
                 <div className='d-flex justify-content-end'>
-                    <Button color="primary" className="mb-2">CANCEL</Button>
-                    <Button onClick={() => { setValue(localDateSelected); close() }} color="primary" className="mb-2">OK</Button>
+                    <Button onClick={() => { close() }} color="primary" className="mb-2">CANCEL</Button>
+                    <Button onClick={() => { setValue(localDateSelected); close(); setAttendanceMode(localAttendanceMode) }} color="primary" className="mb-2">OK</Button>
                 </div>
             </Paper>
         </Popover>

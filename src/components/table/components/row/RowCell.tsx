@@ -13,10 +13,11 @@ interface RowCellProps {
     passOnProps?: object
     table?: tableProps
     colspan?: number
+    onClick?: () => void
 }
 
 function RowCell(props: RowCellProps): React.ReactElement {
-    const { children, className, passOnProps, table, colspan } = props;
+    const { children, className, passOnProps, table, colspan, onClick } = props;
 
     const classes = classNames(
         defaultClasses.tableCell,
@@ -33,6 +34,7 @@ function RowCell(props: RowCellProps): React.ReactElement {
             className={classes}
             {...passOnProps}
             colSpan={colspan}
+            onClick={onClick}
         >
             {children}
         </td>
