@@ -1,5 +1,5 @@
 const config = {
-    type: 'RESOURCE',
+    type: 'app',
     name: 'SEMIS-Attendance',
     description:"SEMIS-Attendance",
 

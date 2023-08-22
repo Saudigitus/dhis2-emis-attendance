@@ -1,28 +1,27 @@
 import React from "react";
 import styles from "./button.module.css";
-import { ButtonStrip } from "@dhis2/ui";
-import { ButtonGroup } from "@material-ui/core";
-import { Button } from "@material-ui/core";
+import { ButtonGroup, Button } from "@material-ui/core";
 
 interface MultipleButtonsProps {
-    id: string
+    code: string
     type: string
     Component: any
 }
 
 interface ButtonProps {
-    items: MultipleButtonsProps[]
+    id: string
     selectedTerm: any
-    setSelectedTerm: (arg: object) => void
+    items: MultipleButtonsProps[]
+    setSelectedTerm: any
 }
 
 export default function MultipleButtons(props: ButtonProps) {
-    const { items, selectedTerm, setSelectedTerm } = props;
+    const { items, selectedTerm, setSelectedTerm, id } = props;
 
     return (
         <ButtonGroup color="primary">
             {items?.map((item) => (
-                <Button key={item?.id} className={selectedTerm?.id === item?.id && styles["active-button"]} onClick={() => { setSelectedTerm(item) }}>
+                <Button key={item?.code} className={selectedTerm === item?.code && styles["active-button"]} onClick={() => { setSelectedTerm(item.code) }}>
                     <span className={styles.simpleButtonLabel}>{item.Component}</span>
                 </Button>
             ))}

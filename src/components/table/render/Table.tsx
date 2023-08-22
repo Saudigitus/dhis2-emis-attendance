@@ -26,7 +26,7 @@ const usetStyles = makeStyles({
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
-    const { getData, loading, tableData, getAttendanceData } = useTableData()
+    const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
     const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
@@ -80,6 +80,7 @@ function Table() {
                                     headerData={columns}
                                     rowsData={tableData}
                                     attendanceMode={attendanceMode}
+                                    setTableData={setTableData}
                                 />
                             </>
                         </TableComponent>
