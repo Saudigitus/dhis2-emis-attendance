@@ -62,7 +62,7 @@ const useCreateDataValues = () => {
                     localRowData[finCurrentRow][dateFormated] = {
                         status: dataElementValue,
                         absenceOption: undefined,
-                        event: x.response.importSummaries[0].reference
+                        eventId: x.response.importSummaries[0].reference
                     }
                 }
                 setTableData(localRowData)
@@ -74,7 +74,8 @@ const useCreateDataValues = () => {
     if (((response?.error) != null) && controlError) {
         setcontrolError(false)
 
-        const message = response?.error?.details?.message
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        const message = response?.error?.details?.response?.importSummaries?.[0]?.description || response?.error?.details?.response?.description || response?.error?.details?.message
 
         show({
             message,
