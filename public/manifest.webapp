@@ -1,5 +1,5 @@
 {
-  "appType": "APP",
+  "appType": "RESOURCE",
   "short_name": "SEMIS-Attendance",
   "name": "SEMIS-Attendance",
   "description": "SEMIS-Attendance",
@@ -13,10 +13,6 @@
   },
   "icons": {
     "48": "dhis2-app-icon.png"
-  },
-  "developer": {
-    "name": "Hisp Mozambique (Saudigitus) & Hisp Uganda",
-    "email": "info@saudigitus.org"
   },
   "manifest_generated_at": "Fri Aug 11 2023 09:02:26 GMT+0200 (Hora da África Central)",
   "display": "standalone",
