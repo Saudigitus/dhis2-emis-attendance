@@ -6,7 +6,7 @@ import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
-function sideBarData (): SideBarItemProps[] {
+function sideBarData(): SideBarItemProps[] {
     return [
         {
             title: "Students",
@@ -16,7 +16,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Enrollment",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS-Enrollment",
+                    appName: "SEMIS-Attendance",
                     route: "/enrollment"
                 },
                 {
@@ -105,4 +105,4 @@ function sideBarData (): SideBarItemProps[] {
         }
     ]
 }
-export {sideBarData}
+export { sideBarData }
