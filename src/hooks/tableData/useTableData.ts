@@ -260,6 +260,7 @@ export function useTableData() {
         getData,
         tableData,
         loading,
-        getAttendanceData
+        getAttendanceData,
+        setTableData
     }
 }
