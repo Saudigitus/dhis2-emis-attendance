@@ -8,17 +8,12 @@ export default function RouteList() {
         {
             path: "/",
             layout: SimpleLayout,
-            component: () => <Navigate to="/attendance" replace />
+            component: () => <Navigate to="/staff-attendance" replace />
         },
         {
-            path: "/attendance",
+            path: "/staff-attendance",
             layout: FullLayout,
             component: () => <TableComponent />
-        },
-        {
-            path: "/form",
-            layout: FullLayout,
-            component: GenericForm
         }
     ]
 }

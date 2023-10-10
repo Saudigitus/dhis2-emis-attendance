@@ -1,6 +1,6 @@
 import { type SelectedOptionsTypes, type HeadBarTypes } from "../../../types/headBar/HeadBarTypes"
 
-function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
+function headBarData(selectedOptions: SelectedOptionsTypes, registration: any): HeadBarTypes[] {
     return [
         {
             id: "c540ac7c",
@@ -11,18 +11,18 @@ function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
         },
         {
             id: "981ed8a3",
-            label: "Grade",
-            value: selectedOptions?.grade ?? "Select a grade",
-            placeholder: "Search for grade",
-            dataElementId: "kNNoif9gASf",
+            label: "Position",
+            value: selectedOptions?.grade ?? "Select a position",
+            placeholder: "Search for position",
+            dataElementId: registration.grade,
             component: "menuItemContainer"
         },
         {
             id: "7ce5c7f3",
-            label: "Class",
-            value: selectedOptions?.class ?? "Select a class",
-            placeholder: "Search for class",
-            dataElementId: "RhABRLO2Fae",
+            label: "Employment type",
+            value: selectedOptions?.class ?? "Select a employment type",
+            placeholder: "Search for employment type",
+            dataElementId: registration.section,
             component: "menuItemContainer"
         },
         {
@@ -30,7 +30,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes): HeadBarTypes[] {
             label: "Academic Year",
             value: selectedOptions?.academicYear ?? "Select academic year",
             placeholder: "Search for academic year",
-            dataElementId: "iDSrFrrVgmX",
+            dataElementId: registration.academicYear,
             component: "menuItemContainer"
         }
     ]

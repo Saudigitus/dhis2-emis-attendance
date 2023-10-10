@@ -24,6 +24,6 @@ export function useGetInitialValues() {
     }
 
     return {
-        isSetSectionType: location?.search.includes("student")
+        isSetSectionType: location?.search.includes("sectionType")
     }
 }

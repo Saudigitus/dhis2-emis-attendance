@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { SelectedDateAddNewState } from "../../../../schema/attendanceSchema";
 import { useAttendanceMode } from "../../../../hooks/attendanceMode/useAttendanceMode";
 import { format } from "date-fns";
+import { VariablesTypes } from "../../../../types/table/AttributeColumns";
 
 function HeaderFilters() {
   const { columns } = useHeader();
@@ -23,7 +24,7 @@ function HeaderFilters() {
             Selected date: {format(selectedDate, 'dd/MM/yyyy')}
           </Chip>
         }
-        <ConfigTableColumns headers={columns} updateVariables={() => { }} />
+        <ConfigTableColumns headers={columns.filter(x => x.type !== VariablesTypes.Attendance)} updateVariables={() => { }} />
       </div>
     </div>
   );
