@@ -7,6 +7,7 @@ interface attendance {
     statusOptions: [{
         code: string
         icon: string
+        key: string
     }]
 }
 
@@ -29,17 +30,23 @@ interface transfer {
     destinySchool: string
     programStage: string
     status: string
+    statusOptions: [{
+        code: string
+        key: string
+    }]
 }
 
 export interface dataStoreRecord {
     attendance: attendance
     key: string
+    trackedEntityType: string
     lastUpdate: string
     performance: performance
     program: string
     registration: registration
     ["socio-economics"]: programStages
     transfer: transfer
+    ["final-result"]: programStages
 
 }
 

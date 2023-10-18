@@ -107,6 +107,11 @@ interface TeiQueryResults {
         instances: [{
             trackedEntity: string
             attributes: attributesProps[]
+            enrollments: [{
+                enrollment: string
+                orgUnit: string
+                program: string
+            }]
         }]
     }
 }
@@ -219,7 +224,7 @@ export function useTableData() {
 
     async function getAttendanceData() {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
-            let localData = [...tableData]
+            const localData = [...tableData]
             setLoading(true)
             const attendanceValuesByTei: attendanceFormaterProps[] = []
 
@@ -234,7 +239,8 @@ export function useTableData() {
                     trackedEntity: tei,
                     occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
                     occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
-                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
+                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]",
+                    programStatus: "ACTIVE"
                 })).catch((error) => {
                     show({
                         message: `${("Could not get data")}: ${error.message}`,
