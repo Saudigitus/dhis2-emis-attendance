@@ -12,9 +12,9 @@ function headBarData(selectedOptions: SelectedOptionsTypes, registration: any): 
         {
             id: "981ed8a3",
             label: "Position",
-            value: selectedOptions?.grade ?? "Select a position",
+            value: selectedOptions?.position ?? "Select a position",
             placeholder: "Search for position",
-            dataElementId: registration.grade,
+            dataElementId: registration.position,
             component: "menuItemContainer"
         },
         {
@@ -22,7 +22,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes, registration: any): 
             label: "Employment type",
             value: selectedOptions?.class ?? "Select a employment type",
             placeholder: "Search for employment type",
-            dataElementId: registration.section,
+            dataElementId: registration.employmentType,
             component: "menuItemContainer"
         },
         {

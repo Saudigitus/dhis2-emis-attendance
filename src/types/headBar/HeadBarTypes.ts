@@ -10,7 +10,7 @@ interface HeadBarTypes {
 interface SelectedOptionsTypes {
     academicYear: string | null
     class: string | null
-    grade: string | null
+    position: string | null
     school: string | null
     schoolName: string | null
 }
