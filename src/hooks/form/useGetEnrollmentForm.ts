@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../schema/programSchema';
 import { formatResponseEvents } from '../../utils/events/formatResponseEvents';
 import { formatResponseTEI } from '../../utils/tei/formatResponseAttributes';
-import { getSelectedKey } from '../../utils/constants/dataStore/getSelectedKey';
+import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 
 export default function useGetEnrollmentForm() {
     const [enrollmentsData, setEnrollmentsData] = useState<any[]>([])

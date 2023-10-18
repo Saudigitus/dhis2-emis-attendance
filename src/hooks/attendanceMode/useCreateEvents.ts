@@ -1,10 +1,10 @@
 import { useDataMutation } from "@dhis2/app-runtime";
 import { format } from "date-fns";
 import { useState } from "react";
-import { getSelectedKey } from "../../utils/constants/dataStore/getSelectedKey";
 import { SelectedDateAddNewState } from "../../schema/attendanceSchema";
 import { useRecoilValue } from "recoil";
 import useShowAlerts from "../commons/useShowAlert";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 const putEvent: any = {
     resource: 'events',

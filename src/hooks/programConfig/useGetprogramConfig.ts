@@ -6,10 +6,10 @@ import { type ProgramConfig } from "../../types/programConfig/ProgramConfig";
 import useShowAlerts from "../commons/useShowAlert";
 import { useGetInitialValues } from "../initialValues/useGetInitialValues";
 
-const PROGRAMQUERY = (id: string) => ({
+const PROGRAMQUERY = {
     results: {
         resource: "programs",
-        id: `${id}`,
+        id: ({ id }: any) => id,
         params: {
             fields: [
                 "access",
@@ -20,14 +20,14 @@ const PROGRAMQUERY = (id: string) => ({
             ]
         }
     }
-})
+}
 
 export function useGetProgramConfig(program: string) {
     const { isSetSectionType } = useGetInitialValues()
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
     const { hide, show } = useShowAlerts()
 
-    const { loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY(program), {
+    const { loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY, {
         onError(error) {
             show({
                 message: `${("Could not get program")}: ${error.message}`,
@@ -38,12 +38,15 @@ export function useGetProgramConfig(program: string) {
         onComplete(response) {
             setProgramConfigState(response?.results);
         },
-        lazy: true
+        lazy: true,
+        variables: {
+            id: program
+        }
     })
 
     useEffect(() => {
         if (isSetSectionType && (program !== undefined || program !== null)) {
-            void refetch()
+            void refetch({ id: program })
         }
     }, [isSetSectionType])
 

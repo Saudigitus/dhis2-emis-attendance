@@ -7,10 +7,10 @@ import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { getSelectedKey } from "../../utils/constants/dataStore/getSelectedKey";
 import { EnrollmentDetailsTeisState, SelectedDateState } from "../../schema/attendanceSchema";
 import { TableDataState } from "../../schema/tableColumnsSchema";
 import { format } from "date-fns";
+import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 
 type TableDataProps = Record<string, string>;
 

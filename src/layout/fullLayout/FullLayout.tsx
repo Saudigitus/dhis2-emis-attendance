@@ -21,7 +21,7 @@ export default function FullLayout({ children }: { children: React.ReactNode }) 
     }
 
     if (loading) {
-        return (
+    return (
             <CenteredContent>
                 <CircularLoader />
             </CenteredContent>

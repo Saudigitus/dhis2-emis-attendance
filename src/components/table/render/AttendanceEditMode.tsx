@@ -3,7 +3,7 @@ import { VariablesTypes } from '../../../types/table/AttributeColumns'
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { AccessTime, CheckCircleOutline, HighlightOff } from '@material-ui/icons';
 import MultipleButtons from '../components/multipleButtom/MultipleButtons';
-import { getSelectedKey } from '../../../utils/constants/dataStore/getSelectedKey';
+import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey';
 import { SelectedDateAddNewState } from '../../../schema/attendanceSchema';
 import { useRecoilValue } from 'recoil';
 import { format } from 'date-fns';
@@ -54,7 +54,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     }
 
     function onChangeAttendance(v: string, type: string) {
-        if (value?.[date]?.eventId) {
+        if (value[date].eventId) {
             void updateValues({
                 dataElementId: props.column.id,
                 dataElementValue: v,
