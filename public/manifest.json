@@ -1,5 +1,6 @@
 {
   "short_name": "SEMIS-Enrollment",
+  "appType":"RESOURCE",
   "name": "SEMIS-Enrollment",
   "description": "SEMIS-Enrollment",
   "icons": [

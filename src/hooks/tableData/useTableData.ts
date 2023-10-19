@@ -155,6 +155,7 @@ export function useTableData() {
             // Map the trackedEntityIds from the events
             const trackedEntityIds = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
             setEnrollmentTeis({ enrollmentDetails: trackedEntityIds })
+            console.log(trackedEntityIds);
             const trackedEntityToFetch = trackedEntityIds.toString().replaceAll(",", ";")
 
             // Get the events from the programStage attendance for the each student

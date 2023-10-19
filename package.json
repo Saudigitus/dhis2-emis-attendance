@@ -1,5 +1,6 @@
 {
-  "name": "SEMIS-Enrollment",
+  "name": "semis-enrollment",
+  "appType":"RESOURCE",
   "version": "1.0.0",
   "description": "",
   "license": "BSD-3-Clause",

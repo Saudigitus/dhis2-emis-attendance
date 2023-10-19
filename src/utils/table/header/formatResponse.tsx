@@ -16,7 +16,7 @@ export function formatResponse(data: ProgramConfig, registrationProgramStage: st
             name: item.trackedEntityAttribute.displayName,
             labelName: item.trackedEntityAttribute.displayName,
             valueType: item.trackedEntityAttribute.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : item.trackedEntityAttribute.valueType as unknown as CustomAttributeProps["valueType"],
-            options: { optionSet: item.trackedEntityAttribute.optionSet },
+        options: { optionSet: item.trackedEntityAttribute.optionSet },
             visible: item.displayInList,
             disabled: false,
             pattern: '',

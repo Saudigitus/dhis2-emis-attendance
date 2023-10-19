@@ -7,6 +7,7 @@ interface attendance {
     statusOptions: [{
         code: string
         icon: string
+        key: string
     }]
 }
 
@@ -20,9 +21,9 @@ interface performance {
 
 interface registration {
     academicYear: string
-    grade: string
+    position: string
     programStage: string
-    section: string
+    employmentType: string
 }
 
 interface transfer {

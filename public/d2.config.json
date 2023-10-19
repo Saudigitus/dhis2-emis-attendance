@@ -1,5 +1,6 @@
 {
   "type": "app",
+  "appType":"RESOURCE",
   "name": "SEMIS-Enrollment",
   "description": "SEMIS-Enrollment",
   "version": "1.0.0",
