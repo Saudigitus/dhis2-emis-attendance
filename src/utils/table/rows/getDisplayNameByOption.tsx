@@ -1,21 +1,26 @@
-import { type OptionSet } from "../../../types/generated"
 
 interface defaultProps {
-    attribute: string
-    value: string
-    headers: Array<{
+    attribute: {
         id: string
-        optionSets?: OptionSet[]
-    }>
+        options?: {
+            optionSet: {
+                id: string
+                options: [{
+                    value: string
+                    label: string
+                }]
+            }
+        }
+    }
+    value: string | any
 }
 
-export function getDisplayName({ attribute, value, headers }: defaultProps): string {
-    // for (let i = 0; i < headers.length; i++) {
-    //     if (attribute === headers[i].id && typeof headers[i].optionSets !== 'undefined') {
-    //         for (const op of headers[i].optionSets || []) {
-    //             if (op.code === value) return op.displayName
-    //         }
-    //     }
-    // }
+export function getDisplayName({ attribute, value }: defaultProps): string {
+    if ((attribute.options?.optionSet?.options) != null) {
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        for (const op of attribute.options?.optionSet?.options || []) {
+            if (op.value === value) return op.label
+        }
+    }
     return value
 }

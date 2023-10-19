@@ -6,7 +6,10 @@ import { formatResponse } from '../../utils/table/header/formatResponse';
 
 function MenuItemContainer({ dataElementId, onToggle }: { dataElementId: string, onToggle: () => void }): React.ReactElement {
     const programConfigState = useRecoilValue(ProgramConfigState);
+    console.log(programConfigState);
     const options = formatResponse(programConfigState)?.find(element => element.id === dataElementId)?.options.optionSet.options ?? [];
+
+    console.log(options, 'options');
 
     return (
         <Item onToggle={onToggle} dataElementId={dataElementId} menuItems={options} />
