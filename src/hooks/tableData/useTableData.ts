@@ -7,10 +7,10 @@ import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { getSelectedKey } from "../../utils/constants/dataStore/getSelectedKey";
 import { EnrollmentDetailsTeisState, SelectedDateState } from "../../schema/attendanceSchema";
 import { TableDataState } from "../../schema/tableColumnsSchema";
 import { format } from "date-fns";
+import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 
 type TableDataProps = Record<string, string>;
 
@@ -22,6 +22,7 @@ interface EventQueryProps {
     order?: string
     programStage: string
     orgUnit: string
+    programStatus: string
     filter?: string[]
     filterAttributes?: string[]
     trackedEntity?: string
@@ -39,7 +40,7 @@ interface TeiQueryProps {
     order: string
 }
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, programStatus, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
@@ -52,6 +53,7 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
             orgUnit,
             filter,
             filterAttributes,
+            programStatus,
             fields,
             trackedEntity,
             occurredAfter,
@@ -105,6 +107,11 @@ interface TeiQueryResults {
         instances: [{
             trackedEntity: string
             attributes: attributesProps[]
+            enrollments: [{
+                enrollment: string
+                orgUnit: string
+                program: string
+            }]
         }]
     }
 }
@@ -137,6 +144,7 @@ export function useTableData() {
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
                 pageSize,
+                programStatus: "ACTIVE",
                 program: getDataStoreData?.program as unknown as string,
                 order: "createdAt:desc",
                 programStage: getDataStoreData?.registration?.programStage as unknown as string,
@@ -165,6 +173,7 @@ export function useTableData() {
                         program: getDataStoreData?.program as unknown as string,
                         programStage: getDataStoreData?.attendance?.programStage as unknown as string,
                         orgUnit: school,
+                        programStatus: "ACTIVE",
                         trackedEntity: tei,
                         occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
                         occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
@@ -215,7 +224,7 @@ export function useTableData() {
 
     async function getAttendanceData() {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
-            let localData = [...tableData]
+            const localData = [...tableData]
             setLoading(true)
             const attendanceValuesByTei: attendanceFormaterProps[] = []
 
@@ -230,7 +239,8 @@ export function useTableData() {
                     trackedEntity: tei,
                     occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
                     occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
-                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
+                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]",
+                    programStatus: "ACTIVE"
                 })).catch((error) => {
                     show({
                         message: `${("Could not get data")}: ${error.message}`,
@@ -256,6 +266,7 @@ export function useTableData() {
         getData,
         tableData,
         loading,
-        getAttendanceData
+        getAttendanceData,
+        setTableData
     }
 }

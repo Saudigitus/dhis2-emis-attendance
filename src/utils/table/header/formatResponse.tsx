@@ -5,7 +5,7 @@ import { VariablesTypes, type CustomAttributeProps } from "../../../types/table/
 
 export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
     // TODO: Remove this when the API is fixed and solve this bug 👇
-    const originalData = ((data?.programStages?.find(programStge => programStge.id === "Ni2qsy2WJn4")) ?? [] as unknown as ProgramConfig["programStages"][0])
+    const originalData = ((data?.programStages?.find(programStge => programStge.id === "yXOtuTzmdqn")) ?? [] as unknown as ProgramConfig["programStages"][0])
 
     return data?.programTrackedEntityAttributes?.map((item) => {
         return {
@@ -57,7 +57,7 @@ export function getAttendanceDays(date: Date, attendanceMode: "edit" | "view", d
     const days: CustomAttributeProps[] = [];
 
     if (attendanceMode === "edit") {
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === "Ljyrr3cktAr")) ?? [] as unknown as ProgramConfig["programStages"][0])
+        const originalData = ((data?.programStages?.find(programStge => programStge.id === "XaFLe2CYGzr")) ?? [] as unknown as ProgramConfig["programStages"][0])
 
         days.push(
             ...originalData?.programStageDataElements?.map((programStageDataElement) => {
