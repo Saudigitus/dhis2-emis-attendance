@@ -54,7 +54,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     }
 
     function onChangeAttendance(v: string, type: string) {
-        if (value[date].eventId) {
+        if (value[date]?.eventId) {
             void updateValues({
                 dataElementId: props.column.id,
                 dataElementValue: v,
