@@ -20,7 +20,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes, registration: any): 
         {
             id: "7ce5c7f3",
             label: "Employment type",
-            value: selectedOptions?.class ?? "Select a employment type",
+            value: selectedOptions?.employmentType ?? "Select a employment type",
             placeholder: "Search for employment type",
             dataElementId: registration.employmentType,
             component: "menuItemContainer"

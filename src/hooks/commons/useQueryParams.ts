@@ -21,7 +21,7 @@ const useParams = () => {
             school: useQuery().get('school'),
             schoolName: useQuery().get('schoolName'),
             position: useQuery().get('position'),
-            class: useQuery().get('class'),
+            employmentType: useQuery().get('employmentType'),
             academicYear: useQuery().get('academicYear')
         }
     }
