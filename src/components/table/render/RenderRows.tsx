@@ -12,6 +12,7 @@ interface RenderHeaderProps {
     rowsData: any[]
     headerData: CustomAttributeProps[]
     attendanceMode: "view" | "edit"
+    setTableData: any
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function RenderRows({ headerData, rowsData, attendanceMode }: RenderHeaderProps): React.ReactElement {
+function RenderRows({ headerData, rowsData, attendanceMode, setTableData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const { baseUrl } = useConfig()
 
@@ -69,7 +70,7 @@ function RenderRows({ headerData, rowsData, attendanceMode }: RenderHeaderProps)
                         >
                             {attendanceMode === "view"
                                 ? <AttendanceViewMode column={column} value={row[column.id]} />
-                                : <AttendanceEditMode column={column} value={row[column.id]} />
+                                : <AttendanceEditMode column={column} value={row} rowsData={rowsData} setTableData={setTableData} />
                             }
                         </RowCell>
                     ));
