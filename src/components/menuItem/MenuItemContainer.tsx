@@ -9,7 +9,7 @@ function MenuItemContainer({ dataElementId, onToggle }: { dataElementId: string,
     const programConfigState = useRecoilValue(ProgramConfigState);
     const { getDataStoreData } = getSelectedKey()
     const registrationProgramStage = getDataStoreData.registration.programStage
-    const options = formatResponse(programConfigState, registrationProgramStage)?.find(element => element.id === dataElementId)?.options.optionSet.options ?? [];
+    const options = formatResponse(programConfigState, registrationProgramStage)?.find(element => element.id === dataElementId)?.options?.optionSet?.options ?? [];
 
     return (
         <Item onToggle={onToggle} dataElementId={dataElementId} menuItems={options} />
