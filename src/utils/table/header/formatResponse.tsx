@@ -3,9 +3,9 @@ import { Attribute } from "../../../types/generated/models";
 import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/table/AttributeColumns";
 
-export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, registrationProgramStage: string): CustomAttributeProps[] {
     // TODO: Remove this when the API is fixed and solve this bug 👇
-    const originalData = ((data?.programStages?.find(programStge => programStge.id === "yXOtuTzmdqn")) ?? [] as unknown as ProgramConfig["programStages"][0])
+    const originalData = ((data?.programStages?.find(programStge => programStge.id === registrationProgramStage)) ?? [] as unknown as ProgramConfig["programStages"][0])
 
     return data?.programTrackedEntityAttributes?.map((item) => {
         return {
