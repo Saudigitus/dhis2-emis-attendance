@@ -14,6 +14,8 @@ import { useParams } from '../../../hooks/commons/useQueryParams';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { teiRefetch } from '../../../hooks/tei/usePostTei';
+import { SelectedDateState } from '../../../schema/attendanceSchema';
+import { useAttendanceMode } from '../../../hooks/attendanceMode/useAttendanceMode';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -24,16 +26,23 @@ const usetStyles = makeStyles({
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
-    const { getData, loading, tableData } = useTableData()
+    const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
     const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(teiRefetch)
+    const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
 
     useEffect(() => {
         void getData(page, pageSize)
-    }, [columns, useQuery(), headerFieldsState, page, pageSize, refetch])
+        setInitialAttendanceMode()
+    }, [useQuery(), headerFieldsState, page, pageSize, refetch])
+
+    useEffect(() => {
+        void getAttendanceData()
+    }, [selectedDateViewMode])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -70,6 +79,8 @@ function Table() {
                                 <RenderRows
                                     headerData={columns}
                                     rowsData={tableData}
+                                    attendanceMode={attendanceMode}
+                                    setTableData={setTableData}
                                 />
                             </>
                         </TableComponent>

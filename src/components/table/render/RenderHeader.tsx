@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { RowTable, SortLabel } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import HeaderCell from '../components/head/HeaderCell';
-import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 
 interface renderHeaderProps {
     rowsHeader: CustomAttributeProps[]
@@ -51,37 +51,39 @@ function RenderHeader(props: renderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
 
-    const headerCells = useMemo(() => {
-        return rowsHeader?.filter(x => x.visible)?.map((column, index) => (
-            <HeaderCell
-                key={column.id}
-                className={classNames(classes.cell, classes.headerCell)}
-            >
-                {/* TODO: the sortLabel must be optional 👇 */}
-                <SortLabel
-                    active={orderBy === column.id}
-                    direction={orderBy === column.id ? order : 'asc'}
-                    createSortHandler={createSortHandler(column.id)}
+    const headerCells = () => {
+        if (rowsHeader?.length > 0) {
+            return rowsHeader?.filter(x => (x.visible && x.type !== VariablesTypes.DataElement))?.map((column, index) => (
+                <HeaderCell
+                    key={column.id}
+                    className={classNames(classes.cell, classes.headerCell)}
                 >
+                    {/* TODO: the sortLabel must be optional 👇 */}
+                    {/* <SortLabel
+                        active={orderBy === column.id}
+                        direction={orderBy === column.id ? order : 'asc'}
+                        createSortHandler={createSortHandler(column.id)}
+                    > */}
                     {column.header}
-                    {orderBy === column.id
-                        ? (
-                            <span className={classes.visuallyHidden}>
-                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                            </span>
-                        )
-                        : null}
-                </SortLabel>
-            </HeaderCell>
-        ))
-    }, [rowsHeader]);
+                    {/* {orderBy === column.id
+                            ? (
+                                <span className={classes.visuallyHidden}>
+                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                </span>
+                            )
+                            : null}
+                    </SortLabel> */}
+                </HeaderCell>
+            ))
+        }
+    };
 
     return (
         <thead>
             <RowTable
                 className={classes.row}
             >
-                {headerCells}
+                {headerCells()}
             </RowTable>
         </thead>
     )

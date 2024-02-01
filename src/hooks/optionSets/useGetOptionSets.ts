@@ -1,5 +1,4 @@
 import { useDataQuery } from '@dhis2/app-runtime'
-import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { OptionSetsState } from '../../schema/optionSetsSchema';
 import useShowAlerts from '../commons/useShowAlert';
@@ -25,13 +24,12 @@ function useGetOptionSets({ optionSetId }: { optionSetId: string }) {
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
+        },
+        onComplete(data) {
+            const localData = { ...getOptionSetsState, [optionSetId]: data?.result }
+            setOptionSetsState(localData)
         }
     })
-
-    useEffect(() => {
-        const localData = { ...getOptionSetsState, [optionSetId]: data?.result }
-        setOptionSetsState(localData)
-    }, [loading])
 
     return { data, loading, error }
 }
