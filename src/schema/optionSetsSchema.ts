@@ -1,28 +1,20 @@
 import { atom } from "recoil"
-import { z } from "zod"
 
-export const optionSetsSchema = z.record(
-    z.string(),
-    z.object({
-        name: z.string(),
-        id: z.string(),
-        displayName: z.string(),
-        options: z.array(
-            z.object(
-                {
-                    code: z.string(),
-                    name: z.string(),
-                    id: z.string(),
-                    displayName: z.string()
-                }
-            )
-        )
-    })
-)
+interface options {
+    code: string
+    name: string
+    id: string
+    displayName: string
+}
 
-type OptionSetsSchema = z.infer<typeof optionSetsSchema>
+export type optionSetsSchema = Record<string, {
+    name: string
+    id: string
+    displayName: string
+    options: options[]
+}>
 
-export const OptionSetsState = atom<OptionSetsSchema | undefined>({
+export const OptionSetsState = atom<optionSetsSchema | undefined>({
     key: "optionSetsSchema-state",
     default: undefined
 })

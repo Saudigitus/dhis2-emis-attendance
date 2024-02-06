@@ -66,14 +66,6 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     return allRows;
 }
 
-function dataValues(data: dataValuesProps[]): RowsProps {
-    const localData: RowsProps = {}
-    for (const dataElement of data) {
-        localData[dataElement.dataElement] = dataElement.value
-    }
-    return localData
-}
-
 function attributes(data: attributesProps[]): RowsProps {
     const localData: RowsProps = {}
     for (const attribute of data) {
