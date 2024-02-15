@@ -47,7 +47,9 @@ export interface dataStoreRecord {
     ["socio-economics"]: programStages
     transfer: transfer
     ["final-result"]: programStages
-
+    defaults: {
+        currentAcademicYear: string
+    }
 }
 
 export const DataStoreState = atom<dataStoreRecord[]>({
