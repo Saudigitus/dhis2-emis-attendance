@@ -1,0 +1,50 @@
+{
+    "classPeriods": [
+        {
+            "description": "Term1",
+            "startDate": "2024-06-01",
+            "endDate": "2024-06-25"
+        },
+        {
+            "description": "Term2",
+            "startDate": "2024-06-01",
+            "endDate": "2024-06-25"
+        },
+        {
+            "description": "Term3",
+            "startDate": "2024-06-01",
+            "endDate": "2024-06-25"
+        }
+    ],
+    "holidays": [
+        {
+            "date": "2024-02-15",
+            "event": "Heroes day"
+        },
+        {
+            "date": "2024-02-03",
+            "event": "Heroes day"
+        },
+        {
+            "date": "2024-02-03",
+            "event": "Heroes day"
+        },
+        {
+            "date": "2024-02-03",
+            "event": "Heroes day"
+        },
+        {
+            "date": "2024-02-03",
+            "event": "Heroes day"
+        }
+    ],
+    "weekDays": {
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": false,
+        "sunday": false
+    }
+}
