@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import style from './selectButton.module.css'
 import { Popover, makeStyles } from '@material-ui/core';
 import WithPadding from '../../../../template/WithPadding';
 import RenderWithAppliedFilter from './RenderWithAppliedFilter';
@@ -84,7 +85,7 @@ function SelectButton(props: SelectButtonProps) {
     }
 
     return (
-        <div style={{ padding: "0.25em 0.5em 0.25em 0em" }}>
+        <div className={style.selectButtonContainer}>
             <div
                 data-test="filter-button-popover-anchor"
                 ref={anchorRef}

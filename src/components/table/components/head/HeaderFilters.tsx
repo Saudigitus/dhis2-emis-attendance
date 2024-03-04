@@ -2,6 +2,7 @@ import React from "react";
 import { Chip } from "@dhis2/ui";
 import { format } from "date-fns";
 import { useRecoilValue } from "recoil";
+import styles from './header.module.css'
 import { useHeader, useAttendanceMode } from "../../../../hooks";
 import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
 import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
@@ -13,7 +14,7 @@ function HeaderFilters() {
   const { attendanceMode } = useAttendanceMode()
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className={styles.headerFilterContainer}>
       <EnrollmentFilters />
       <div className="mt-2">
         {

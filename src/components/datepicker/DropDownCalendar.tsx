@@ -2,7 +2,8 @@
 import React, { useState } from 'react'
 import Calendar from './Calendar';
 import { format } from 'date-fns';
-import { Popover, Typography, Paper, makeStyles, createStyles, Button } from '@material-ui/core';
+import style from './datepicker.module.css'
+import { Popover, Typography, Paper, Button } from '@material-ui/core';
 
 interface DropDownCalendarProps {
     open: boolean
@@ -13,31 +14,19 @@ interface DropDownCalendarProps {
     setAttendanceMode: (arg: "edit" | "view") => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        typography: {
-            padding: theme.spacing(2)
-        },
-        date: {
-            padding: theme.spacing(1)
-        }
-    })
-);
-
 export default function DropDownCalendar(props: DropDownCalendarProps) {
     const { anchorEl, close, open, setValue, setAttendanceMode, localAttendanceMode } = props
-    const classes = useStyles();
     const [localDateSelected, setlocalDateSelected] = useState<{ selectedDate: Date }>({ selectedDate: new Date() })
 
     return (
         <Popover open={open} anchorEl={anchorEl} placement={"bottom"}>
             <Paper>
-                <div className={classes.typography}>
+                <div className={style.datepickerTypography}>
                     <Typography variant="overline">SELECT DATE</Typography>
                     <Typography variant="h4" className="mt-2">{format(new Date(localDateSelected.selectedDate), "E, MMM dd - YYY")}</Typography>
                 </div>
                 <Calendar setValue={setlocalDateSelected} value={localDateSelected} />
-                <div className='d-flex justify-content-end'>
+                <div className={style.datepickerButtons}>
                     <Button onClick={() => { close() }} color="primary" className="mb-2">CANCEL</Button>
                     <Button onClick={() => { setValue(localDateSelected); close(); setAttendanceMode(localAttendanceMode) }} color="primary" className="mb-2">OK</Button>
                 </div>
