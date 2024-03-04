@@ -1,5 +1,5 @@
-import { useSearchParams } from "react-router-dom"
 import { useRecoilState } from "recoil"
+import { useSearchParams } from "react-router-dom"
 import { AttendanceModeState } from "../../schema/attendanceSchema"
 
 export const useAttendanceMode = () => {

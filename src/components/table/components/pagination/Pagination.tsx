@@ -1,8 +1,8 @@
-import { IconButton } from '@material-ui/core';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import React from 'react'
 import Select from 'react-select';
+import { IconButton } from '@material-ui/core';
 import defaultClasses from '../table.module.css';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
 

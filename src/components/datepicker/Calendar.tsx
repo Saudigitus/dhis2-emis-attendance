@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateCalendar } from '@mui/x-date-pickers';
 import { unavailableSchoolDays } from '../../utils/constants/attendance/unavailableSchoolDays';
 
 interface CalendarProps {

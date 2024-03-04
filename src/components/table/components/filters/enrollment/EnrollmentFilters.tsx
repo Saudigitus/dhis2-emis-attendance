@@ -1,6 +1,6 @@
 import React from 'react'
 import ContentFilter from './ContentFilter';
-import { useHeader } from '../../../../../hooks/tableHeader/useHeader';
+import { useHeader } from '../../../../../hooks';
 
 function EnrollmentFilters(): React.ReactElement {
     const { columns } = useHeader()

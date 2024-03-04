@@ -1,6 +1,6 @@
 import React from 'react'
+import { useDataStore } from '../hooks'
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { useDataStore } from '../hooks/appwrapper/useDataStore'
 
 interface Props {
     children: React.ReactNode

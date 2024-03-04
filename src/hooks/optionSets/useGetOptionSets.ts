@@ -1,7 +1,7 @@
 import { useDataQuery } from '@dhis2/app-runtime'
+import useShowAlerts from '../commons/useShowAlert';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { OptionSetsState } from '../../schema/optionSetsSchema';
-import useShowAlerts from '../commons/useShowAlert';
 
 const OPTIONSETS_QUERY = (id: string) => ({
     result: {

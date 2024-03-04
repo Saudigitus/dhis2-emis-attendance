@@ -1,14 +1,10 @@
-import i18n from '@dhis2/d2-i18n';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import React from 'react'
-import update from 'react-addons-update';
+import i18n from '@dhis2/d2-i18n';
 import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import update from 'react-addons-update';
 import DragDropListItem from './DragDropItems.js';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 
 interface DragDropListProps {
     listItems: any[]

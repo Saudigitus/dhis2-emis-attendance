@@ -1,5 +1,5 @@
-import { useSearchParams } from 'react-router-dom'
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 const useParams = () => {
     const [searchParams, setSearchParams] = useSearchParams()

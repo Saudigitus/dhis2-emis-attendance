@@ -1,10 +1,7 @@
 import React from 'react'
-import DateFilterManager from './components/date/DateFilterManager';
-import TextFilter from './components/text/Text'
-import TrueOnly from './components/trueOnly/TrueOnly';
-import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
 import { Attribute } from '../../../../../types/generated/models';
-import SelectBoxes from './components/optionSet/selectBoxes/SelectBoxes';
+import { DateFilterManager, TextFilter, TrueOnly, SelectBoxes } from './components';
+import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
 
 interface FilterComponentProps {
     type: CustomAttributeProps['valueType']

@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
-import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
-import DropdownButtonComponent from '../../../buttons/DropdownButton';
-import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
-import { useParams } from '../../../../hooks/commons/useQueryParams';
-import Tooltip from '@material-ui/core/Tooltip';
 import { Event } from '@material-ui/icons';
-import DropDownCalendar from '../../../datepicker/DropDownCalendar';
 import { useSetRecoilState } from 'recoil';
+import Tooltip from '@material-ui/core/Tooltip';
+import { useParams, useAttendanceMode } from '../../../../hooks';
+import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
+import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
 import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/attendanceSchema';
-import ModalComponent from '../../../modal/Modal';
-import ImportContent from '../../../modal/ImportContent';
-import { useAttendanceMode } from '../../../../hooks/attendanceMode/useAttendanceMode';
+import { ModalComponent, ImportContent, DropDownCalendar, DropdownButtonComponent} from '../../../../components';
 
 function EnrollmentActionsButtons() {
   const { useQuery } = useParams();

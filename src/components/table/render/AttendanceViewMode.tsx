@@ -1,8 +1,8 @@
 import React from 'react'
 import { VariablesTypes } from '../../../types/table/AttributeColumns'
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { AccessTime, CheckCircleOutline, HighlightOff, RemoveCircleOutline } from '@material-ui/icons';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
+import { AccessTime, CheckCircleOutline, HighlightOff, RemoveCircleOutline } from '@material-ui/icons';
 
 interface AttendanceViewModeProps {
     value: string | any
