@@ -3,15 +3,19 @@ import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
 import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
 import { useHeader } from "../../../../hooks/tableHeader/useHeader";
 import { Chip } from "@dhis2/ui";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedDateAddNewState } from "../../../../schema/attendanceSchema";
 import { useAttendanceMode } from "../../../../hooks/attendanceMode/useAttendanceMode";
 import { format } from "date-fns";
+import { TableColumnState } from "../../../../schema/tableColumnsSchema";
 
 function HeaderFilters() {
   const { columns } = useHeader();
+  const [updatedCols, setTableColumns] = useRecoilState(TableColumnState)
   const { selectedDate } = useRecoilValue(SelectedDateAddNewState)
   const { attendanceMode } = useAttendanceMode()
+
+  const setTableHeaders = (tableHeaders: any) => setTableColumns(tableHeaders)
 
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -23,7 +27,7 @@ function HeaderFilters() {
             Selected date: {format(selectedDate, 'dd/MM/yyyy')}
           </Chip>
         }
-        <ConfigTableColumns headers={columns} updateVariables={() => { }} />
+        <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>
     </div>
   );
