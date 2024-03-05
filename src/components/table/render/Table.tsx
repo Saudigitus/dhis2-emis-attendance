@@ -4,8 +4,8 @@ import RenderHeader from './RenderHeader'
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { teiRefetch } from '../../../hooks/tei/usePostTei';
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { WithBorder, WithPadding } from '../../../components';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { SelectedDateState } from '../../../schema/attendanceSchema';
@@ -27,7 +27,7 @@ function Table() {
     const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
-    const [refetch] = useRecoilState(teiRefetch)
+    const [refetch] = useRecoilState(TeiRefetch)
     const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
 
     useEffect(() => {
