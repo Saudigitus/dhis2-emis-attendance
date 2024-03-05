@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
-import { useParams } from "../../../hooks"
-import { DataStoreState,  } from "../../../schema/dataStoreSchema"
+import { useParams } from "../../../hooks";
+import { DataStoreState } from "../../../schema/dataStoreSchema"
 import { DataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 
 export const getSelectedKey = () => {
