@@ -3,12 +3,8 @@ import i18n from '@dhis2/d2-i18n';
 import { IconSettings24 } from '@dhis2/ui';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DialogConfigColumns from './DialogConfigColumns';
-import { type CustomAttributeProps } from '../../../../types/table/AttributeColumns';
+import { ConfigTableColumnsProps } from '../../../../types/table/ConfigColumnsTypes';
 
-interface ConfigTableColumnsProps {
-    headers?: CustomAttributeProps[]
-    updateVariables: (list: any[]) => void
-}
 
 function ConfigTableColumns(props: ConfigTableColumnsProps) {
     const { headers, updateVariables } = props;
@@ -21,11 +17,6 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
     const openDialog = () => {
         setopen(true)
     }
-
-    // const handleSaveColumns = (columns) => {
-    //     // this.props.onSave(columns);
-    //     closeDialog();
-    // }
 
     return (
         <React.Fragment>
@@ -44,10 +35,10 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
             </Tooltip>
             <DialogConfigColumns
                 open={open}
-                onClose={closeDialog}
-                // onSave={handleSaveColumns}
-                updateVariables={updateVariables}
                 headers={headers}
+                filteredHeaders={[]}
+                onClose={closeDialog}
+                updateVariables={updateVariables}
             />
         </React.Fragment>
     )

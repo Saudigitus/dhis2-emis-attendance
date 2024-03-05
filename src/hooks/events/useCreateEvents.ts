@@ -4,22 +4,13 @@ import { useRecoilValue } from "recoil";
 import useShowAlerts from "../commons/useShowAlert";
 import { useDataMutation } from "@dhis2/app-runtime";
 import { SelectedDateAddNewState } from "../../schema/attendanceSchema";
+import { CreateEventProps } from "../../types/api/WithoutRegistrationTypes";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 const putEvent: any = {
     resource: 'events',
     type: 'create',
     data: ({ form }: { form: any }) => form
-}
-
-interface EventProps {
-    teiDetails: any
-    dataElementId: string
-    dataElementValue: string
-    typeField: string
-    rowsData: any[]
-    setTableData: any
-    setselectedTerm: any
 }
 
 const useCreateDataValues = () => {
@@ -30,7 +21,7 @@ const useCreateDataValues = () => {
 
     const [mutate, response] = useDataMutation(putEvent)
 
-    async function createValues(props: EventProps) {
+    async function createValues(props: CreateEventProps) {
         const { teiDetails, dataElementId, dataElementValue, typeField, rowsData, setTableData, setselectedTerm } = props
         const dateFormated = format(new Date(selectedDate), "yyyy-MM-dd")
 

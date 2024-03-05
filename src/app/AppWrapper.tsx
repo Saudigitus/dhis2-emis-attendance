@@ -1,12 +1,11 @@
 import React from 'react'
 import { useDataStore } from '../hooks'
+import { AppProps } from '../types/app/AppTypes';
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
 
-interface Props {
-    children: React.ReactNode
-}
 
-export default function AppWrapper(props: Props) {
+export default function AppWrapper(props: AppProps) {
+    const { children } = props
     const { error, loading } = useDataStore()
 
     if (loading) {
@@ -26,6 +25,6 @@ export default function AppWrapper(props: Props) {
     }
 
     return (
-        <>{props.children}</>
+        <>{children}</>
     )
 }

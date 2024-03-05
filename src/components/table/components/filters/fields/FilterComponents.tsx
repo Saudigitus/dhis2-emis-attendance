@@ -1,16 +1,8 @@
 import React from 'react'
 import { Attribute } from '../../../../../types/generated/models';
 import { DateFilterManager, TextFilter, TrueOnly, SelectBoxes } from './components';
-import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
-
-interface FilterComponentProps {
-    type: CustomAttributeProps['valueType']
-    column: CustomAttributeProps
-    onChange: () => void
-    value: any
-    id: string
-    options: { optionSet: { options: [{ value: string, label: string }] } }
-}
+import { FilterComponentProps } from '../../../../../types/table/ContentFiltersTypes';
+import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
 
 function FilterComponents(props: FilterComponentProps) {
     const { type, column, onChange, value } = props;
