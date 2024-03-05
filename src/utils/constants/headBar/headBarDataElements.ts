@@ -1,7 +1,7 @@
+import { formatCamelCaseToWords } from "../../commons/formatCamelCaseToWords";
 import { HeadBarTypes, SelectedOptionsTypes } from "../../../types/headBar/HeadBarTypes";
 import { FilterDataElements, DataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 import { ProgramStageDataElements } from "../../../types/programStageConfig/ProgramStageConfig";
-import { formatCamelCaseToWords } from "../../commons/formatCamelCaseToWords";
 
 export const headBarDataElements = (selectedOptions : SelectedOptionsTypes, getDataStoreData: DataStoreRecord, programStageDataElements: ProgramStageDataElements[]) : HeadBarTypes[] => {
     const headBarFilters : HeadBarTypes[] = []
@@ -14,7 +14,6 @@ export const headBarDataElements = (selectedOptions : SelectedOptionsTypes, getD
             const dataElement = programStageDataElements?.find((psDataElement: any) => psDataElement?.dataElement?.id === filter?.dataElement)?.dataElement;
             
             if (dataElement) headBarFilterName = dataElement.displayName;
-            
             headBarFilters.push({
                 id: filter.code,
                 label: headBarFilterName,
