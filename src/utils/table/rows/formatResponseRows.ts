@@ -1,59 +1,11 @@
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
-
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-export interface attendanceFormaterProps {
-    dataValues: dataValuesProps[]
-    occurredAt: string
-    trackedEntity: string
-    event: string
-}
-
-interface formatResponseRowsProps {
-    eventsInstances: [{
-        trackedEntity: string
-        dataValues: dataValuesProps[]
-    }]
-    teiInstances: [{
-        trackedEntity: string
-        attributes: attributesProps[]
-        enrollments: [{
-            enrollment: string
-            orgUnit: string
-            program: string
-        }]
-    }]
-    attendanceValues: [{
-        trackedEntity: string
-        occurredAt: string
-        dataValues: dataValuesProps[]
-        event: string
-    }]
-    attendanceConfig: {
-        absenceReason: string
-        programStage: string
-        status: string
-        statusOptions: [{
-            code: string
-            icon: string
-        }]
-    }
-}
-
-type RowsProps = Record<string, string | number | boolean | any>;
+import { AttendanceFormaterProps, AttributesProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/table/FormatRowsDataTypes";
 
 // TODO @edsonnhancale remove this attendanceConfig from this function
-export function formatResponseRows({ eventsInstances, teiInstances, attendanceValues, attendanceConfig }: formatResponseRowsProps): RowsProps[] {
-    const allRows: RowsProps[] = []
+export function formatResponseRows({ eventsInstances, teiInstances, attendanceValues, attendanceConfig }: FormatResponseRowsProps): RowsDataProps[] {
+    const allRows: RowsDataProps[] = []
     for (const event of eventsInstances || []) {
-        const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
-        const attendanceDetails = attendanceValues.filter(attendance => attendance.trackedEntity === event.trackedEntity)
+        const teiDetails = teiInstances.find((tei: any) => tei.trackedEntity === event.trackedEntity)
+        const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity)
         allRows.push({
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...attendanceFormater(attendanceDetails, attendanceConfig),
@@ -66,16 +18,16 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     return allRows;
 }
 
-function attributes(data: attributesProps[]): RowsProps {
-    const localData: RowsProps = {}
+function attributes(data: AttributesProps[]): RowsDataProps {
+    const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value
     }
     return localData
 }
 
-export function attendanceFormater(data: attendanceFormaterProps[], attendanceConfig: formatResponseRowsProps["attendanceConfig"]): RowsProps {
-    const localData: RowsProps = {}
+export function attendanceFormater(data: AttendanceFormaterProps[], attendanceConfig: FormatResponseRowsProps["attendanceConfig"]): RowsDataProps {
+    const localData: RowsDataProps = {}
     let status, absenceOption, eventId
 
     for (const event of data) {

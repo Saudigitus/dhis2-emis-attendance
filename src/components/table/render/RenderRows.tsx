@@ -4,15 +4,9 @@ import classNames from 'classnames';
 import { RowCell, RowTable } from '../components';
 import AttendanceViewMode from './AttendanceViewMode';
 import AttendanceEditMode from './AttendanceEditMode';
-import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
-import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
-
-interface RenderHeaderProps {
-    rowsData: any[]
-    headerData: CustomAttributeProps[]
-    attendanceMode: "view" | "edit"
-    setTableData: any
-}
+import { RenderRowsProps } from '../../../types/table/TableContentTypes';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { VariablesTypes } from '../../../types/variables/AttributeColumns';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,9 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function RenderRows({ headerData, rowsData, attendanceMode, setTableData }: RenderHeaderProps): React.ReactElement {
+function RenderRows(props: RenderRowsProps): React.ReactElement {
+    const { headerData, rowsData, attendanceMode, setTableData } = props
     const classes = useStyles()
-    // const { baseUrl } = useConfig()
 
     if (rowsData.length === 0) {
         return (

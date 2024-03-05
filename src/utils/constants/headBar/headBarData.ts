@@ -1,7 +1,7 @@
-import { type dataStoreRecord } from "../../../schema/dataStoreSchema"
-import { type SelectedOptionsTypes, type HeadBarTypes } from "../../../types/headBar/HeadBarTypes"
+import { HeadBarTypes } from "../../../types/headBar/HeadBarTypes"
+import { HeadBarDataProps } from "../../../types/utils/ConstantsTypes"
 
-function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataStoreRecord): HeadBarTypes[] {
+function headBarData({ selectedOptions, dataStoreData }: HeadBarDataProps): HeadBarTypes[] {
     return [
         {
             id: "c540ac7c",

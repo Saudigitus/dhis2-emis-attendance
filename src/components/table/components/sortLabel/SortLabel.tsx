@@ -1,21 +1,18 @@
 import React from 'react'
 import { TableSortLabel } from '@material-ui/core';
+import { TableSortProps } from '../../../../types/table/TableContentTypes';
 
-interface TableSortProps {
-    children?: React.ReactNode
-    active: boolean
-    direction?: 'asc' | 'desc'
-    createSortHandler: (rowsPerPage: string) => void
-}
 
 function SortLabel(props: TableSortProps): React.ReactElement {
+    const { active, direction, createSortHandler, children } = props;
+
     return (
         <TableSortLabel
-            active={props.active}
-            direction={props.direction}
-            onClick={(page: any) => { props.createSortHandler(page) }}
+            active={active}
+            direction={direction}
+            onClick={(page: any) => { createSortHandler(page) }}
         >
-            {props.children}
+            {children}
         </TableSortLabel>
     )
 }

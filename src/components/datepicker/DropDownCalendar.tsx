@@ -4,15 +4,7 @@ import Calendar from './Calendar';
 import { format } from 'date-fns';
 import style from './datepicker.module.css'
 import { Popover, Typography, Paper, Button } from '@material-ui/core';
-
-interface DropDownCalendarProps {
-    open: boolean
-    anchorEl: HTMLElement | null
-    close: () => void
-    setValue: ({ selectedDate }: { selectedDate: Date }) => void
-    localAttendanceMode: "edit" | "view"
-    setAttendanceMode: (arg: "edit" | "view") => void
-}
+import { DropDownCalendarProps } from '../../types/datePicker/CalendarTypes';
 
 export default function DropDownCalendar(props: DropDownCalendarProps) {
     const { anchorEl, close, open, setValue, setAttendanceMode, localAttendanceMode } = props

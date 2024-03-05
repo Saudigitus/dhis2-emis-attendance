@@ -6,14 +6,10 @@ import { Button } from '@material-ui/core';
 import style from './enrollmentFilter.module.css'
 import SelectButton from "../selectButton/SelectButton";
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
-import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
+import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
+import { ContentFilterProps, FiltersValuesProps } from '../../../../../types/table/ContentFiltersTypes';
 
-interface ContentFilterProps {
-    headers?: CustomAttributeProps[]
-}
-
-type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
 
 function ContentFilter(props: ContentFilterProps) {
     const { headers = [] } = props;
@@ -45,7 +41,7 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     const onChangeFilters = (value: any, key: string, type: string, pos: string) => {
-        let cloneHeader = { ...filtersValues, ...convertArrayToObject(headerFieldsStateValues.dataElements) }
+        let cloneHeader = { ...filtersValues, ...convertArrayToObject({array:headerFieldsStateValues.dataElements}) }
 
         if (type === 'DATE') {
             let date = cloneHeader[key] ?? {}

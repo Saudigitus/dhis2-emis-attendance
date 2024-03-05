@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "./text.module.css";
+import { TitleProps } from "../../types/text/TitleTypes";
 
-interface TitleProps {
-  label: string
-}
+
 function Title(props: TitleProps): React.ReactElement {
   const { label } = props;
 

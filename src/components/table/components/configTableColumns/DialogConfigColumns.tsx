@@ -2,15 +2,10 @@ import React, { useState } from 'react'
 import i18n from '@dhis2/d2-i18n';
 import { Button } from 'react-bootstrap';
 import DragDropList from '../../../dragDrop/DragDropList';
-import { type CustomAttributeProps } from '../../../../types/table/AttributeColumns';
+import { CustomAttributeProps } from '../../../../types/variables/AttributeColumns';
 import { Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import { DialogSelectColumnsProps } from '../../../../types/table/ConfigColumnsTypes';
 
-interface DialogSelectColumnsProps {
-    open: boolean
-    onClose: () => void
-    headers: any[]
-    updateVariables: (list: any[]) => void
-}
 
 function DialogSelectColumns(props: DialogSelectColumnsProps) {
     const { open, onClose, headers = [], updateVariables } = props

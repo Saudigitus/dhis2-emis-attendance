@@ -8,6 +8,6 @@ export const useAttendanceConst = () => {
     }
 
     return {
-        attendanceConst
+        attendanceConst,
     }
 }

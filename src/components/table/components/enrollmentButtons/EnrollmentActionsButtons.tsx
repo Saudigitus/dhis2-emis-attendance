@@ -3,8 +3,8 @@ import { Event } from '@material-ui/icons';
 import { useSetRecoilState } from 'recoil';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useParams, useAttendanceMode } from '../../../../hooks';
+import { FlyoutOptionsProps } from '../../../../types/menu/FlyoutMenuTypes';
 import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
-import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
 import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/attendanceSchema';
 import { ModalComponent, ImportContent, DropDownCalendar, DropdownButtonComponent} from '../../../../components';
 
