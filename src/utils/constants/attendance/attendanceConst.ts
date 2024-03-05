@@ -7,12 +7,7 @@ export const useAttendanceConst = () => {
         return getDataStoreData.attendance.statusOptions.find((option) => option.key === key)?.code
     }
 
-    function transferConst(key: string) {
-        return getDataStoreData.transfer.statusOptions.find((option) => option.key === key)?.code
-    }
-
     return {
-        attendanceConst,
-        transferConst
+        attendanceConst
     }
 }
