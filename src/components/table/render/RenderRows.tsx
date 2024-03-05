@@ -1,12 +1,11 @@
 import React from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
-import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 import AttendanceViewMode from './AttendanceViewMode';
 import AttendanceEditMode from './AttendanceEditMode';
-// import { useConfig } from '@dhis2/app-runtime';
+import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
+import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 
 interface RenderHeaderProps {
     rowsData: any[]

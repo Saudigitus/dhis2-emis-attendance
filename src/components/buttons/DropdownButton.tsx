@@ -1,5 +1,5 @@
-import { SplitButton } from "@dhis2/ui";
 import React from "react";
+import { SplitButton } from "@dhis2/ui";
 import FlyoutMenuComponent from "../menu/FlyoutMenu.js";
 import { type FlyoutOptionsProps } from "../../types/buttons/FlyoutOptions.js";
 

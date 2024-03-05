@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import style from "./SideBar.module.css"
 import SideBarItem from './SideBarItem'
-import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
+import style from "./sideBar.module.css"
 import SibeBarCollapseBtn from './SibeBarCollapseBtn';
+import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
 import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey';
 
 export default function SideBar(): React.ReactElement {

@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { HeaderFilters, Pagination, TableComponent } from '../components'
-import RenderHeader from './RenderHeader'
 import RenderRows from './RenderRows'
-import { makeStyles } from '@material-ui/core/styles';
+import RenderHeader from './RenderHeader'
 import { Paper } from '@material-ui/core';
-import WithBorder from '../../template/WithBorder';
-import WithPadding from '../../template/WithPadding';
-import WorkingLits from '../components/filters/workingList/WorkingLits';
-import { useHeader } from '../../../hooks/tableHeader/useHeader';
-import { useTableData } from '../../../hooks/tableData/useTableData';
-import { useParams } from '../../../hooks/commons/useQueryParams';
+import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { teiRefetch } from '../../../hooks/tei/usePostTei';
+import { CenteredContent, CircularLoader } from "@dhis2/ui";
+import { WithBorder, WithPadding } from '../../../components';
+import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { SelectedDateState } from '../../../schema/attendanceSchema';
-import { useAttendanceMode } from '../../../hooks/attendanceMode/useAttendanceMode';
+import { HeaderFilters, Pagination, TableComponent, WorkingLits} from '../components'
+import { useHeader, useTableData, useParams, useAttendanceMode  } from '../../../hooks';
 
 const usetStyles = makeStyles({
     tableContainer: {

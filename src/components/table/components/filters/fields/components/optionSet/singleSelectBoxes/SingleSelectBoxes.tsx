@@ -1,6 +1,6 @@
-import { Radio, spacersNum, colors } from '@dhis2/ui'
-import { makeStyles } from '@material-ui/core';
 import React from 'react'
+import { makeStyles } from '@material-ui/core';
+import { Radio, spacersNum, colors } from '@dhis2/ui'
 
 const useStyle = makeStyles(() => ({
     iconDeselected: {

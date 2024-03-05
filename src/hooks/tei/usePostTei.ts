@@ -1,6 +1,6 @@
-import { useDataMutation } from "@dhis2/app-runtime"
-import useShowAlerts from '../commons/useShowAlert';
 import { atom, useRecoilState } from "recoil";
+import useShowAlerts from '../commons/useShowAlert';
+import { useDataMutation } from "@dhis2/app-runtime"
 
 const POST_TEI: any = {
     resource: "tracker",

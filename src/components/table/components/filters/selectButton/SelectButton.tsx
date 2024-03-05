@@ -1,9 +1,10 @@
-import { Popover, makeStyles } from '@material-ui/core';
 import React, { useState, useRef } from 'react'
-import RenderWithoutAppliedFilter from './RenderWithoutAppliedFilter';
+import style from './selectButton.module.css'
+import { Popover, makeStyles } from '@material-ui/core';
 import WithPadding from '../../../../template/WithPadding';
-import SelectorContents from '../enrollment/content/SelectorContents';
 import RenderWithAppliedFilter from './RenderWithAppliedFilter';
+import SelectorContents from '../enrollment/content/SelectorContents';
+import RenderWithoutAppliedFilter from './RenderWithoutAppliedFilter';
 
 const POPOVER_ANCHOR_ORIGIN = {
     vertical: 'bottom',
@@ -84,7 +85,7 @@ function SelectButton(props: SelectButtonProps) {
     }
 
     return (
-        <div style={{ padding: "0.25em 0.5em 0.25em 0em" }}>
+        <div className={style.selectButtonContainer}>
             <div
                 data-test="filter-button-popover-anchor"
                 ref={anchorRef}

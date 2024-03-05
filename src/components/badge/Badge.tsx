@@ -1,5 +1,5 @@
 import React from 'react'
-import style from "./Badge.module.css"
+import style from "./badge.module.css"
 
 interface BadgeProps {
     value: string

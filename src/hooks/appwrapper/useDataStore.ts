@@ -1,8 +1,8 @@
 
-import { useDataQuery } from "@dhis2/app-runtime"
 import { useSetRecoilState } from 'recoil';
-import { DataStoreState } from '../../schema/dataStoreSchema';
+import { useDataQuery } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
+import { DataStoreState } from '../../schema/dataStoreSchema';
 
 const DATASTORE_QUERY = ({
     config: {
