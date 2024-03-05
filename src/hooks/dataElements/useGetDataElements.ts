@@ -1,10 +1,6 @@
 import { useDataQuery } from "@dhis2/app-runtime";
 import { formatResponseEvents } from "../../utils/events/formatResponseEvents";
-
-interface GeTDataElementsProps {
-    programStageId: string
-    type?: keyof typeof fieldsType
-}
+import { GeTDataElementsProps } from "../../types/api/WithoutRegistrationTypes";
 
 const fieldsType = {
     programStage: "executionDateLabel,programStageDataElements[displayInReports,compulsory,dataElement[id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]],programStageSections[displayName,id,displayInReports,compulsory,dataElements[id,formName~rename(displayName),valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]",

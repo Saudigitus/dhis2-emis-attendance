@@ -6,7 +6,7 @@ function useGetAttributes() {
     const programConfiVariables = useRecoilValue(ProgramConfigState)
 
     return {
-        attributes: formatResponseTEI(programConfiVariables)
+        attributes: formatResponseTEI({ attributes: programConfiVariables })
     }
 }
 export { useGetAttributes }

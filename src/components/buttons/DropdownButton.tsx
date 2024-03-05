@@ -1,15 +1,10 @@
 import React from "react";
 import { SplitButton } from "@dhis2/ui";
 import FlyoutMenuComponent from "../menu/FlyoutMenu.js";
-import { type FlyoutOptionsProps } from "../../types/buttons/FlyoutOptions.js";
+import { DropdownButtonProps } from "../../types/buttons/DropdownButtonTypes.js";
 
-interface ButtonProps {
-  name: string
-  icon?: React.ReactNode
-  options: FlyoutOptionsProps[]
-  disabled: boolean
-}
-function DropdownButtonComponent(props: ButtonProps): React.ReactElement {
+
+function DropdownButtonComponent(props: DropdownButtonProps): React.ReactElement {
   const { name, icon, options, disabled } = props;
 
   return (

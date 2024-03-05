@@ -1,58 +1,8 @@
 import { atom } from "recoil"
+import { DataStoreRecord } from "../types/dataStore/DataStoreConfig"
 
-interface attendance {
-    absenceReason: string
-    programStage: string
-    status: string
-    statusOptions: [{
-        code: string
-        icon: string
-        key: string
-    }]
-}
 
-interface programStages {
-    programStage: string
-}
-
-interface performance {
-    programStages: programStages[]
-}
-
-interface registration {
-    academicYear: string
-    grade: string
-    programStage: string
-    section: string
-}
-
-interface transfer {
-    destinySchool: string
-    programStage: string
-    status: string
-    statusOptions: [{
-        code: string
-        key: string
-    }]
-}
-
-export interface dataStoreRecord {
-    attendance: attendance
-    key: string
-    trackedEntityType: string
-    lastUpdate: string
-    performance: performance
-    program: string
-    registration: registration
-    ["socio-economics"]: programStages
-    transfer: transfer
-    ["final-result"]: programStages
-    defaults: {
-        currentAcademicYear: string
-    }
-}
-
-export const DataStoreState = atom<dataStoreRecord[]>({
+export const DataStoreState = atom<DataStoreRecord[]>({
     key: "dataStore-get-state",
     default: []
 })

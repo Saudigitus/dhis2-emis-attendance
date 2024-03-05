@@ -2,32 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { format } from 'date-fns';
 import { useRecoilValue } from 'recoil';
 import { useCreateDataValues, useUpdateEvents } from '../../../hooks';
-import { VariablesTypes } from '../../../types/table/AttributeColumns'
+import { VariablesTypes } from '../../../types/variables/AttributeColumns'
 import MultipleButtons from '../components/multipleButtom/MultipleButtons';
 import { SelectedDateAddNewState } from '../../../schema/attendanceSchema';
+import { AttendanceEditModeProps } from '../../../types/table/TableRenderTypes';
 import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { AccessTime, CheckCircleOutline, HighlightOff } from '@material-ui/icons';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
 
-interface AttendanceEditModeProps {
-    value: string | any
-    column: {
-        type: string
-        id: "attendance-status" | "reason-absence" | any
-        options?: {
-            optionSet: {
-                id: string
-                options: [{
-                    value: string
-                    label: string
-                }]
-            }
-        }
-    }
-    rowsData: any[]
-    setTableData: any
-}
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
     const { column, value, rowsData, setTableData } = props

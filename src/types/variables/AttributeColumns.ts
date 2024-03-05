@@ -1,4 +1,4 @@
-import { type Attribute } from '../generated/models';
+import { Attribute } from '../generated/models';
 
 export enum VariablesTypes {
     DataElement = "dataElement",
@@ -13,7 +13,7 @@ export interface CustomAttributeProps {
     required: boolean
     name: string
     programStage?: string
-    value?: string
+    assignedValue?: string
     labelName: string
     valueType: typeof Attribute.valueType
     disabled: boolean
@@ -21,10 +21,7 @@ export interface CustomAttributeProps {
     options?: {
         optionSet: {
             id: string
-            options: [{
-                value: string
-                label: string
-            }]
+            options: OptionsProps[]
         }
     }
     pattern?: string
@@ -34,4 +31,10 @@ export interface CustomAttributeProps {
     key?: any
     description?: string
     type: VariablesTypes
+    value?:string
+}
+
+export interface OptionsProps {
+    value: string
+    label: string
 }

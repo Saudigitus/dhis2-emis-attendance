@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime"
-import { type CustomAttributeProps } from "../../types/table/AttributeColumns";
+import { CustomAttributeProps } from "../../types/variables/AttributeColumns";
+import { GeneratedCodeType, PatternCodeQueryResults } from "../../types/variables/GeneratedCodeTypes";
 
 const TEI_ATTRIBUTES: any = {
     results: {
@@ -12,24 +13,16 @@ const TEI_ATTRIBUTES: any = {
     }
 }
 
-interface QueryResults {
-    results: {
-        value: string
-    }
-}
-
-type Generated = Record<string, string>;
-
 export const useGetPatternCode = () => {
     const engine = useDataEngine()
     const [loadingCodes, setloadingCodes] = useState(false)
-    const [value, setvalue] = useState<Generated>({})
+    const [value, setvalue] = useState<GeneratedCodeType>({})
 
     async function returnPattern(variables: CustomAttributeProps[]) {
         setloadingCodes(true)
         for (const variable of variables) {
             const { pattern = "", name: id }: CustomAttributeProps = variable
-            let code: QueryResults = { results: { value: "" } }
+            let code: PatternCodeQueryResults = { results: { value: "" } }
             if (pattern.length > 0) {
                 console.log(pattern, id);
                 code = await engine.query(TEI_ATTRIBUTES, { variables: { id } })

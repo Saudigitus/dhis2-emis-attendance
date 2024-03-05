@@ -1,19 +1,8 @@
 import React from "react";
 import styles from "./button.module.css";
 import { ButtonGroup, Button } from "@material-ui/core";
+import { ButtonProps } from "../../../../types/table/MultipleButtonsTypes";
 
-interface MultipleButtonsProps {
-    code: string
-    type: string
-    Component: any
-}
-
-interface ButtonProps {
-    id: string
-    selectedTerm: any
-    items: MultipleButtonsProps[]
-    setSelectedTerm: any
-}
 
 export default function MultipleButtons(props: ButtonProps) {
     const { items, selectedTerm, setSelectedTerm } = props;

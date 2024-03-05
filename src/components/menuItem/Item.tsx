@@ -1,11 +1,12 @@
 import React from 'react'
 import { MenuItem } from "@dhis2/ui"
 import { useRecoilState } from 'recoil';
+import { MenuItemProps } from '../../types/menu/MenuItemTypes'
 import { HeaderFieldsState } from '../../schema/headersSchema';
-import { type MenuItemTypes } from '../../types/menu/MenuItemTypes'
 import { useParams, useDataElementsParamMapping  } from '../../hooks';
 
-export default function Item({ menuItems, dataElementId, onToggle }: { menuItems: MenuItemTypes[], dataElementId: string, onToggle: () => void }): React.ReactElement {
+export default function Item(props: MenuItemProps): React.ReactElement {
+    const { menuItems, dataElementId, onToggle } = props;
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
     const paramsMapping = useDataElementsParamMapping()

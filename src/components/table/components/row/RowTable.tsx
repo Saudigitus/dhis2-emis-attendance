@@ -1,20 +1,9 @@
 import React from 'react'
 import classNames from 'classnames';
 import defaultClasses from '../table.module.css';
+import { RowTableProps } from '../../../../types/table/TableContentTypes';
 
-interface tableProps {
-    head: any
-    footer: any
-}
-
-interface RowProps {
-    children?: React.ReactNode
-    className?: string
-    passOnProps?: object
-    table?: tableProps
-}
-
-function RowTable(props: RowProps): React.ReactElement {
+function RowTable(props: RowTableProps): React.ReactElement {
     const { children, className, table, ...passOnProps } = props;
 
     const classes = classNames(
