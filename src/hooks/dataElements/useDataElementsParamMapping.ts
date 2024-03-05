@@ -1,12 +1,12 @@
-import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey"
+import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
+import { formatFilterItems } from "../../utils/constants/headBar/formatFilterItemsMapping";
 
 const useDataElementsParamMapping = () => {
-    const { getDataStoreData } = getSelectedKey()
+    const { registration, filterItems } = getDataStoreKeys()
 
     return {
-        [getDataStoreData.registration?.section]: "class",
-        [getDataStoreData.registration?.academicYear]: "academicYear",
-        [getDataStoreData.registration?.grade]: "grade"
+        [registration?.academicYear]: "academicYear",
+        ...formatFilterItems(filterItems)
     }
 }
 export default useDataElementsParamMapping;

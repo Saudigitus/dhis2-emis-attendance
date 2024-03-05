@@ -21,7 +21,9 @@ const useParams = () => {
             schoolName: useQuery().get('schoolName'),
             grade: useQuery().get('grade'),
             class: useQuery().get('class'),
-            academicYear: useQuery().get('academicYear')
+            academicYear: useQuery().get('academicYear'),
+            position: useQuery().get('position'),
+            employmentType: useQuery().get('employmentType')
         }
     }
     return { add, remove, useQuery, urlParamiters }
