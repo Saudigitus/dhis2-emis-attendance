@@ -36,7 +36,7 @@ function EnrollmentActionsButtons() {
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorElAddNew(event.currentTarget); setlocalAttendanceMode("edit") }}>
-            <Button icon={<IconAddCircle24 />}>Add new event</Button>
+            <Button icon={<IconAddCircle24 />}>Take attendancet</Button>
           </span>
         </Tooltip>
 
