@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { useState, useEffect } from "react";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { SelectedDateState } from "../../schema/attendanceSchema";
+import { formatResponse, getAttendanceDays } from "../../utils/table/header/formatResponse";
 import { TableColumnState } from "../../schema/tableColumnsSchema";
+import { SelectedDateState } from "../../schema/attendanceSchema";
 import { useAttendanceMode } from "../attendanceMode/useAttendanceMode";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
-import { formatResponse, getAttendanceDays } from "../../utils/table/header/formatResponse";
 
 export function useHeader() {
     const programConfigState = useRecoilValue(ProgramConfigState);
@@ -18,11 +18,11 @@ export function useHeader() {
     const attendanceProgramStage = getDataStoreData.attendance.programStage
 
     useEffect(() => {
-        if (typeof formatResponse({data: programConfigState, programStageId: registrationProgramStage}) !== "undefined" && controlRender) {
-            setcolumnHeader(formatResponse({data:programConfigState, programStageId:registrationProgramStage}).concat(getAttendanceDays(selectedDate, attendanceMode, programConfigState, attendanceProgramStage)) ?? [])
+        if (typeof formatResponse(programConfigState, registrationProgramStage) !== "undefined" && controlRender) {
+            setcolumnHeader(formatResponse(programConfigState, registrationProgramStage).concat(getAttendanceDays(selectedDate, attendanceMode, programConfigState, attendanceProgramStage)) ?? [])
             setcontrolRender(false)
         }
-    }, [formatResponse({data:programConfigState, programStageId:registrationProgramStage}), controlRender])
+    }, [formatResponse(programConfigState, registrationProgramStage), controlRender])
 
     useEffect(() => {
         if (!controlRender) {
