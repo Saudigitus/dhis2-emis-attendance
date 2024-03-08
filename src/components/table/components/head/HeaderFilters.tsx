@@ -31,11 +31,10 @@ function HeaderFilters() {
             Selected date: {format(selectedDate, 'dd/MM/yyyy')}
           </Chip>
         }
-        <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
         <Button onClick={handleClick} icon={seeReason ? <IconViewOff24 /> : <IconView24 />}>
           {seeReason ? 'Hide Reason of Absense' : 'View Reason of Absense'}
         </Button>
-        <ConfigTableColumns headers={columns} updateVariables={() => { }} />
+        <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>
     </div>
   );
