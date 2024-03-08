@@ -26,14 +26,15 @@ function HeaderFilters() {
       <EnrollmentFilters />
       <div className="mt-2">
         {
-          attendanceMode === 'edit' &&
-          <Chip selected>
-            Selected date: {format(selectedDate, 'dd/MM/yyyy')}
-          </Chip>
+          attendanceMode === 'edit' ?
+            <Chip selected>
+              Selected date: {format(selectedDate, 'dd/MM/yyyy')}
+            </Chip>
+            :
+            <Button onClick={handleClick} icon={seeReason ? <IconViewOff24 /> : <IconView24 />}>
+              {seeReason ? 'Hide Reason of Absense' : 'View Reason of Absense'}
+            </Button>
         }
-        <Button onClick={handleClick} icon={seeReason ? <IconViewOff24 /> : <IconView24 />}>
-          {seeReason ? 'Hide Reason of Absense' : 'View Reason of Absense'}
-        </Button>
         <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>
     </div>

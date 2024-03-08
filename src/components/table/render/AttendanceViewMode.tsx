@@ -16,7 +16,7 @@ function AttendanceViewMode(props: AttendanceViewModeProps) {
     return (
         <>
             {column.type === VariablesTypes.Attendance
-                ? attendanceOptionIcons(value?.status, attendanceConst, value?.absenceOption, seeReason)
+                ? attendanceOptionIcons(value?.status, attendanceConst, value?.absenceOption, seeReason as unknown as boolean)
                 : getDisplayName({ attribute: column, value })
             }
         </>
@@ -34,11 +34,10 @@ function attendanceOptionIcons(value: string, attendanceConst: any, absenceOptio
     }
     if (value === attendanceConst("absent")) {
         return <div>
-            <HighlightOff style={{ color: "#F05C5C" }} />
-            {seeReason && <Chip dense selected >
+            {seeReason ? <Chip dense selected >
                 {absenceOption ? absenceOption : '- -'}
             </Chip>
-            }
+                : <HighlightOff style={{ color: "#F05C5C" }} />}
         </div>
     }
     return <RemoveCircleOutline style={{ color: "#ADAEB0" }} />

@@ -6,6 +6,7 @@ import { useGetProgramRules } from '../hooks/programRules/useGetProgramRules';
 import { useGetProgramRulesVariables } from '../hooks/programRules/useGetProgramRulesVariables';
 import { useOrgUnitsGroups } from '../hooks/orgUnitsGroup/useOrgUnitsGroups';
 import { useGetOptionGroups } from '../hooks/optionGroup/useGetOptionGroups';
+import { useGetSchoolDays } from '../hooks/schoolDays/useGetSchoolDays';
 
 export default function AppWrapper(props: AppProps) {
     const { children } = props
@@ -14,8 +15,9 @@ export default function AppWrapper(props: AppProps) {
     const { loadingPRulesVariables } = useGetProgramRulesVariables();
     const { loadingOptionGroups } = useGetOptionGroups();
     const { loadingOrgUnitsGroups } = useOrgUnitsGroups()
+    const { loadingSchoolDays } = useGetSchoolDays()
 
-    if (loading || loadingPRulesVariables || loadingPRules || loadingOptionGroups || loadingOrgUnitsGroups) {
+    if (loadingSchoolDays || loading || loadingPRulesVariables || loadingPRules || loadingOptionGroups || loadingOrgUnitsGroups) {
         return (
             <CenteredContent>
                 <CircularLoader />
