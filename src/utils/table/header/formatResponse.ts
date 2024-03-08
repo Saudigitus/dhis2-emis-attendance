@@ -3,11 +3,10 @@ import { Attribute } from "../../../types/generated/models";
 import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
-import { DataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 
-export function formatResponse(data: ProgramConfig, dataStoreData: DataStoreRecord): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, registrationProgramStage: string): CustomAttributeProps[] {
     const headerResponse = useMemo(() => {
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === dataStoreData?.registration?.programStage)) ?? {} as ProgramConfig["programStages"][0])
+        const originalData = ((data?.programStages?.find(programStge => programStge.id === registrationProgramStage)) ?? [] as unknown as ProgramConfig["programStages"][0])
 
         return data?.programTrackedEntityAttributes?.map((item) => {
             return {
@@ -52,7 +51,7 @@ export function formatResponse(data: ProgramConfig, dataStoreData: DataStoreReco
                 }) as []
                 : []
         )
-    }, [data, tableColumns]);
+    }, [data]);
 
     return headerResponse;
 }
