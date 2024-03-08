@@ -3,7 +3,6 @@ import i18n from '@dhis2/d2-i18n';
 import { Button } from 'react-bootstrap';
 import { type CustomAttributeProps } from '../../../../types/variables/AttributeColumns';
 import DragDropList from '../../../dragDrop/DragDropList';
-import { CustomAttributeProps } from '../../../../types/variables/AttributeColumns';
 import { Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import { DialogSelectColumnsProps } from '../../../../types/table/ConfigColumnsTypes';
 
