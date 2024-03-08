@@ -59,7 +59,7 @@ function Table() {
             <WithBorder type='bottom' />
             <WithPadding >
                 <WithBorder type='all' >
-                    <HeaderFilters />
+                    <HeaderFilters attendanceMode={attendanceMode} />
                     <div
                         className={classes.tableContainer}
                     >
