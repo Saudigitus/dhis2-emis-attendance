@@ -18,11 +18,11 @@ export function useHeader() {
     const attendanceProgramStage = getDataStoreData.attendance.programStage
 
     useEffect(() => {
-        if (typeof formatResponse({data: programConfigState, programStageId: registrationProgramStage}) !== "undefined" && controlRender) {
-            setcolumnHeader(formatResponse({data:programConfigState, programStageId:registrationProgramStage}).concat(getAttendanceDays(selectedDate, attendanceMode, programConfigState, attendanceProgramStage)) ?? [])
+        if (typeof formatResponse(programConfigState, registrationProgramStage) !== "undefined" && controlRender) {
+            setcolumnHeader(formatResponse(programConfigState, registrationProgramStage).concat(getAttendanceDays(selectedDate, attendanceMode, programConfigState, attendanceProgramStage)) ?? [])
             setcontrolRender(false)
         }
-    }, [formatResponse({data:programConfigState, programStageId:registrationProgramStage}), controlRender])
+    }, [formatResponse(programConfigState, registrationProgramStage), controlRender])
 
     useEffect(() => {
         if (!controlRender) {
