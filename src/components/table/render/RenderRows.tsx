@@ -59,7 +59,6 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
-                        // onClick={() => { attendanceMode === "view" && window.open(`${baseUrl}/dhis-web-capture/index.html#/enrollment?enrollmentId=${row?.enrollmentId}&orgUnitId=${row?.orgUnitId}&programId=${row?.programId}&teiId=${row?.trackedEntity}`, "_blank") }}
                         >
                             {attendanceMode === "view"
                                 ? <AttendanceViewMode column={column} value={row[column.id]} />
@@ -67,6 +66,7 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                             }
                         </RowCell>
                     ));
+
                     return (
                         <RowTable
                             key={index}
