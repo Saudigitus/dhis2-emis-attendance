@@ -1,7 +1,10 @@
 import { format } from "date-fns";
-import config from "./config.json";
+import { SchoolCalendarSate } from "../../../schema/schoolCalendarSchema";
+import { useRecoilValue } from "recoil";
 
 export const unavailableSchoolDays = () => {
+    const config = useRecoilValue(SchoolCalendarSate);
+
     function unavailableDays(date: Date) {
         if (isHoliday(date, config.holidays)) {
             return true
