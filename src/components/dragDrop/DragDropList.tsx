@@ -1,13 +1,10 @@
 import i18n from '@dhis2/d2-i18n';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableHead from '@material-ui/core/TableHead';
 import React from 'react'
 import { DndProvider } from 'react-dnd';
 import DragDropListItem from './DragDropItems.js';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DragDropListProps } from '../../types/dragDrop/DragDropTypes.js';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableHead } from '@material-ui/core';
 
 function DragDropList(props: DragDropListProps) {
     const { listItems, handleToggle } = props;
