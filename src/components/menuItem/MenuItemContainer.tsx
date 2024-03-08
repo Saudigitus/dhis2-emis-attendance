@@ -16,12 +16,13 @@ function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     const grade = useQuery().get("grade");
     const { getDataStoreData } = getSelectedKey()
     const programConfigState = useRecoilValue(ProgramConfigState);
+    const registrationProgramStage = getDataStoreData.registration.programStage
 
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-        variables: formatResponse(programConfigState, getDataStoreData)?.filter(element => element.id === dataElementId).map((x) => { return { ...x, name: x.id } }),
+        variables: formatResponse({ data: programConfigState, programStageId: registrationProgramStage })?.filter(element => element.id === dataElementId).map((x) => { return { ...x, name: x.id } }),
         values: { orgUnit, [getDataStoreData.registration.grade]: grade },
         type: "programStage",
-        formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, getDataStoreData)?.filter(element => element.id === dataElementId)) || []
+        formatKeyValueType: formatKeyValueTypeHeader(formatResponse({ data: programConfigState, programStageId: registrationProgramStage })?.filter(element => element.id === dataElementId)) || []
     })
 
     useEffect(() => {

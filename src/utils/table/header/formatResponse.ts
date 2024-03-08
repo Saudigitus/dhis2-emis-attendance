@@ -1,10 +1,11 @@
 import { format } from "date-fns";
 import { Attribute } from "../../../types/generated/models";
-import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
+import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
+import { HeaderFormatResponseProps } from "../../../types/utils/table/TableTypes";
 import { VariablesTypes, CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 
-export function formatResponse(data: ProgramConfig, registrationProgramStage: string): CustomAttributeProps[] {
-    const originalData = ((data?.programStages?.find(programStge => programStge.id === registrationProgramStage)) ?? [] as unknown as ProgramConfig["programStages"][0])
+export function formatResponse({ data, programStageId } : HeaderFormatResponseProps): CustomAttributeProps[] {
+    const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? [] as unknown as ProgramConfig["programStages"][0])
 
     return data?.programTrackedEntityAttributes?.map((item) => {
         return {
