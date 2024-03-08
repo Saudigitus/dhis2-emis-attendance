@@ -5,9 +5,8 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import DialogConfigColumns from './DialogConfigColumns';
 import { ConfigTableColumnsProps } from '../../../../types/table/ConfigColumnsTypes';
 
-
 function ConfigTableColumns(props: ConfigTableColumnsProps) {
-    const { headers, updateVariables } = props;
+    const { headers, updateVariables, filteredHeaders } = props;
     const [open, setopen] = useState(false)
 
     const closeDialog = () => {
@@ -36,9 +35,9 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
             <DialogConfigColumns
                 open={open}
                 headers={headers}
-                filteredHeaders={[]}
                 onClose={closeDialog}
                 updateVariables={updateVariables}
+                filteredHeaders={filteredHeaders}
             />
         </React.Fragment>
     )
