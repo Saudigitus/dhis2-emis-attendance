@@ -3,17 +3,19 @@ import style from "./sideBar.module.css"
 import SideBarItem from './components/SideBarItem'
 import SibeBarCollapseBtn from './components/SibeBarCollapseBtn';
 import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
-import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey';
+import { getDataStoreKeys } from '../../../utils/commons/dataStore/getDataStoreKeys';
+import { useLocation } from 'react-router';
 
 export default function SideBar(): React.ReactElement {
     const [collapsed, setCollapsed] = useState<boolean>(true);
-    const academicYear = getSelectedKey().getDataStoreData.defaults.currentAcademicYear;
+    const { filterItems } = getDataStoreKeys()
+    const location = useLocation()
 
     return (
         <aside className={collapsed ? style.SideBarContainerCollapsed : style.SideBarContainer}>
             <div className={style.SideBarMenu}>
                 {
-                    sideBarData(academicYear).map((element, index) => (
+                    sideBarData(location.search, filterItems).map((element, index) => (
                         <SideBarItem key={index} title={element.title} subItems={element.subItems} />
                     ))
                 }
