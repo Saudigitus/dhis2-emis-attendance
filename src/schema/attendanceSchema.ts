@@ -1,20 +1,5 @@
 import { atom } from "recoil"
-
-interface AttendanceProps {
-    selectedDate: Date
-}
-
-interface AttendanceAddNewProps {
-    selectedDate: Date
-}
-
-interface EnrollmentDetailsProps {
-    enrollmentDetails: string[]
-}
-
-interface AttendanceModeProps {
-    attendanceMode: "edit" | "view"
-}
+import { AttendanceAddNewProps, AttendanceModeProps, AttendanceProps, EnrollmentDetailsProps } from "../types/attendance/AttendanceTypes"
 
 export const SelectedDateState = atom<AttendanceProps>({
     key: "attendanceViewEvents-state",
@@ -30,12 +15,6 @@ export const SelectedDateAddNewState = atom<AttendanceAddNewProps>({
     }
 })
 
-export const EnrollmentDetailsTeisState = atom<EnrollmentDetailsProps>({
-    key: "enrollmentDetailsTeis-state",
-    default: {
-        enrollmentDetails: []
-    }
-})
 
 export const AttendanceModeState = atom<AttendanceModeProps>({
     key: "attendanceMode-state",

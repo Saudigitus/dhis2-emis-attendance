@@ -1,23 +1,26 @@
-import { Checkbox, spacersNum } from '@dhis2/ui'
-import { withStyles } from '@material-ui/core';
 import React from 'react'
+import { withStyles } from '@material-ui/core';
+import { Checkbox, spacersNum } from '@dhis2/ui'
+import { TrueOnlyProps } from '../../../../../../../types/table/ContentFiltersTypes';
 
-const styles = theme => ({
+const styles = (theme: any) => ({
     label: theme.typography.formFieldTitle,
     checkbox: {
         marginTop: spacersNum.dp8,
         marginBottom: spacersNum.dp16,
     },
 });
-function TrueOnly(props) {
-    const { header, classes, id, onChange, value } = props;
+
+function TrueOnly(props: TrueOnlyProps) {
+    const { classes, id, onChange, value } = props;
+
     return (
         <div>
             <Checkbox
                 checked={value}
                 label={"Yes"}
                 name={`multiSelectBoxes`}
-                onChange={(e) => { onChange(e.checked, id); }}
+                onChange={(e : React.ChangeEvent<HTMLInputElement>) => { onChange(e.target.checked, id); }}
                 value={value}
                 className={classes.checkbox}
                 dense

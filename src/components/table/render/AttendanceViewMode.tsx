@@ -1,25 +1,9 @@
 import React from 'react'
-import { VariablesTypes } from '../../../types/table/AttributeColumns'
+import { VariablesTypes } from '../../../types/variables/AttributeColumns'
+import { AttendanceViewModeProps } from '../../../types/table/TableRenderTypes';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { AccessTime, CheckCircleOutline, HighlightOff, RemoveCircleOutline } from '@material-ui/icons';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
-
-interface AttendanceViewModeProps {
-    value: string | any
-    column: {
-        type: string
-        id: string
-        options?: {
-            optionSet: {
-                id: string
-                options: [{
-                    value: string
-                    label: string
-                }]
-            }
-        }
-    }
-}
+import { AccessTime, CheckCircleOutline, HighlightOff, RemoveCircleOutline } from '@material-ui/icons';
 
 function AttendanceViewMode(props: AttendanceViewModeProps) {
     const { column, value } = props

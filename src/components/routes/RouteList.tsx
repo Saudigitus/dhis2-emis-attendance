@@ -1,7 +1,7 @@
-import { Navigate } from "react-router-dom";
 import React from "react";
-import { SimpleLayout, FullLayout } from "../../layout"
+import { Navigate } from "react-router-dom";
 import { TableComponent } from "../../pages";
+import { SimpleLayout, FullLayout } from "../../layout"
 
 export default function RouteList() {
     return [

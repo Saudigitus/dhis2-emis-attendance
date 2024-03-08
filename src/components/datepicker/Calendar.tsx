@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { CalendarProps } from '../../types/datePicker/CalendarTypes';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { unavailableSchoolDays } from '../../utils/constants/attendance/unavailableSchoolDays';
 
-interface CalendarProps {
-  value: { selectedDate: Date }
-  setValue: ({ selectedDate }: { selectedDate: Date }) => void
-}
 
 export default function Calendar(props: CalendarProps) {
   const { value, setValue } = props

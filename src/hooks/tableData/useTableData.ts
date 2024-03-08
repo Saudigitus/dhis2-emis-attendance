@@ -1,44 +1,22 @@
-import { attendanceFormater, type attendanceFormaterProps } from './../../utils/table/rows/formatResponseRows';
-
-import { useRecoilState, useRecoilValue } from "recoil";
 import { useState } from "react";
+import { format } from "date-fns";
 import { useDataEngine } from "@dhis2/app-runtime";
-import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
+import useShowAlerts from "../commons/useShowAlert";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
-import useShowAlerts from "../commons/useShowAlert";
-import { EnrollmentDetailsTeisState, SelectedDateState } from "../../schema/attendanceSchema";
 import { TableDataState } from "../../schema/tableColumnsSchema";
-import { format } from "date-fns";
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
+import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
+import { SelectedDateState } from "../../schema/attendanceSchema";
+import { attendanceFormater } from './../../utils/table/rows/formatResponseRows';
+import { AttendanceQueryResults, EventQueryProps, EventQueryResults } from "../../types/api/WithoutRegistrationTypes";
+import { TeiQueryProps, TeiQueryResults } from "../../types/api/WithRegistrationTypes";
+import { AttendanceFormaterProps } from "../../types/utils/table/FormatRowsDataTypes";
+import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema";
 
 type TableDataProps = Record<string, string>;
 
-interface EventQueryProps {
-    page?: number
-    pageSize?: number
-    ouMode: string
-    program: string
-    order?: string
-    programStage: string
-    orgUnit: string
-    programStatus: string
-    filter?: string[]
-    filterAttributes?: string[]
-    trackedEntity?: string
-    occurredAfter?: string
-    occurredBefore?: string
-    fields?: string
-}
-
-interface TeiQueryProps {
-    program: string
-    pageSize: number
-    ouMode: string
-    trackedEntity: string
-    orgUnit: string
-    order: string
-}
 
 const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, programStatus, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
     results: {
@@ -76,45 +54,6 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
         }
     }
 })
-
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
-
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-interface EventQueryResults {
-    results: {
-        instances: [{
-            trackedEntity: string
-            dataValues: dataValuesProps[]
-        }]
-    }
-}
-
-interface AttendanceQueryResults {
-    results: {
-        instances: any
-    }
-}
-
-interface TeiQueryResults {
-    results: {
-        instances: [{
-            trackedEntity: string
-            attributes: attributesProps[]
-            enrollments: [{
-                enrollment: string
-                orgUnit: string
-                program: string
-            }]
-        }]
-    }
-}
 
 export function useTableData() {
     const engine = useDataEngine();
@@ -158,7 +97,7 @@ export function useTableData() {
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
-            })
+            }) as unknown as EventQueryResults
 
             // Map the trackedEntityIds from the events
             const trackedEntityIds = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
@@ -184,7 +123,7 @@ export function useTableData() {
                             type: { critical: true }
                         });
                         setTimeout(hide, 5000);
-                    })
+                    }) as unknown as AttendanceQueryResults
 
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
@@ -205,8 +144,8 @@ export function useTableData() {
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);
-                })
-                : { results: { instances: [] } }
+                }) as unknown as TeiQueryResults
+                : { results: { instances: [] } } as unknown as TeiQueryResults
 
             const resultsFormatter = formatResponseRows({
                 eventsInstances: eventsResults?.results?.instances,
@@ -226,7 +165,7 @@ export function useTableData() {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             const localData = [...tableData]
             setLoading(true)
-            const attendanceValuesByTei: attendanceFormaterProps[] = []
+            const attendanceValuesByTei: AttendanceFormaterProps[] = []
 
             const trackedEntityIds = enrollmentTeis.enrollmentDetails
 
@@ -247,7 +186,7 @@ export function useTableData() {
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);
-                })
+                }) as unknown as AttendanceQueryResults
 
                 attendanceValuesByTei.push(...attendanceResults?.results?.instances)
             }

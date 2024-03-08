@@ -1,18 +1,15 @@
-import { Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
-import MenuFilters from './MenuFilters';
-import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns';
-import SelectButton from "../selectButton/SelectButton";
 import { format } from 'date-fns';
 import { useRecoilState } from 'recoil';
+import MenuFilters from './MenuFilters';
+import { Button } from '@material-ui/core';
+import style from './enrollmentFilter.module.css'
+import SelectButton from "../selectButton/SelectButton";
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
+import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
+import { ContentFilterProps, FiltersValuesProps } from '../../../../../types/table/ContentFiltersTypes';
 
-interface ContentFilterProps {
-    headers?: CustomAttributeProps[]
-}
-
-type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
 
 function ContentFilter(props: ContentFilterProps) {
     const { headers = [] } = props;
@@ -44,7 +41,7 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     const onChangeFilters = (value: any, key: string, type: string, pos: string) => {
-        let cloneHeader = { ...filtersValues, ...convertArrayToObject(headerFieldsStateValues.dataElements) }
+        let cloneHeader = { ...filtersValues, ...convertArrayToObject({array:headerFieldsStateValues.dataElements}) }
 
         if (type === 'DATE') {
             let date = cloneHeader[key] ?? {}
@@ -128,7 +125,7 @@ function ContentFilter(props: ContentFilterProps) {
     }, [resetValues])
 
     return (
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10, marginTop: 10 }}>
+        <div className={style.contentFilterContainer}>
             {
                 localFilters.map((colums, index) => (
                     <SelectButton key={index}
@@ -155,17 +152,12 @@ function ContentFilter(props: ContentFilterProps) {
                     />
                 ))
             }
-            <div style={{ marginTop: 0 }}>
+            <div className={style.contentFilterButtonsConatiner}>
                 {headers?.filter(x => !localFilters.includes(x)).length > 0 &&
-                    <Button style={{
-                        color: "rgb(33, 41, 52)",
-                        fontSize: 14,
-                        textTransform: "none",
-                        fontWeight: 400
-                    }}
-
+                    <Button
                         variant='outlined'
                         onClick={handleClick}
+                        className={style.contentFilterButton}
                     >
                         More filters
                     </Button>

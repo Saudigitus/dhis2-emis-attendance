@@ -1,18 +1,12 @@
 import React from "react";
+import Subtitle from "../text/Subtitle";
 import WithPadding from "../template/WithPadding";
-import Subtitle from "../text/subtitle";
-import {
-    ModalActions,
-    Button,
-    ButtonStrip,
-    Divider
-  } from "@dhis2/ui";
+import { ImportContentProps } from "../../types/modal/ModalTypes";
+import { ModalActions, Button, ButtonStrip, Divider } from "@dhis2/ui";
 
-interface ContentProps {
-    setOpen: (value: boolean) => void
-  }
-
-function ImportContent({ setOpen }: ContentProps): React.ReactElement {
+function ImportContent(props: ImportContentProps): React.ReactElement {
+  const { setOpen } = props;
+  
   const modalActions = [
     { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
     { label: "Import", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } }

@@ -1,7 +1,8 @@
+import React from 'react'
+import { makeStyles } from '@material-ui/core';
 import { Checkbox, spacersNum } from '@dhis2/ui';
 import { createStyles, type Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core';
-import React from 'react'
+import { SelectBoxesProps } from '../../../../../../../../types/table/ContentFiltersTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,17 +14,8 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface MultiSelectBoxesProps {
-    options: { optionSet: { options: [{ label: string, value: string }] } }
-    value: any
-    id: string
-    onChange: (value: any, id?: string, type?: string) => void
-    valueType?: string
-    orientation?: string
-}
-
 let checkedValues = "";
-function MultiSelectBoxes(props: MultiSelectBoxesProps) {
+function MultiSelectBoxes(props: SelectBoxesProps) {
     const { options, id, onChange, value = "", valueType } = props;
     const classes = useStyles()
 

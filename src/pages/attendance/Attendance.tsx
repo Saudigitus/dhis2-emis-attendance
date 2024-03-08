@@ -1,7 +1,6 @@
 import React from "react";
-import { Table } from "../../components";
-import { useParams } from "../../hooks/commons/useQueryParams";
-import InfoPage from "../../components/info/InfoPage";
+import { useParams } from "../../hooks";
+import { Table, InfoPage } from "../../components";
 
 function TableComponent() {
   const { urlParamiters } = useParams()

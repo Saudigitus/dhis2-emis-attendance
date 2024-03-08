@@ -1,13 +1,15 @@
 import React from "react";
-import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
-import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
-import { useHeader } from "../../../../hooks/tableHeader/useHeader";
 import { Chip } from "@dhis2/ui";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedDateAddNewState } from "../../../../schema/attendanceSchema";
 import { useAttendanceMode } from "../../../../hooks/attendanceMode/useAttendanceMode";
 import { format } from "date-fns";
 import { TableColumnState } from "../../../../schema/tableColumnsSchema";
+import { useRecoilValue } from "recoil";
+import styles from './header.module.css'
+import { useHeader, useAttendanceMode } from "../../../../hooks";
+import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
+import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
 
 function HeaderFilters() {
   const { columns } = useHeader();
@@ -18,7 +20,7 @@ function HeaderFilters() {
   const setTableHeaders = (tableHeaders: any) => setTableColumns(tableHeaders)
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className={styles.headerFilterContainer}>
       <EnrollmentFilters />
       <div className="mt-2">
         {

@@ -1,6 +1,6 @@
 import { atom } from "recoil"
-import { type CustomAttributeProps } from "../types/table/AttributeColumns"
-import { type RowProps } from "react-bootstrap"
+import { CustomAttributeProps } from "../types/variables/AttributeColumns"
+import { RowProps } from "react-bootstrap"
 
 export const TableColumnState = atom<CustomAttributeProps[]>({
     key: "tableColumn-state",

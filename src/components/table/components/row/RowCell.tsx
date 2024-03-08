@@ -1,20 +1,7 @@
-import classNames from 'classnames';
 import React from 'react'
+import classNames from 'classnames';
 import defaultClasses from '../table.module.css';
-
-interface tableProps {
-    head: any
-    footer: any
-}
-
-interface RowCellProps {
-    children?: React.ReactNode
-    className?: string
-    passOnProps?: object
-    table?: tableProps
-    colspan?: number
-    onClick?: () => void
-}
+import { RowCellProps } from '../../../../types/table/TableContentTypes';
 
 function RowCell(props: RowCellProps): React.ReactElement {
     const { children, className, passOnProps, table, colspan, onClick } = props;

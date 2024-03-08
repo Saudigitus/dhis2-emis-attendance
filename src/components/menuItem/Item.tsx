@@ -1,16 +1,22 @@
 import React from 'react'
-import { MenuItem } from "@dhis2/ui"
-import { type MenuItemTypes } from '../../types/menu/MenuItemTypes'
-import { useParams } from '../../hooks/commons/useQueryParams';
-import { useRecoilState } from 'recoil';
+import { MenuItem, Help } from "@dhis2/ui"
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { MenuItemProps } from '../../types/menu/MenuItemTypes'
 import { HeaderFieldsState } from '../../schema/headersSchema';
-import useDataElementsParamMapping from '../../hooks/dataElements/useDataElementsParamMapping';
+import { useParams, useDataElementsParamMapping  } from '../../hooks';
+import { OuQueryString } from '../../schema/headerSearchInputSchema';
 
-export default function Item({ menuItems, dataElementId, onToggle }: { menuItems: MenuItemTypes[], dataElementId: string, onToggle: () => void }): React.ReactElement {
+export default function Item(props: MenuItemProps): React.ReactElement {
+    const { menuItems, dataElementId, onToggle } = props;
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
     const paramsMapping = useDataElementsParamMapping()
 
+    const stringQuery = useRecoilValue(OuQueryString);
+    const filteredMenuItems = stringQuery
+    ? menuItems.filter(item => item.label.toLowerCase().includes(stringQuery.toLowerCase()))
+    : menuItems;
+    
     const onChange = (selectedOption: { label: string, value: string }) => {
         add(paramsMapping[dataElementId], selectedOption.value);
         let dataElements: string[][] = [...headerFields.dataElements]
@@ -28,10 +34,16 @@ export default function Item({ menuItems, dataElementId, onToggle }: { menuItems
         onToggle()
     }
 
+    if ((stringQuery && !filteredMenuItems.length) || !menuItems.length) {
+        return <Help>
+            No items found
+        </Help>
+    }
+
     return (
         <>
             {
-                menuItems?.map(menuItem => (
+                filteredMenuItems?.map(menuItem => (
                     < MenuItem onClick={() => { onChange(menuItem) }} key={menuItem.value} label={menuItem.label} />
                 ))
             }
