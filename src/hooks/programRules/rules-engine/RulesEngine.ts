@@ -20,6 +20,8 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const [updatedVariables, setupdatedVariables] = useState([...variables])
     const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
 
+    // console.log(variables, values, type, formatKeyValueType)
+    // console.log(updatedVariables)
     useEffect(() => {
         if (updatedVariables.length === 0) {
             setupdatedVariables([...variables])

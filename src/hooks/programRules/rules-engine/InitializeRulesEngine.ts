@@ -4,14 +4,13 @@ import { useFormatProgramRules } from "../useFormatProgramRules"
 import { getFunctionExpression, getValueTypeVariable, removeSpecialCharacters, replaceConditionVariables } from "./RulesEngine"
 import { useFormatProgramRulesVariables } from "../useFormatProgramRulesVariables"
 import { ProgramRulesFormatedState } from "../../../schema/programRulesFormated"
-// import useGetSectionTypeLabel from "../../commons/useGetSectionTypeLabel"
-// import { formFields } from "../../../utils/constants/enrollmentForm/enrollmentForm"
+import { useHeader } from "../../tableHeader/useHeader"
 
 export const initializeRulesEngine = () => {
     const { programRules } = useFormatProgramRules()
     const { programRulesVariables } = useFormatProgramRulesVariables()
     const [newProgramRules, setnewProgramRules] = useRecoilState(ProgramRulesFormatedState)
-    // const { sectionName } = useGetSectionTypeLabel();
+    const { columns } = useHeader();
 
     function initialize() {
         if (programRules?.length > 0 && Object.keys(programRulesVariables)?.length > 0 && newProgramRules?.length === 0) {
@@ -22,7 +21,7 @@ export const initializeRulesEngine = () => {
                         functionName: getFunctionExpression(programRule.condition),
                         condition: replaceConditionVariables(removeSpecialCharacters(programRule?.condition), programRulesVariables),
                         data: replaceConditionVariables(removeSpecialCharacters(programRule?.data), programRulesVariables),
-                        // valueType: getValueTypeVariable(formFields(enrollmentsData, sectionName), programRule, "programStageSection")
+                        valueType: getValueTypeVariable(columns, programRule, "programStage")
                     }
                 })
             setnewProgramRules(newProgramR)

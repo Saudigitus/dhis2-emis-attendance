@@ -21,7 +21,7 @@ export default function MainHeader(): React.ReactElement {
     useEffect(() => {
         initialize()
     }, [])
-
+    
     return (
         <nav className={style.MainHeaderContainer}>
             {headBarData({ selectedOptions, dataStoreData: getDataStoreData, programStageDataElements }).map(haderItem => (

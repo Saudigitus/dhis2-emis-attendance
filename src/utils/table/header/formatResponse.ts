@@ -1,33 +1,33 @@
 import { format } from "date-fns";
 import { Attribute } from "../../../types/generated/models";
 import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
+import { HeaderFormatResponseProps } from "../../../types/utils/table/TableTypes";
 import { VariablesTypes, CustomAttributeProps } from "../../../types/variables/AttributeColumns";
-import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig, registrationProgramStage: string): CustomAttributeProps[] {
-    const headerResponse = useMemo(() => {
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === registrationProgramStage)) ?? [] as unknown as ProgramConfig["programStages"][0])
+export function formatResponse({ data, programStageId } : HeaderFormatResponseProps): CustomAttributeProps[] {
+    const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? [] as unknown as ProgramConfig["programStages"][0])
 
-        return data?.programTrackedEntityAttributes?.map((item) => {
-            return {
-                id: item.trackedEntityAttribute.id,
-                displayName: item.trackedEntityAttribute.displayName,
-                header: item.trackedEntityAttribute.displayName,
-                required: item.mandatory,
-                name: item.trackedEntityAttribute.displayName,
-                labelName: item.trackedEntityAttribute.displayName,
-                valueType: item.trackedEntityAttribute.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : item.trackedEntityAttribute.valueType as unknown as CustomAttributeProps["valueType"],
-                options: { optionSet: item.trackedEntityAttribute.optionSet },
-                visible: item.displayInList,
-                disabled: false,
-                pattern: '',
-                searchable: false,
-                error: false,
-                content: '',
-                key: item.trackedEntityAttribute.id,
-                type: VariablesTypes.Attribute
-            }
-        }).concat(
+    return data?.programTrackedEntityAttributes?.map((item) => {
+        return {
+            id: item.trackedEntityAttribute.id,
+            displayName: item.trackedEntityAttribute.displayName,
+            header: item.trackedEntityAttribute.displayName,
+            required: item.mandatory,
+            name: item.trackedEntityAttribute.displayName,
+            labelName: item.trackedEntityAttribute.displayName,
+            valueType: item.trackedEntityAttribute.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : item.trackedEntityAttribute.valueType as unknown as CustomAttributeProps["valueType"],
+            options: { optionSet: item.trackedEntityAttribute.optionSet },
+            visible: item.displayInList,
+            disabled: false,
+            pattern: '',
+            searchable: false,
+            error: false,
+            content: '',
+            key: item.trackedEntityAttribute.id,
+            type: VariablesTypes.Attribute
+        }
+    })
+        .concat(
             Object.keys(originalData)?.length > 0
                 ? originalData?.programStageDataElements?.map((programStageDataElement) => {
                     return {
@@ -51,9 +51,6 @@ export function formatResponse(data: ProgramConfig, registrationProgramStage: st
                 }) as []
                 : []
         )
-    }, [data]);
-
-    return headerResponse;
 }
 
 export function getAttendanceDays(date: Date, attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
