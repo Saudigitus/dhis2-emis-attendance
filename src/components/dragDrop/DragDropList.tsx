@@ -8,6 +8,7 @@ import { Table, TableBody, TableHead } from '@material-ui/core';
 
 function DragDropList(props: DragDropListProps) {
     const { listItems, handleToggle } = props;
+
     return (
         <DndProvider backend={HTML5Backend}>
             <Table>
