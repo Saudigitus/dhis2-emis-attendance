@@ -14,7 +14,7 @@ const useParams = () => {
         setSearchParams(searchParams)
     }
     const useQuery = () => {
-        return React.useMemo(() => new URLSearchParams(searchParams), [searchParams])
+        return new URLSearchParams(searchParams)
     }
 
     const filterItemsParams: Record<string, any> = {};

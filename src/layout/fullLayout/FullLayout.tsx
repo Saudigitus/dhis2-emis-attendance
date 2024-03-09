@@ -8,8 +8,7 @@ import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 export default function FullLayout({ children }: { children: React.ReactNode }) {
     useGetInitialValues()
     const { isSetSectionType } = useGetInitialValues()
-    const { getDataStoreData } = getSelectedKey()
-    const { loading } = useGetProgramConfig(getDataStoreData.program);
+    const { loading } = useGetProgramConfig();
 
     if (!isSetSectionType) {
         return (

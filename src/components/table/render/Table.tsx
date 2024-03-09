@@ -33,7 +33,7 @@ function Table() {
     useEffect(() => {
         void getData(page, pageSize)
         setInitialAttendanceMode()
-    }, [useQuery(), headerFieldsState, page, pageSize, refetch])
+    }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         void getAttendanceData()
