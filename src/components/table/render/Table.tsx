@@ -9,8 +9,8 @@ import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { WithBorder, WithPadding } from '../../../components';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { SelectedDateState } from '../../../schema/attendanceSchema';
-import { HeaderFilters, Pagination, TableComponent, WorkingLits} from '../components'
-import { useHeader, useTableData, useParams, useAttendanceMode  } from '../../../hooks';
+import { HeaderFilters, Pagination, TableComponent, WorkingLits } from '../components'
+import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -22,7 +22,6 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
-    const { useQuery } = useParams()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
@@ -59,7 +58,7 @@ function Table() {
             <WithBorder type='bottom' />
             <WithPadding >
                 <WithBorder type='all' >
-                    <HeaderFilters attendanceMode={attendanceMode} />
+                    <HeaderFilters />
                     <div
                         className={classes.tableContainer}
                     >

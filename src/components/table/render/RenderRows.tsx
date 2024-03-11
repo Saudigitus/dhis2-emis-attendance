@@ -59,6 +59,7 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
+                            cellClass={column?.class}
                         >
                             {attendanceMode === "view"
                                 ? <AttendanceViewMode column={column} value={row[column.id]} />
