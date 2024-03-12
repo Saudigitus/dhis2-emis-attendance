@@ -4,7 +4,7 @@ import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { HeaderFormatResponseProps } from "../../../types/utils/table/TableTypes";
 import { VariablesTypes, CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 
-export function formatResponse({ data, programStageId } : HeaderFormatResponseProps): CustomAttributeProps[] {
+export function formatResponse({ data, programStageId }: HeaderFormatResponseProps): CustomAttributeProps[] {
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? [] as unknown as ProgramConfig["programStages"][0])
 
     return data?.programTrackedEntityAttributes?.map((item) => {
@@ -100,7 +100,8 @@ export function getAttendanceDays(date: Date, attendanceMode: "edit" | "view", d
                     error: false,
                     content: '',
                     key: "",
-                    type: VariablesTypes.Attendance
+                    type: VariablesTypes.Attendance,
+                    class: "center"
                 }
             )
         }

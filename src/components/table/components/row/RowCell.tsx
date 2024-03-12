@@ -4,7 +4,7 @@ import defaultClasses from '../table.module.css';
 import { RowCellProps } from '../../../../types/table/TableContentTypes';
 
 function RowCell(props: RowCellProps): React.ReactElement {
-    const { children, className, passOnProps, table, colspan, onClick } = props;
+    const { children, className, passOnProps, table, colspan, onClick, cellClass } = props;
 
     const classes = classNames(
         defaultClasses.tableCell,
@@ -23,7 +23,9 @@ function RowCell(props: RowCellProps): React.ReactElement {
             colSpan={colspan}
             onClick={onClick}
         >
-            {children}
+            <div className={defaultClasses[cellClass as unknown as string]} >
+                {children}
+            </div>
         </td>
     );
 };

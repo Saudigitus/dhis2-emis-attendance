@@ -4,9 +4,10 @@ import { AttendanceViewModeProps } from '../../../types/table/TableRenderTypes';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
 import { AccessTime, CheckCircleOutline, HighlightOff, RemoveCircleOutline } from '@material-ui/icons';
-import { Chip } from "@dhis2/ui";
 import { useRecoilValue } from 'recoil';
 import { ReasonOfAbsenseState } from '../../../schema/reasonOfAbsenseSchema';
+import { Chip } from '@mui/material';
+import styles from './attendance.module.css'
 
 function AttendanceViewMode(props: AttendanceViewModeProps) {
     const { column, value } = props
@@ -27,18 +28,20 @@ export default AttendanceViewMode
 
 function attendanceOptionIcons(value: string, attendanceConst: any, absenceOption: string, seeReason: boolean) {
     if (value === attendanceConst("late")) {
-        return <AccessTime style={{ color: "#EAB631" }} />
+        return <AccessTime className={styles.late} />
     }
     if (value === attendanceConst("present")) {
-        return <CheckCircleOutline style={{ color: "#21B26D" }} />
+        return <CheckCircleOutline className={styles.present} />
     }
     if (value === attendanceConst("absent")) {
         return <div>
-            {seeReason ? <Chip dense selected >
-                {absenceOption ? absenceOption : '- -'}
-            </Chip>
-                : <HighlightOff style={{ color: "#F05C5C" }} />}
+            {seeReason ? <Chip label={absenceOption ?
+                absenceOption.substring(0, 1) + absenceOption.substring(1, absenceOption.length).toLowerCase()
+                :
+                '- -'
+            } size='small' className={styles.reasonOfAbsense} />
+                : <HighlightOff className={styles.absent} />}
         </div>
     }
-    return <RemoveCircleOutline style={{ color: "#ADAEB0" }} />
+    return <RemoveCircleOutline className={styles.empty} />
 }

@@ -15,6 +15,7 @@ interface HeaderCellProps {
     passOnProps?: object
     table?: TableProps
     colspan?: number
+    cellClass?: string
 }
 
 interface RowProps {
@@ -32,8 +33,8 @@ interface RenderHeaderProps {
 }
 
 interface RenderRowsProps {
-    headerData: CustomAttributeProps[], 
-    rowsData:  any[], 
+    headerData: CustomAttributeProps[],
+    rowsData: any[],
     attendanceMode: "view" | "edit"
     setTableData: any
 }
@@ -52,6 +53,7 @@ interface RowCellProps {
     table?: TableProps,
     colspan?: number,
     onClick?: () => void,
+    cellClass?: string
 }
 
 interface RowTableProps {

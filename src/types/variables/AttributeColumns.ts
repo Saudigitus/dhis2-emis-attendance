@@ -31,7 +31,8 @@ export interface CustomAttributeProps {
     key?: any
     description?: string
     type: VariablesTypes
-    value?:string
+    value?: string
+    class?: string
 }
 
 export interface OptionsProps {

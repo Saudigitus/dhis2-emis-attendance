@@ -1,0 +1,21 @@
+.late {
+    color: #EAB631
+}
+
+.absent {
+    color: #F05C5C
+}
+
+.present {
+    color: #21B26D
+}
+
+.reasonOfAbsense {
+    background: #F05C5C !important;
+    color: #fff !important;
+    font-size: 13px !important
+}
+
+.empty {
+    color: #ADAEB0
+}

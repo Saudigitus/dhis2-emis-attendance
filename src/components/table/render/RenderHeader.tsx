@@ -49,6 +49,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
                 <HeaderCell
                     key={column.id}
                     className={classNames(classes.cell, classes.headerCell)}
+                    cellClass={column.class}
                 >
                     {/* TODO: the sortLabel must be optional 👇 */}
                     {/* <SortLabel
