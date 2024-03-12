@@ -1,18 +1,16 @@
 import React from 'react'
 import style from "../sideBar.module.css"
-import SideBarSubItem from './SideBarSubItem'
 import SideBarItemTitle from './SideBarItemTitle'
-import { SideBarItemProps } from '../../../../types/sideBar/SideBarTypes'
-import classNames from 'classnames'
+import SideBarSubItem from './SideBarSubItem'
+import { SideBarItemProps } from '../../../../types/sideBar/SideBarTypes';
 
 export default function SideBarItem(props: SideBarItemProps): React.ReactElement {
-    const { title, subItems } = props
-
+    const { title, subItems } = props;
     return (
-        <section className={classNames(style.SideBarItemContainer, title==="Home" ? style.SideBarHomeItem : "")}>
+        <section className={style.SideBarItemContainer}>
             <SideBarItemTitle title={title} />
             <ul className={style.SideBarItemListContainer}>
-                {subItems.map((subItem, index) => (
+                {subItems.map((subItem, index:number) => (
                     <SideBarSubItem pathName={subItem.pathName} route={subItem.route} key={index} icon={subItem.icon} label={subItem.label} showBadge={subItem.showBadge} disabled={subItem.disabled} appName={subItem.appName} />
                 ))}
             </ul>
