@@ -16,7 +16,7 @@ export default function DropDownCalendar(props: DropDownCalendarProps) {
         <Popover open={open} anchorEl={anchorEl} placement={"bottom"}>
             <Paper>
                 <div className={style.datepickerTypography}>
-                    <Typography className={style.typography} variant="overline">select a valid date</Typography>
+                    <Typography variant="overline">SELECT DATE</Typography>
                     <Typography variant="h4" className="mt-2">{format(new Date(localDateSelected.selectedDate), "E, MMM dd - YYY")}</Typography>
                 </div>
                 <Calendar setValue={setlocalDateSelected} value={localDateSelected} />
