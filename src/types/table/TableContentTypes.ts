@@ -15,6 +15,7 @@ interface HeaderCellProps {
     passOnProps?: object
     table?: TableProps
     colspan?: number
+    cellClass?: string
 }
 
 interface RowProps {

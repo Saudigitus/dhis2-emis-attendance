@@ -4,7 +4,7 @@ import defaultClasses from '../table.module.css';
 import { HeaderCellProps } from '../../../../types/table/TableContentTypes';
 
 function HeaderCell(props: HeaderCellProps): React.ReactElement {
-    const { children, className, passOnProps, table, colspan } = props;
+    const { children, className, passOnProps, table, colspan, cellClass } = props;
 
     const classes = classNames(
         defaultClasses.tableCell,
@@ -15,13 +15,16 @@ function HeaderCell(props: HeaderCellProps): React.ReactElement {
         },
         className
     );
+
     return (
         <td
             className={classes}
             {...passOnProps}
             colSpan={colspan}
         >
-            {children}
+            <div className={defaultClasses[cellClass as unknown as string]} >
+                {children}
+            </div>
         </td>
     );
 };
