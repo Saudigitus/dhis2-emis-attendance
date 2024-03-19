@@ -40,12 +40,11 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
     }
 })
 
-const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }: TeiQueryProps) => ({
+const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit }: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
             program,
-            order,
             ouMode,
             pageSize,
             trackedEntity,
@@ -133,7 +132,6 @@ export function useTableData() {
             const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
                 ? await engine.query(TEI_QUERY({
                     ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                    order: "created:desc",
                     pageSize,
                     program: getDataStoreData?.program as unknown as string,
                     orgUnit: school,

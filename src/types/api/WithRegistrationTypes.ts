@@ -4,7 +4,6 @@ interface TeiQueryProps {
     ouMode: string
     trackedEntity: string
     orgUnit: string
-    order: string
 }
 
 interface AttributesProps {
