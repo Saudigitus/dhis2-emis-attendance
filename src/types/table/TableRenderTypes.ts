@@ -1,3 +1,5 @@
+import { OptionsProps } from "../variables/AttributeColumns"
+
 interface AttendanceEditModeProps {
     value: string | any
     column: {
@@ -6,10 +8,7 @@ interface AttendanceEditModeProps {
         options?: {
             optionSet: {
                 id: string
-                options: [{
-                    value: string
-                    label: string
-                }]
+                options: OptionsProps[]
             }
         }
     }
@@ -26,10 +25,7 @@ interface AttendanceViewModeProps {
         options?: {
             optionSet: {
                 id: string
-                options: [{
-                    value: string
-                    label: string
-                }]
+                options: OptionsProps[]
             }
         }
     }
