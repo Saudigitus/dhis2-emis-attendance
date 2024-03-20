@@ -1,5 +1,6 @@
 import { AttributesProps } from "../../api/WithRegistrationTypes"
 import { DataValuesProps } from "../../api/WithoutRegistrationTypes"
+import { OptionsProps } from "../../variables/AttributeColumns"
 
 interface FormatResponseRowsProps {
     eventsInstances: [{
@@ -40,10 +41,7 @@ interface DefaultProps {
         options?: {
             optionSet: {
                 id: string
-                options: [{
-                    value: string
-                    label: string
-                }]
+                options: OptionsProps[]
             }
         }
     }
