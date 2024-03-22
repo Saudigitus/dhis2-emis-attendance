@@ -18,7 +18,7 @@ import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema
 type TableDataProps = Record<string, string>;
 
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, programStatus, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
@@ -31,7 +31,6 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
             orgUnit,
             filter,
             filterAttributes,
-            programStatus,
             fields,
             trackedEntity,
             occurredAfter,
@@ -82,7 +81,6 @@ export function useTableData() {
                 ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                 page,
                 pageSize,
-                programStatus: "ACTIVE",
                 program: getDataStoreData?.program as unknown as string,
                 order: "createdAt:desc",
                 programStage: getDataStoreData?.registration?.programStage as unknown as string,
@@ -111,7 +109,6 @@ export function useTableData() {
                         program: getDataStoreData?.program as unknown as string,
                         programStage: getDataStoreData?.attendance?.programStage as unknown as string,
                         orgUnit: school,
-                        programStatus: "ACTIVE",
                         trackedEntity: tei,
                         occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
                         occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
@@ -176,8 +173,7 @@ export function useTableData() {
                     trackedEntity: tei,
                     occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
                     occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
-                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]",
-                    programStatus: "ACTIVE"
+                    fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
                 })).catch((error) => {
                     show({
                         message: `${("Could not get data")}: ${error.message}`,
