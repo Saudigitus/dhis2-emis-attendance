@@ -6,7 +6,7 @@ import { useAttendanceConst } from '../../../utils/constants/attendance/attendan
 import { AccessTime, CheckCircleOutline, HighlightOff, RemoveCircleOutline } from '@material-ui/icons';
 import { useRecoilValue } from 'recoil';
 import { ReasonOfAbsenseState } from '../../../schema/reasonOfAbsenseSchema';
-import { Chip } from '@mui/material';
+import { Chip, Tooltip } from '@mui/material';
 import styles from './attendance.module.css'
 
 function AttendanceViewMode(props: AttendanceViewModeProps) {
@@ -28,10 +28,14 @@ export default AttendanceViewMode
 
 function attendanceOptionIcons(value: string, attendanceConst: any, absenceOption: string, seeReason: boolean) {
     if (value === attendanceConst("late")) {
-        return <AccessTime className={styles.late} />
+        return <Tooltip title='Late'>
+            <AccessTime className={styles.late} />
+        </Tooltip>
     }
     if (value === attendanceConst("present")) {
-        return <CheckCircleOutline className={styles.present} />
+        return <Tooltip title='Present'>
+            <CheckCircleOutline className={styles.present} />
+        </Tooltip>
     }
     if (value === attendanceConst("absent")) {
         return <div>
@@ -40,8 +44,14 @@ function attendanceOptionIcons(value: string, attendanceConst: any, absenceOptio
                 :
                 '- -'
             } size='small' className={styles.reasonOfAbsense} />
-                : <HighlightOff className={styles.absent} />}
+                : <Tooltip title='Absent'>
+                    <HighlightOff className={styles.absent} />
+                </Tooltip>
+            }
         </div>
     }
-    return <RemoveCircleOutline className={styles.empty} />
+    return <Tooltip title='Empty'>
+        <RemoveCircleOutline className={styles.empty} />
+    </Tooltip>
+
 }
