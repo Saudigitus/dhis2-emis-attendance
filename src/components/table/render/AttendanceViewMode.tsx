@@ -8,17 +8,25 @@ import { useRecoilValue } from 'recoil';
 import { ReasonOfAbsenseState } from '../../../schema/reasonOfAbsenseSchema';
 import { Chip } from '@mui/material';
 import styles from './attendance.module.css'
+import { formatKeyValueTypeHeader } from '../../../utils/programRules/formatKeyValueType';
+import { Attribute } from '../../../types/generated/models';
+import { GetImageUrl } from '../../../utils/table/rows/getImageUrl';
+import { IconButton } from '@material-ui/core';
+import CropOriginal from '@material-ui/icons/CropOriginal';
 
 function AttendanceViewMode(props: AttendanceViewModeProps) {
-    const { column, value } = props
+    const { column, value, headers, trackedEntity } = props
     const { attendanceConst } = useAttendanceConst()
     const seeReason = useRecoilValue(ReasonOfAbsenseState)
+    const { imageUrl } = GetImageUrl()
 
     return (
         <>
             {column.type === VariablesTypes.Attendance
                 ? attendanceOptionIcons(value?.status, attendanceConst, value?.absenceOption, seeReason as unknown as boolean)
-                : getDisplayName({ attribute: column, value })
+                : formatKeyValueTypeHeader(headers)[column.id] === Attribute.valueType.IMAGE ?
+                    <a href={imageUrl({ attribute: column.id, trackedEntity })} target='_blank'>{value && <IconButton> <CropOriginal /></IconButton>}</a>
+                    : getDisplayName({ attribute: column, value })
             }
         </>
     )
