@@ -10,6 +10,7 @@ import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey'
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { AccessTime, CheckCircleOutline, HighlightOff } from '@material-ui/icons';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
+import { Tooltip } from '@mui/material';
 
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
@@ -97,9 +98,15 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
 
 function itemsAttendance(options: AttendanceEditModeProps["column"], attendanceConst: any) {
     const codeComponent = {
-        [attendanceConst("present") as string]: <CheckCircleOutline style={{ color: "#21B26D" }} />,
-        [attendanceConst("late") as string]: <AccessTime style={{ color: "#EAB631" }} />,
-        [attendanceConst("absent") as string]: <HighlightOff style={{ color: "#F05C5C" }} />
+        [attendanceConst("present") as string]: <Tooltip title='Present'>
+            <CheckCircleOutline style={{ color: "#21B26D" }} />
+        </Tooltip>,
+        [attendanceConst("late") as string]: <Tooltip title='Late'>
+            <AccessTime style={{ color: "#EAB631" }} />
+        </Tooltip>,
+        [attendanceConst("absent") as string]: <Tooltip title='Absent'>
+            <HighlightOff style={{ color: "#F05C5C" }} />
+        </Tooltip>
     }
 
     return options.options?.optionSet.options.map((option) => {
