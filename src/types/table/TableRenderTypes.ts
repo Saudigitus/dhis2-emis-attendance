@@ -19,6 +19,8 @@ interface AttendanceEditModeProps {
 
 interface AttendanceViewModeProps {
     value: string | any
+    headers: any[]
+    trackedEntity: string
     column: {
         type: string
         id: string
@@ -32,4 +34,4 @@ interface AttendanceViewModeProps {
 }
 
 
-export type { AttendanceEditModeProps, AttendanceViewModeProps}
+export type { AttendanceEditModeProps, AttendanceViewModeProps }

@@ -62,7 +62,7 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                             cellClass={column?.class}
                         >
                             {attendanceMode === "view"
-                                ? <AttendanceViewMode column={column} value={row[column.id]} />
+                                ? <AttendanceViewMode headers={headerData} trackedEntity={row.trackedEntity} column={column} value={row[column.id]} />
                                 : <AttendanceEditMode column={column} value={row} rowsData={rowsData} setTableData={setTableData} />
                             }
                         </RowCell>
