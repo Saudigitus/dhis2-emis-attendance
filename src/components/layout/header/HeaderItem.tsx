@@ -8,6 +8,9 @@ import { HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 import { componentMapping } from '../../../utils/commons/componentMapping'
 import { useDataElementsParamMapping, useParams } from '../../../hooks'
 import HeaderResetItemValue from './HeaderResetItemValue'
+import { useRecoilValue } from 'recoil'
+import { ProgramConfigState } from '../../../schema/programSchema'
+import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const { label, value, placeholder, component, dataElementId, id, selected } = props;
@@ -16,6 +19,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const onToggle = () => { setOpenDropDown(!openDropDown) }
     const Component = (component != null) ? componentMapping[component] : null;
+    const programConfigState = useRecoilValue(ProgramConfigState);
 
     const onReset = () => {
         if(dataElementId)
@@ -40,7 +44,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
                 </FlyoutMenu >
             }
         >
-            <h5>{label} <span>{value}</span></h5>
+            <h5>{label} <span>{(dataElementId && programConfigState) ? getDisplayName({ metaData: dataElementId, value: value, program: programConfigState }) : value}</span></h5>
             {selected && <HeaderResetItemValue onReset={onReset}/> }
             <img src={info} />
         </DropdownButton >

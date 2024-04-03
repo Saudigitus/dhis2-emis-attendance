@@ -11,6 +11,7 @@ import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption
 import { AccessTime, CheckCircleOutline, HighlightOff } from '@material-ui/icons';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
 import { Tooltip } from '@mui/material';
+import { ProgramConfigState } from '../../../schema/programSchema';
 
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
@@ -23,6 +24,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     const { createValues } = useCreateDataValues()
     const { updateValues } = useUpdateEvents()
     const { attendanceConst } = useAttendanceConst()
+    const programConfigState = useRecoilValue(ProgramConfigState);
 
     const date = format(new Date(selectedDate), "yyyy-MM-dd")
 
@@ -68,7 +70,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
         <>
             {column.type === VariablesTypes.Attendance
                 ? attendanceOptionIcons(props, selectedTerm, onChangeAttendance, attendanceId, value?.[date], attendanceConst)
-                : getDisplayName({ attribute: column, value: value[column.id] })
+                : getDisplayName({ metaData: column.id, value: value[column.id], program: programConfigState })
             }
         </>
     )

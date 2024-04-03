@@ -10,8 +10,10 @@ interface HeadBarTypes {
 
 interface SelectedOptionsTypes {
     academicYear: string | null
-    class: string | null
-    grade: string | null
+    class?: string | null
+    grade?: string | null
+    employmentType?: string | null
+    position?: string | null
     school: string | null
     schoolName: string | null
 }
