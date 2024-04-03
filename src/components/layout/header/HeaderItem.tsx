@@ -34,6 +34,8 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
         } else if (id === "c540ac7c") {
             remove("school");
             remove("schoolName");
+            remove("grade");
+            remove("class");
         }
     }
 
