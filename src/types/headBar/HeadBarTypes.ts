@@ -1,11 +1,12 @@
 interface HeadBarTypes {
-    id: string
-    label: string
-    value: string
-    placeholder: string
     component?: string
     dataElementId?: string
+    disabled?: boolean
+    id: string
+    label: string
+    placeholder: string
     selected: boolean
+    value: string
 }
 
 interface SelectedOptionsTypes {
