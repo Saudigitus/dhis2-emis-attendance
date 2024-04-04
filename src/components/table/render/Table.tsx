@@ -28,14 +28,19 @@ function Table() {
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
 
     useEffect(() => {
-        void getData(page, pageSize)
-        setInitialAttendanceMode()
+        if(academicYear){
+            void getData(page, pageSize)
+            setInitialAttendanceMode()
+        }
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        void getAttendanceData()
+        if(academicYear)
+            void getAttendanceData()
     }, [selectedDateViewMode])
 
     const onPageChange = (newPage: number) => {
