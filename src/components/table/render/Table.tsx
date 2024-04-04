@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
-import { Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { TeiRefetch } from '../../../schema/refecthTeiSchema';
-import { WithBorder, WithPadding } from '../../../components';
-import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { SelectedDateState } from '../../../schema/attendanceSchema';
-import { HeaderFilters, Pagination, TableComponent, WorkingLits } from '../components'
-import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
+import {Paper} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {CenteredContent, CircularLoader} from "@dhis2/ui";
+import {TeiRefetch} from '../../../schema/refecthTeiSchema';
+import {WithBorder, WithPadding} from '../../../components';
+import {HeaderFieldsState} from '../../../schema/headersSchema';
+import {SelectedDateState} from '../../../schema/attendanceSchema';
+import {HeaderFilters, Pagination, TableComponent, WorkingLits} from '../components'
+import {useHeader, useTableData, useParams, useAttendanceMode} from '../../../hooks';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -20,27 +20,37 @@ const usetStyles = makeStyles({
 
 function Table() {
     const classes = usetStyles()
-    const { columns } = useHeader()
-    const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
+    const {columns} = useHeader()
+    const {
+        getData,
+        loading,
+        tableData,
+        getAttendanceData,
+        setTableData
+    } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
+    const {selectedDate: selectedDateViewMode} = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
-    const { urlParamiters } = useParams()
-    const { academicYear } = urlParamiters()
+    const {
+        setInitialAttendanceMode,
+        attendanceMode
+    } = useAttendanceMode()
+    const {urlParamiters} = useParams()
+    const {academicYear} = urlParamiters()
 
     useEffect(() => {
-        if(academicYear){
+        if (academicYear) {
             void getData(page, pageSize)
             setInitialAttendanceMode()
         }
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if(academicYear)
+        if (academicYear) {
             void getAttendanceData()
+        }
     }, [selectedDateViewMode])
 
     const onPageChange = (newPage: number) => {
@@ -56,21 +66,22 @@ function Table() {
         <Paper>
             {loading &&
                 <CenteredContent>
-                    <CircularLoader />
+                    <CircularLoader/>
                 </CenteredContent>
             }
-            <WorkingLits />
-            <WithBorder type='bottom' />
-            <WithPadding >
-                <WithBorder type='all' >
-                    <HeaderFilters />
+            <WorkingLits/>
+            <WithBorder type='bottom'/>
+            <WithPadding>
+                <WithBorder type='all'>
+                    <HeaderFilters/>
                     <div
                         className={classes.tableContainer}
                     >
                         <TableComponent>
                             <>
                                 <RenderHeader
-                                    createSortHandler={() => { }}
+                                    createSortHandler={() => {
+                                    }}
                                     order='asc'
                                     orderBy='desc'
                                     rowsHeader={columns}

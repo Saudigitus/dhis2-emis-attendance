@@ -6,10 +6,9 @@ import { Button } from '@material-ui/core';
 import style from './enrollmentFilter.module.css'
 import SelectButton from "../selectButton/SelectButton";
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
-import { CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
+import { type CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
-import { ContentFilterProps, FiltersValuesProps } from '../../../../../types/table/ContentFiltersTypes';
-
+import { type ContentFilterProps, type FiltersValuesProps } from '../../../../../types/table/ContentFiltersTypes';
 
 function ContentFilter(props: ContentFilterProps) {
     const { headers = [] } = props;
@@ -41,7 +40,7 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     const onChangeFilters = (value: any, key: string, type: string, pos: string) => {
-        let cloneHeader = { ...filtersValues, ...convertArrayToObject({array:headerFieldsStateValues.dataElements}) }
+        let cloneHeader = { ...filtersValues, ...convertArrayToObject({array: headerFieldsStateValues.dataElements}) }
 
         if (type === 'DATE') {
             let date = cloneHeader[key] ?? {}
@@ -97,7 +96,7 @@ function ContentFilter(props: ContentFilterProps) {
                         } else attributesQuerybuilder.push([`${key}:in:${newValue}`])
                     } else {
                         if (variableType === "dataElement") {
-                            dataElementsQuerybuilder.push([`${key}:like:${value}`])
+                            dataElementsQuerybuilder.push([`${key}:in:${value}`])
                         } else attributesQuerybuilder.push([`${key}:like:${value}`])
                     }
             }

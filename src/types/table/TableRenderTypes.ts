@@ -1,4 +1,4 @@
-import { OptionsProps } from "../variables/AttributeColumns"
+import {type OptionsProps} from "../variables/AttributeColumns"
 
 interface AttendanceEditModeProps {
     value: string | any
@@ -16,7 +16,6 @@ interface AttendanceEditModeProps {
     setTableData: any
 }
 
-
 interface AttendanceViewModeProps {
     value: string | any
     headers: any[]
@@ -33,5 +32,4 @@ interface AttendanceViewModeProps {
     }
 }
 
-
-export type { AttendanceEditModeProps, AttendanceViewModeProps }
+export type {AttendanceEditModeProps, AttendanceViewModeProps}

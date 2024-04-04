@@ -1,4 +1,4 @@
-import { Attribute } from '../generated/models';
+import {type Attribute } from '../generated';
 
 export enum VariablesTypes {
     DataElement = "dataElement",
@@ -38,4 +38,10 @@ export interface CustomAttributeProps {
 export interface OptionsProps {
     value: string
     label: string
+}
+
+export interface AttendanceOptionsProps {
+    code: string
+    icon: string
+    key: string
 }
