@@ -11,6 +11,7 @@ import HeaderResetItemValue from './HeaderResetItemValue'
 import { useRecoilValue } from 'recoil'
 import { ProgramConfigState } from '../../../schema/programSchema'
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption'
+import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const {
@@ -31,6 +32,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     }
     const Component = (component != null) ? componentMapping[component] : null;
     const programConfigState = useRecoilValue(ProgramConfigState);
+    const { getDataStoreData } = getSelectedKey()
 
     const onReset = () => {
         if (dataElementId) {
@@ -58,7 +60,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
             }
         >
             <h5>{label} <span>{(dataElementId && programConfigState) ? getDisplayName({ metaData: dataElementId, value: value, program: programConfigState }) : value}</span></h5>
-            {selected && <HeaderResetItemValue onReset={onReset}/> }
+            {(selected && dataElementId !== getDataStoreData?.registration?.academicYear) ? <HeaderResetItemValue onReset={onReset}/> : null}
             <img src={info} />
         </DropdownButton >
     )
