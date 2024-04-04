@@ -2,6 +2,7 @@ interface MultipleButtonsProps {
     code: string
     type: string
     Component: any
+    disabled?: boolean
 }
 
 interface ButtonProps {

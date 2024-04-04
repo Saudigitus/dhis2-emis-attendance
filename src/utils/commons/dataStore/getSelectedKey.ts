@@ -8,6 +8,5 @@ export const getSelectedKey = () => {
     const emisConfig = useRecoilValue(DataStoreState);
 
     const getDataStoreData: DataStoreRecord = emisConfig?.length > 0 ? emisConfig?.find((dataStore: DataStoreRecord) => dataStore.key === useQuery().get("sectionType")) ?? {} as unknown as DataStoreRecord : {} as unknown as DataStoreRecord
-console.log(getDataStoreData)
     return { getDataStoreData }
 }

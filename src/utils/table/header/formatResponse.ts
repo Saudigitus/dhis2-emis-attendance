@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { Attribute } from "../../../types/generated/models";
-import { ProgramConfig } from "../../../types/programConfig/ProgramConfig";
-import { HeaderFormatResponseProps } from "../../../types/utils/table/TableTypes";
-import { VariablesTypes, CustomAttributeProps } from "../../../types/variables/AttributeColumns";
+import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
+import { type HeaderFormatResponseProps } from "../../../types/utils/table/TableTypes";
+import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 
 export function formatResponse({ data, programStageId }: HeaderFormatResponseProps): CustomAttributeProps[] {
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? [] as unknown as ProgramConfig["programStages"][0])

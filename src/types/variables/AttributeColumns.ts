@@ -42,6 +42,7 @@ export interface OptionsProps {
 
 export interface AttendanceOptionsProps {
     code: string
+    color: string
     icon: string
     key: string
 }

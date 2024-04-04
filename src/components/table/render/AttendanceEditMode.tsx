@@ -9,10 +9,10 @@ import {type AttendanceEditModeProps} from '../../../types/table/TableRenderType
 import {type AttendanceOptionsProps} from '../../../types/variables/AttributeColumns';
 import {getSelectedKey} from '../../../utils/commons/dataStore/getSelectedKey';
 import {getDisplayName} from '../../../utils/table/rows/getDisplayNameByOption';
-import {AccessTime, CheckCircleOutline, HighlightOff} from '@material-ui/icons';
 import {useAttendanceConst} from '../../../utils/constants/attendance/attendanceConst';
 import {Tooltip} from '@mui/material';
 import {ProgramConfigState} from '../../../schema/programSchema';
+import * as Icons from '@material-ui/icons';
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
     const {
@@ -25,7 +25,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     const {getDataStoreData} = getSelectedKey()
     const attendanceId = getDataStoreData.attendance.status
     const absentId = getDataStoreData.attendance.absenceReason
-    const statusOptions = getDataStoreData.attendance.statusOptions
+    const dataStoreOptions = getDataStoreData.attendance.statusOptions
     const {selectedDate} = useRecoilValue(SelectedDateAddNewState)
     const {createValues} = useCreateDataValues()
     const {updateValues} = useUpdateEvents()
@@ -76,7 +76,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     return (
         <>
             {column.type === VariablesTypes.Attendance
-                ? attendanceOptionIcons(props, selectedTerm, statusOptions, onChangeAttendance, attendanceId, value?.[date], attendanceConst)
+                ? attendanceOptionIcons(props, selectedTerm, dataStoreOptions, onChangeAttendance, attendanceId, value?.[date], attendanceConst)
                 : getDisplayName({
                     metaData: column.id,
                     value: value[column.id],
@@ -89,14 +89,13 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
 
 export default AttendanceEditMode
 
-function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string, statusOptions: any,
+function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string, dataStoreOptions: any,
                                setselectedTerm: any, attendanceId: string, value: any, attendanceConst: any) {
-    console.log(props.column)
     return (
         props.column.id === attendanceId
             ? <MultipleButtons
                 id={props.column.id}
-                items={itemsAttendance(statusOptions, attendanceConst)}
+                items={itemsAttendance(dataStoreOptions, props.column)}
                 selectedTerm={selectedTerm}
                 setSelectedTerm={setselectedTerm}
             />
@@ -110,24 +109,23 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
     )
 }
 
-function itemsAttendance(options: AttendanceOptionsProps[], attendanceConst: any) {
-    const codeComponent = {
-        [attendanceConst("present") as string]: <Tooltip title='Present'>
-            <CheckCircleOutline style={{color: "#21B26D"}}/>
-        </Tooltip>,
-        [attendanceConst("late") as string]: <Tooltip title='Late'>
-            <AccessTime style={{color: "#EAB631"}}/>
-        </Tooltip>,
-        [attendanceConst("absent") as string]: <Tooltip title='Absent'>
-            <HighlightOff style={{color: "#F05C5C"}}/>
+function itemsAttendance(dataStoreOptions: AttendanceOptionsProps[], programOptions: AttendanceEditModeProps["column"]) {
+    const programOptionsSets: string[] | undefined = programOptions?.options?.optionSet?.options?.map((x) => x.value)
+
+    const getComponent = (option: AttendanceOptionsProps) => {
+        const Icon: React.FC<{ style: Record<string, unknown> }> = Icons[option.icon as unknown as keyof typeof Icons]
+
+        return <Tooltip title={option.key}>
+            <Icon style={{color: option.color}}/>
         </Tooltip>
     }
 
-    return options.map((option) => {
+    return dataStoreOptions?.map((option) => {
         return {
             code: option.code,
             type: "attendance",
-            Component: codeComponent[option.code]
+            disabled: (programOptionsSets?.includes(option.code)) === false,
+            Component: getComponent(option)
         }
     }) as []
 }
