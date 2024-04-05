@@ -5,14 +5,14 @@ import { useCreateDataValues, useUpdateEvents } from '../../../hooks';
 import { VariablesTypes } from '../../../types/variables/AttributeColumns'
 import MultipleButtons from '../components/multipleButtom/MultipleButtons';
 import { SelectedDateAddNewState } from '../../../schema/attendanceSchema';
-import { AttendanceEditModeProps } from '../../../types/table/TableRenderTypes';
+import { type AttendanceEditModeProps } from '../../../types/table/TableRenderTypes';
 import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { AccessTime, CheckCircleOutline, HighlightOff } from '@material-ui/icons';
 import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
 import { Tooltip } from '@mui/material';
 import { ProgramConfigState } from '../../../schema/programSchema';
-
+import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
     const { column, value, rowsData, setTableData } = props
@@ -69,7 +69,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     return (
         <>
             {column.type === VariablesTypes.Attendance
-                ? attendanceOptionIcons(props, selectedTerm, onChangeAttendance, attendanceId, value?.[date], attendanceConst)
+                ? attendanceOptionIcons(props, selectedTerm, onChangeAttendance, attendanceId, value?.status, value?.[date], attendanceConst)
                 : getDisplayName({ metaData: column.id, value: value[column.id], program: programConfigState })
             }
         </>
@@ -79,7 +79,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
 export default AttendanceEditMode
 
 function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string,
-    setselectedTerm: any, attendanceId: string, value: any, attendanceConst: any) {
+    setselectedTerm: any, attendanceId: string, enrollmentStatus: string, value: any, attendanceConst: any) {
     return (
         props.column.id === attendanceId
             ? <MultipleButtons
@@ -87,6 +87,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
                 items={itemsAttendance(props.column, attendanceConst)}
                 selectedTerm={selectedTerm}
                 setSelectedTerm={setselectedTerm}
+                disabled={checkCanceled(enrollmentStatus)}
             />
             : value?.status === attendanceConst("absent") &&
             <MultipleButtons
@@ -94,6 +95,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
                 items={itemsAbsence(props.column)}
                 selectedTerm={selectedTerm}
                 setSelectedTerm={setselectedTerm}
+                disabled={checkCanceled(enrollmentStatus)}
             />
     )
 }
