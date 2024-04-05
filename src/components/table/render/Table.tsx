@@ -34,7 +34,7 @@ function Table() {
     useEffect(() => {
         if(academicYear){
             void getData(page, pageSize)
-            setInitialAttendanceMode()
+            // setInitialAttendanceMode()
         }
     }, [headerFieldsState, page, pageSize, refetch])
 
