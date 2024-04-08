@@ -5,9 +5,9 @@ import Pagination from "./pagination/Pagination"
 import SortLabel from "./sortLabel/SortLabel"
 import TableComponent from "./table/TableComponent"
 import HeaderFilters from "./head/HeaderFilters"
-import WorkingLits from "./filters/workingList/WorkingLits"
+import WorkingLists from "./filters/workingList/WorkingLits"
 
 export {
     RowCell, RowTable, HeaderCell, Pagination, SortLabel,
-    TableComponent, HeaderFilters, WorkingLits
+    TableComponent, HeaderFilters, WorkingLists
 }

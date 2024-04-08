@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
-import {Paper} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {CenteredContent, CircularLoader} from "@dhis2/ui";
-import {TeiRefetch} from '../../../schema/refecthTeiSchema';
-import {WithBorder, WithPadding} from '../../../components';
-import {HeaderFieldsState} from '../../../schema/headersSchema';
-import {SelectedDateState} from '../../../schema/attendanceSchema';
-import {HeaderFilters, Pagination, TableComponent, WorkingLits} from '../components'
-import {useHeader, useTableData, useParams, useAttendanceMode} from '../../../hooks';
+import { Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { CenteredContent, CircularLoader } from "@dhis2/ui";
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { WithBorder, WithPadding } from '../../../components';
+import { HeaderFieldsState } from '../../../schema/headersSchema';
+import { SelectedDateState } from '../../../schema/attendanceSchema';
+import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
+import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -54,7 +54,7 @@ function Table() {
     useEffect(() => {
         if (academicYear) {
             void getData(page, pageSize)
-            setInitialAttendanceMode()
+            // setInitialAttendanceMode()
         }
     }, [headerFieldsState, page, pageSize, refetch])
 
@@ -81,13 +81,13 @@ function Table() {
                 </CenteredContent>
             }
             <div className={classes.workingListsContainer}>
-                <h4 className={classes.h4}>Attendance</h4>
-                <WorkingLits/>
+                <h4 className={classes.h4}>Attendances</h4>
+                <WorkingLists />
             </div>
-            <WithBorder type='bottom'/>
-            <WithPadding>
-                <WithBorder type='all'>
-                    <HeaderFilters/>
+            <WithBorder type='bottom' />
+            <WithPadding >
+                <WithBorder type='all' >
+                    <HeaderFilters />
                     <div
                         className={classes.tableContainer}
                     >

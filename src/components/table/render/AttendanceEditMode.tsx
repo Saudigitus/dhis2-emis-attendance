@@ -13,6 +13,7 @@ import {useAttendanceConst} from '../../../utils/constants/attendance/attendance
 import {Tooltip} from '@mui/material';
 import {ProgramConfigState} from '../../../schema/programSchema';
 import * as Icons from '@material-ui/icons';
+import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
     const {
@@ -76,7 +77,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     return (
         <>
             {column.type === VariablesTypes.Attendance
-                ? attendanceOptionIcons(props, selectedTerm, dataStoreOptions, onChangeAttendance, attendanceId, value?.[date], attendanceConst)
+                ? attendanceOptionIcons(props, selectedTerm, dataStoreOptions, onChangeAttendance, attendanceId, value?.status, value?.[date], attendanceConst)
                 : getDisplayName({
                     metaData: column.id,
                     value: value[column.id],
@@ -90,7 +91,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
 export default AttendanceEditMode
 
 function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string, dataStoreOptions: any,
-                               setselectedTerm: any, attendanceId: string, value: any, attendanceConst: any) {
+                               setselectedTerm: any, attendanceId: string, enrollmentStatus: string, value: any, attendanceConst: any) {
     return (
         props.column.id === attendanceId
             ? <MultipleButtons
@@ -98,6 +99,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
                 items={itemsAttendance(dataStoreOptions, props.column)}
                 selectedTerm={selectedTerm}
                 setSelectedTerm={setselectedTerm}
+                disabled={checkCanceled(enrollmentStatus)}
             />
             : value?.status === attendanceConst("absent") &&
             <MultipleButtons
@@ -105,6 +107,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
                 items={itemsAbsence(props.column)}
                 selectedTerm={selectedTerm}
                 setSelectedTerm={setselectedTerm}
+                disabled={checkCanceled(enrollmentStatus)}
             />
     )
 }

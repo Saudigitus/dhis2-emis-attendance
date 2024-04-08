@@ -6,6 +6,12 @@ export enum VariablesTypes {
     Attendance = "attendance"
 }
 
+export enum enrollmentStatus {
+    ACTIVE = 'ACTIVE',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED'
+}
+
 export interface CustomAttributeProps {
     id: string
     displayName: string
