@@ -14,7 +14,7 @@ export default function MultipleButtons(props: ButtonProps) {
     return (
         <ButtonGroup color="primary">
             {items?.map((item) => (
-                <Button disabled={item.disabled ?? disabled} key={item?.code}
+                <Button disabled={item.disabled || disabled} key={item?.code}
                         className={selectedTerm === item?.code && styles["active-button"]}
                         onClick={() => {
                             setSelectedTerm(item.code, item.type)
