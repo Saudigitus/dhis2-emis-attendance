@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
 import { Paper } from '@material-ui/core';
@@ -24,34 +24,44 @@ const usetStyles = makeStyles({
     },
     h4: {
         margin: '0px',
-        fontSize:'22px',
-        fontWeigth:'500',
+        fontSize: '22px',
+        fontWeigth: '500',
     }
 });
 
 function Table() {
     const classes = usetStyles()
-    const { columns } = useHeader()
-    const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
+    const {columns} = useHeader()
+    const {
+        getData,
+        loading,
+        tableData,
+        getAttendanceData,
+        setTableData
+    } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
+    const {selectedDate: selectedDateViewMode} = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
-    const { urlParamiters } = useParams()
-    const { academicYear } = urlParamiters()
+    const {
+        setInitialAttendanceMode,
+        attendanceMode
+    } = useAttendanceMode()
+    const {urlParamiters} = useParams()
+    const {academicYear} = urlParamiters()
 
     useEffect(() => {
-        if(academicYear){
+        if (academicYear) {
             void getData(page, pageSize)
             // setInitialAttendanceMode()
         }
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if(academicYear)
+        if (academicYear) {
             void getAttendanceData()
+        }
     }, [selectedDateViewMode])
 
     const onPageChange = (newPage: number) => {
@@ -67,7 +77,7 @@ function Table() {
         <Paper>
             {loading &&
                 <CenteredContent>
-                    <CircularLoader />
+                    <CircularLoader/>
                 </CenteredContent>
             }
             <div className={classes.workingListsContainer}>
@@ -84,7 +94,8 @@ function Table() {
                         <TableComponent>
                             <>
                                 <RenderHeader
-                                    createSortHandler={() => { }}
+                                    createSortHandler={() => {
+                                    }}
                                     order='asc'
                                     orderBy='desc'
                                     rowsHeader={columns}

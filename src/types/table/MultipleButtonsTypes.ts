@@ -2,6 +2,7 @@ interface MultipleButtonsProps {
     code: string
     type: string
     Component: any
+    disabled?: boolean
 }
 
 interface ButtonProps {
@@ -12,4 +13,5 @@ interface ButtonProps {
     disabled?: boolean
 }
 
-export type {MultipleButtonsProps, ButtonProps}
+export type { MultipleButtonsProps, ButtonProps }
+
