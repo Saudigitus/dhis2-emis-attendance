@@ -1,6 +1,6 @@
-import { AttributesProps } from "../../api/WithRegistrationTypes"
-import { DataValuesProps } from "../../api/WithoutRegistrationTypes"
-import { OptionsProps } from "../../variables/AttributeColumns"
+import {AttributesProps} from "../../api/WithRegistrationTypes"
+import {DataValuesProps} from "../../api/WithoutRegistrationTypes"
+import {OptionsProps} from "../../variables/AttributeColumns"
 
 interface FormatResponseRowsProps {
     eventsInstances: [{
@@ -14,6 +14,7 @@ interface FormatResponseRowsProps {
             enrollment: string
             orgUnit: string
             program: string
+            status: string
         }]
     }]
     attendanceValues: [{
@@ -55,4 +56,11 @@ interface AttendanceFormaterProps {
     event: string
 }
 
-export type { FormatResponseRowsProps, RowsDataProps, DefaultProps, AttributesProps, DataValuesProps, AttendanceFormaterProps }
+export type {
+    FormatResponseRowsProps,
+    RowsDataProps,
+    DefaultProps,
+    AttributesProps,
+    DataValuesProps,
+    AttendanceFormaterProps
+}

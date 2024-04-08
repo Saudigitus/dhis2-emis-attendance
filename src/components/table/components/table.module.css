@@ -10,6 +10,11 @@
     vertical-align: middle;
 }
 
+.disabledRow {
+    background: rgba(218, 52, 77, 0.18) !important;
+    cursor: not-allowed !important;
+}
+
 .tableRow:focus {
     outline: none;
 }
