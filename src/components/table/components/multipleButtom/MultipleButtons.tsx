@@ -19,8 +19,8 @@ export default function MultipleButtons(props: ButtonProps) {
                 <Button disabled={item.disabled || disabled} key={item?.code}
                         className={classNames(
                             selectedTerm === item?.code && styles["active-button"],
-                            styles.label)
-                        }
+                            styles.label
+                        )}
                         onClick={() => { setSelectedTerm(item.code, item.type) }} >
                     <span className={styles.simpleButtonLabel}>{item.Component}</span>
                 </Button>
