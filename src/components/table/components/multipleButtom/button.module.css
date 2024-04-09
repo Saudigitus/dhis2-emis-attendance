@@ -52,3 +52,7 @@
 .activeMenuItem{
     background-color: #F0F0F0 !important;
 }
+
+.label{
+    text-transform: capitalize;
+}

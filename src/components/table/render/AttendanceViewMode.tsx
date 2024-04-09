@@ -61,6 +61,7 @@ function attendanceOptionIcons(getDataStoreData: DataStoreRecord, value: string,
             return <div>
                 {seeReason
                     ? <Chip
+                        // eslint-disable-next-line
                         label={absenceOption
                             ? absenceOption.substring(0, 1) + absenceOption.substring(1, absenceOption.length).toLowerCase()
                             : '- -'
