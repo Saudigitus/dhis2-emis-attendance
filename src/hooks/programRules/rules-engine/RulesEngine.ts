@@ -219,7 +219,6 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
 
         case "inOrgUnitGroup":
-            console.log(condition);
             return true
         default:
             return eval(condition ?? "");

@@ -10,10 +10,9 @@ import {type AttendanceOptionsProps} from '../../../types/variables/AttributeCol
 import {getSelectedKey} from '../../../utils/commons/dataStore/getSelectedKey';
 import {getDisplayName} from '../../../utils/table/rows/getDisplayNameByOption';
 import {useAttendanceConst} from '../../../utils/constants/attendance/attendanceConst';
-import {Tooltip} from '@mui/material';
 import {ProgramConfigState} from '../../../schema/programSchema';
-import * as Icons from '@material-ui/icons';
 import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
+import {getIcon} from "../../../utils/table/attendance/getIcom";
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
     const {
@@ -90,7 +89,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
 
 export default AttendanceEditMode
 
-function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string, dataStoreOptions: any,
+function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string, dataStoreOptions: AttendanceOptionsProps[],
                                setselectedTerm: any, attendanceId: string, enrollmentStatus: string, value: any, attendanceConst: any) {
     return (
         props.column.id === attendanceId
@@ -115,20 +114,12 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
 function itemsAttendance(dataStoreOptions: AttendanceOptionsProps[], programOptions: AttendanceEditModeProps["column"]) {
     const programOptionsSets: string[] | undefined = programOptions?.options?.optionSet?.options?.map((x) => x.value)
 
-    const getComponent = (option: AttendanceOptionsProps) => {
-        const Icon: React.FC<{ style: Record<string, unknown> }> = Icons[option.icon as unknown as keyof typeof Icons]
-
-        return <Tooltip title={option.key}>
-            <Icon style={{color: option.color}}/>
-        </Tooltip>
-    }
-
     return dataStoreOptions?.map((option) => {
         return {
             code: option.code,
             type: "attendance",
             disabled: (programOptionsSets?.includes(option.code)) === false,
-            Component: getComponent(option)
+            Component: getIcon(option)
         }
     }) as []
 }
