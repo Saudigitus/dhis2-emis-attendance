@@ -95,7 +95,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
         props.column.id === attendanceId
             ? <MultipleButtons
                 id={props.column.id}
-                items={itemsAttendance(dataStoreOptions, props.column)}
+                items={itemsAttendance(dataStoreOptions, props.column, checkCanceled(enrollmentStatus))}
                 selectedTerm={selectedTerm}
                 setSelectedTerm={setselectedTerm}
                 disabled={checkCanceled(enrollmentStatus)}
@@ -111,7 +111,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
     )
 }
 
-function itemsAttendance(dataStoreOptions: AttendanceOptionsProps[], programOptions: AttendanceEditModeProps["column"]) {
+function itemsAttendance(dataStoreOptions: AttendanceOptionsProps[], programOptions: AttendanceEditModeProps["column"], disabled: boolean) {
     const programOptionsSets: string[] | undefined = programOptions?.options?.optionSet?.options?.map((x) => x.value)
 
     return dataStoreOptions?.map((option) => {
@@ -119,7 +119,7 @@ function itemsAttendance(dataStoreOptions: AttendanceOptionsProps[], programOpti
             code: option.code,
             type: "attendance",
             disabled: (programOptionsSets?.includes(option.code)) === false,
-            Component: getIcon(option)
+            Component: getIcon(option, (disabled || (programOptionsSets?.includes(option.code)) === false))
         }
     }) as []
 }

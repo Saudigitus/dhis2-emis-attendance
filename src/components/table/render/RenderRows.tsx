@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
         bodyCell: {
             fontSize: theme.typography.pxToRem(13),
             color: theme.palette.text.primary
-        }
+        },
+        opacity: {opacity: 0.5}
     })
 );
 
@@ -68,8 +69,10 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                             cellClass={column?.class}
                         >
                             {attendanceMode === "view"
-                                ? <AttendanceViewMode headers={headerData} trackedEntity={row.trackedEntity} column={column} value={row[column.id]}/>
-                                : <AttendanceEditMode column={column} value={row} rowsData={rowsData} setTableData={setTableData}/>
+                                ? <AttendanceViewMode headers={headerData} trackedEntity={row.trackedEntity}
+                                                      column={column} value={row[column.id]}/>
+                                : <AttendanceEditMode column={column} value={row} rowsData={rowsData}
+                                                      setTableData={setTableData}/>
                             }
                         </RowCell>
                     ));
@@ -77,7 +80,7 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                     return (
                         <RowTable
                             key={index}
-                            className={classNames(classes.row, classes.dataRow)}
+                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.status) && classes.opacity)}
                             inactive={checkCanceled(row.status)}
                         >
                             {cells}
