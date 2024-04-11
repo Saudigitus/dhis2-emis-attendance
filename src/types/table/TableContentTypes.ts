@@ -61,9 +61,9 @@ interface RowTableProps {
     className?: string
     passOnProps?: object
     table?: TableProps
+    inactive?: boolean
 }
 
 type TableDataProps = Record<string, string>;
-
 
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, RowCellProps, RowTableProps, RenderRowsProps }

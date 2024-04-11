@@ -1,8 +1,9 @@
-import { AttendanceFormaterProps, AttributesProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/table/FormatRowsDataTypes";
+import { type AttendanceFormaterProps, type AttributesProps, type FormatResponseRowsProps, type RowsDataProps } from "../../../types/utils/table/FormatRowsDataTypes";
 
 // TODO @edsonnhancale remove this attendanceConfig from this function
 export function formatResponseRows({ eventsInstances, teiInstances, attendanceValues, attendanceConfig }: FormatResponseRowsProps): RowsDataProps[] {
     const allRows: RowsDataProps[] = []
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find((tei: any) => tei.trackedEntity === event.trackedEntity)
         const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity)
@@ -12,7 +13,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
             trackedEntity: event.trackedEntity,
             enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
-            programId: teiDetails?.enrollments?.[0]?.program
+            programId: teiDetails?.enrollments?.[0]?.program,
+            status: teiDetails?.enrollments?.[0]?.status
         })
     }
     return allRows;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
 import { Paper } from '@material-ui/core';
@@ -32,10 +32,16 @@ const usetStyles = makeStyles({
 
 function Table() {
     const classes = usetStyles()
-    const { columns } = useHeader()
-    const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
+    const {columns} = useHeader()
+    const {
+        getData,
+        loading,
+        tableData,
+        getAttendanceData,
+        setTableData
+    } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
+    const {selectedDate: selectedDateViewMode} = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
@@ -43,6 +49,9 @@ function Table() {
     const { urlParamiters } = useParams()
     const { academicYear } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
+    const {attendanceMode} = useAttendanceMode()
+    const {urlParamiters} = useParams()
+    const {academicYear} = urlParamiters()
 
     useEffect(() => {
         setLoading(loading)
@@ -51,13 +60,14 @@ function Table() {
     useEffect(() => {
         if (academicYear) {
             void getData(page, pageSize)
-            setInitialAttendanceMode()
+            // setInitialAttendanceMode()
         }
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         if (academicYear)
             void getAttendanceData()
+        }
     }, [selectedDateViewMode])
 
     const onPageChange = (newPage: number) => {
@@ -73,24 +83,25 @@ function Table() {
         <Paper>
             {loading &&
                 <CenteredContent>
-                    <CircularLoader />
+                    <CircularLoader/>
                 </CenteredContent>
             }
             <div className={classes.workingListsContainer}>
                 <h4 className={classes.h4}>Attendances</h4>
-                <WorkingLists />
+                <WorkingLists/>
             </div>
-            <WithBorder type='bottom' />
-            <WithPadding >
-                <WithBorder type='all' >
-                    <HeaderFilters />
+            <WithBorder type='bottom'/>
+            <WithPadding>
+                <WithBorder type='all'>
+                    <HeaderFilters/>
                     <div
                         className={classes.tableContainer}
                     >
                         <TableComponent>
                             <>
                                 <RenderHeader
-                                    createSortHandler={() => { }}
+                                    createSortHandler={() => {
+                                    }}
                                     order='asc'
                                     orderBy='desc'
                                     rowsHeader={columns}

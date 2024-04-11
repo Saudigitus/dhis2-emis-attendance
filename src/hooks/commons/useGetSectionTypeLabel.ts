@@ -1,10 +1,11 @@
-import { formatCamelToTitleCase } from "../../utils/commons/formatCamelCaseToWords";
-import { useParams } from "./useQueryParams";
+import {formatCamelToTitleCase} from "../../utils/commons/formatCamelCaseToWords";
+import {useParams} from "./useQueryParams";
 
 const useGetSectionTypeLabel = () => {
-    const { urlParamiters } = useParams()
+    const {urlParamiters} = useParams()
     const sectionType = urlParamiters().sectionType;
 
-    return { sectionName: formatCamelToTitleCase(sectionType as unknown as string) };
+    return {sectionName: sectionType === 'student' ? 'student\'s' : 'employee\'s'};
 }
+
 export default useGetSectionTypeLabel;
