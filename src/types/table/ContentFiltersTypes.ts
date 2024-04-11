@@ -19,6 +19,7 @@ interface SelectorContentsProps {
     colum: CustomAttributeProps
     onChange: () => void
     value: any
+    filled: boolean | string
     onQuerySubmit: () => void
     disabled: boolean
 }

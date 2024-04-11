@@ -3,7 +3,7 @@ import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { WithBorder, WithPadding } from '../../../components';
@@ -11,6 +11,7 @@ import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { SelectedDateState } from '../../../schema/attendanceSchema';
 import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
 import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
+import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -24,8 +25,8 @@ const usetStyles = makeStyles({
     },
     h4: {
         margin: '0px',
-        fontSize:'22px',
-        fontWeigth:'500',
+        fontSize: '22px',
+        fontWeigth: '500',
     }
 });
 
@@ -41,16 +42,21 @@ function Table() {
     const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
     const { urlParamiters } = useParams()
     const { academicYear } = urlParamiters()
+    const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
-        if(academicYear){
+        setLoading(loading)
+    }, [loading])
+
+    useEffect(() => {
+        if (academicYear) {
             void getData(page, pageSize)
             setInitialAttendanceMode()
         }
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if(academicYear)
+        if (academicYear)
             void getAttendanceData()
     }, [selectedDateViewMode])
 
