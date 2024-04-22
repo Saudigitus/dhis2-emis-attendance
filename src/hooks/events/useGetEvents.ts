@@ -2,7 +2,6 @@ import {format} from "date-fns";
 import {type AttendanceQueryResults, type EventQueryProps} from "../../types/api/WithoutRegistrationTypes";
 import {useDataEngine} from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
-import {getEvents} from "../../../.d2/shell/src/D2App/hooks/events/useGetEvents";
 import {getSelectedKey} from "../../utils/commons/dataStore/getSelectedKey";
 
 export const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
@@ -42,6 +41,7 @@ export function useGetEvents() {
             fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
         })).catch((error) => {
             show({
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 message: `${("Could not get data")}: ${error.message}`,
                 type: {critical: true}
             });
