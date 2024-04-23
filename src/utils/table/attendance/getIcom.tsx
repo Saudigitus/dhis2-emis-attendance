@@ -16,7 +16,7 @@ export const getIcon = (option: AttendanceOptionsProps, disabled = false) => {
         }
 
         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        return codeComponent?.[option.code] ?? <ExitToApp style={disabled ? styles : {color: "#2BD9FE"}}/>
+        return codeComponent?.[option.code] ?? <ExitToApp style={disabled ? styles : {color: "#28AFEA"}}/>
     }
 
     console.log(option.code, attendanceConst("late"))
