@@ -70,6 +70,11 @@ function Table() {
         }
     }, [selectedDateViewMode])
 
+
+    useEffect(() => {
+        setpage(1)
+    }, [headerFieldsState])
+
     const onPageChange = (newPage: number) => {
         setpage(newPage)
     }
