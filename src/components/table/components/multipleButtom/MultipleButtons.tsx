@@ -16,7 +16,7 @@ export default function MultipleButtons(props: ButtonProps) {
         <ButtonGroup color="primary">
             {items?.map((item) => (
                 // eslint-disable-next-line
-                <Button disabled={item.disabled || disabled} key={item?.code}
+                <Button disabled={disabled} key={item?.code}
                         className={classNames(
                             selectedTerm === item?.code && styles["active-button"],
                             styles.label

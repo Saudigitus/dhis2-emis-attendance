@@ -14,4 +14,3 @@ interface ButtonProps {
 }
 
 export type { MultipleButtonsProps, ButtonProps }
-
