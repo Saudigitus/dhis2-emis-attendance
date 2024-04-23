@@ -66,7 +66,7 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     function verifyIsFilled(value: any) {
-        if (value != null) {
+        if (value != null && value?.replace(/\s/g, '').length) {
             return true
         }
         if (value === "") {
@@ -137,7 +137,7 @@ function ContentFilter(props: ContentFilterProps) {
                         disabledReset={
                             typeof filtersValues[colums.id] === "object"
                                 ? filtersValues[colums.id]?.startDate !== undefined && filtersValues[colums.id]?.endDate === undefined
-                                : filtersValues[colums.id] === undefined
+                                : (filtersValues[colums.id] === undefined && fieldsFilled[colums.id] === undefined)
                         }
                         disabled={
                             typeof filtersValues[colums.id] === "object"
