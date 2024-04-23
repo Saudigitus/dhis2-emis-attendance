@@ -1,5 +1,9 @@
 import {format} from "date-fns";
-import {type AttendanceQueryResults, type EventQueryProps} from "../../types/api/WithoutRegistrationTypes";
+import {
+    type AttendanceQueryResults, type DataValuesProps,
+    type EventQueryProps,
+    EventQueryResults
+} from "../../types/api/WithoutRegistrationTypes";
 import {useDataEngine} from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
 import {getSelectedKey} from "../../utils/commons/dataStore/getSelectedKey";
@@ -49,5 +53,22 @@ export function useGetEvents() {
         }) as unknown as AttendanceQueryResults
     }
 
-    return {getEvents}
+    async function eventsResults(page: number, pageSize: number, school: string, headerFieldsState: any): Promise<[{trackedEntity: string, dataValues: DataValuesProps[]}]> {
+        // Get the events from the programStage registration
+        return await engine.query(EVENT_QUERY({
+            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+            page,
+            pageSize,
+            program: getDataStoreData?.program as unknown as string,
+            order: "createdAt:desc",
+            programStage: getDataStoreData?.registration?.programStage as unknown as string,
+            filter: headerFieldsState?.dataElements,
+            filterAttributes: headerFieldsState?.attributes,
+            orgUnit: school,
+            fields: "trackedEntity"
+        })).then((resp: any) => {
+            return resp.results?.instances
+        })
+    }
+    return {getEvents, eventsResults}
 }

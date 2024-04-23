@@ -8,15 +8,21 @@ import {TableDataState} from "../../schema/tableColumnsSchema";
 import {getSelectedKey} from '../../utils/commons/dataStore/getSelectedKey';
 import {formatResponseRows, attendanceFormater} from "../../utils/table/rows/formatResponseRows";
 import {SelectedDateState} from "../../schema/attendanceSchema";
-import {type AttendanceQueryResults, type EventQueryResults} from "../../types/api/WithoutRegistrationTypes";
+import {type AttendanceQueryResults} from "../../types/api/WithoutRegistrationTypes";
 import {type TeiQueryProps, type TeiQueryResults} from "../../types/api/WithRegistrationTypes";
 import {type AttendanceFormaterProps} from "../../types/utils/table/FormatRowsDataTypes";
 import {EnrollmentDetailsTeisState} from "../../schema/enrollmentDetailsSchema";
-import {EVENT_QUERY, useGetEvents} from "../events/useGetEvents";
+import {useGetEvents} from "../events/useGetEvents";
 
 type TableDataProps = Record<string, string>;
 
-const TEI_QUERY = ({ouMode, pageSize, program, trackedEntity, orgUnit }: TeiQueryProps) => ({
+const TEI_QUERY = ({
+                       ouMode,
+                       pageSize,
+                       program,
+                       trackedEntity,
+                       orgUnit
+                   }: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
@@ -39,11 +45,16 @@ export function useTableData() {
     const {urlParamiters} = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
-    const { hide, show } = useShowAlerts()
+    const {
+        hide,
+        show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
     const {getDataStoreData} = getSelectedKey()
     const attendanceConfig = getSelectedKey()?.getDataStoreData?.attendance
-    const {getEvents} = useGetEvents()
+    const {
+        getEvents,
+        eventsResults
+    } = useGetEvents()
 
     const showError = (error: any) => {
         show({
@@ -58,39 +69,33 @@ export function useTableData() {
         if (school !== null) {
             try {
                 setLoading(true)
+                const events = await eventsResults(page, pageSize, school, headerFieldsState)
+
                 const attendanceValuesByTei: AttendanceQueryResults = {
-                    results: {
-                        instances: []
-                    }
+                    results: {instances: [] }
                 }
 
-                // Get the events from the programStage registration
-                const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-                    ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
-                    page,
-                    pageSize,
-                    program: getDataStoreData?.program as unknown as string,
-                    order: "createdAt:desc",
-                    programStage: getDataStoreData?.registration?.programStage as unknown as string,
-                    filter: headerFieldsState?.dataElements,
-                    filterAttributes: headerFieldsState?.attributes,
-                    orgUnit: school,
-                    fields: "trackedEntity"
-                })) as unknown as EventQueryResults
-
                 // Map trackedEntityIds from the events
-                const trackedEntityIds = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
+                const trackedEntityIds = events?.map((x: { trackedEntity: string }) => x.trackedEntity)
                 setEnrollmentTeis({enrollmentDetails: trackedEntityIds})
-                const trackedEntityToFetch = trackedEntityIds.toString().replaceAll(",", ";")
+                const trackedEntityToFetch = trackedEntityIds?.join(';')
 
                 // Get events from the programStage attendance for each student
                 if (trackedEntityToFetch?.length > 0) {
-                    for (const tei of trackedEntityIds) {
-                        const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate, school, tei)
-                        attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
-                    }
+                    // Create an array to store all promises
+                    const promises = trackedEntityIds.map((tei) => getEvents(selectedDate, school, tei));
+
+                    // Wait for all promises to resolve
+                    const resultsArray = await Promise.all(promises);
+
+                    // Extract instances from each result and flatten them into a single array
+                    const instancesArray = resultsArray.map(result => result?.results?.instances).flat();
+
+                    // Push all instances into attendanceValuesByTei.results.instances
+                    attendanceValuesByTei.results.instances.push(...instancesArray);
                 }
 
+                console.log(attendanceValuesByTei)
                 // Get the list of trackedEntityIds attributes from the events
                 const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
                     ? await engine.query(TEI_QUERY({
@@ -102,8 +107,9 @@ export function useTableData() {
                     })) as unknown as TeiQueryResults
                     : {results: {instances: []}} as unknown as TeiQueryResults
 
+                // console.log(teiResults, events, 33)
                 const resultsFormatter = formatResponseRows({
-                    eventsInstances: eventsResults?.results?.instances,
+                    eventsInstances: events,
                     teiInstances: teiResults?.results?.instances,
                     attendanceValues: attendanceValuesByTei?.results?.instances,
                     attendanceConfig
@@ -152,6 +158,6 @@ export function useTableData() {
         tableData,
         loading,
         getAttendanceData,
-        setTableData,
+        setTableData
     }
 }
