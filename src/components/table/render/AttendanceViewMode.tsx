@@ -34,7 +34,7 @@ function AttendanceViewMode(props: AttendanceViewModeProps) {
     return (
         <>
             {column.type === VariablesTypes.Attendance
-                ? attendanceOptionIcons(getDataStoreData, value?.status, attendanceConst, value?.absenceOption, seeReason as unknown as boolean, programConfigState)
+                ? attendanceOptionIcons(getDataStoreData, value?.status, attendanceConst, value?.absenceOption, seeReason as unknown as boolean)
                 : formatKeyValueTypeHeader(headers)[column.id] === Attribute.valueType.IMAGE
                     ? <a href={imageUrl({
                         attribute: column.id,
@@ -52,11 +52,10 @@ function AttendanceViewMode(props: AttendanceViewModeProps) {
 
 export default AttendanceViewMode
 
-function attendanceOptionIcons(getDataStoreData: DataStoreRecord, value: string, attendanceConst: any, absenceOption: string, seeReason: boolean, program: any) {
+function attendanceOptionIcons(getDataStoreData: DataStoreRecord, value: string, attendanceConst: any, absenceOption: string, seeReason: boolean) {
     const attendance = getDataStoreData.attendance.statusOptions.find(x => x.code === value)
-    const programOptionsSets: string[] | undefined = program.programStages.find((x: any) => x.id === getDataStoreData.attendance.programStage)?.programStageDataElements?.find((x: any) => x?.dataElement?.id === getDataStoreData.attendance.status)?.dataElement?.optionSet?.options as unknown as []
 
-    if (attendance !== undefined && programOptionsSets?.filter((x: any) => x.value === value)?.length > 0) {
+    if (attendance !== undefined) {
         if (value === attendanceConst("absent")) {
             return <div>
                 {seeReason
