@@ -13,7 +13,6 @@ export const getIcon = (option: AttendanceOptionsProps, disabled = false) => {
         [attendanceConst("late") as string]: <AccessTime style={disabled ? styles : {color: "#EAB631"}}/>,
         [attendanceConst("absent") as string]: <HighlightOff style={disabled ? styles : {color: "#F05C5C"}}/>,
         Empty: <RemoveCircleOutline style={{color: "#ADAEB0"}}/>
-    }
 
     return <>
         {

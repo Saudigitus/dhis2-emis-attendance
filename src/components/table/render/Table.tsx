@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
-import {Paper} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {CenteredContent, CircularLoader} from "@dhis2/ui";
-import {TeiRefetch} from '../../../schema/refecthTeiSchema';
-import {WithBorder, WithPadding} from '../../../components';
-import {HeaderFieldsState} from '../../../schema/headersSchema';
-import {SelectedDateState} from '../../../schema/attendanceSchema';
-import {HeaderFilters, Pagination, TableComponent, WorkingLists} from '../components'
-import {useHeader, useTableData, useParams, useAttendanceMode} from '../../../hooks';
+import { Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { CenteredContent, CircularLoader } from "@dhis2/ui";
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { WithBorder, WithPadding } from '../../../components';
+import { HeaderFieldsState } from '../../../schema/headersSchema';
+import { SelectedDateState } from '../../../schema/attendanceSchema';
+import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
+import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
+import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -44,9 +45,17 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
+    const { setInitialAttendanceMode, attendanceMode } = useAttendanceMode()
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
+    const setLoading = useSetRecoilState(TableDataLoadingState)
     const {attendanceMode} = useAttendanceMode()
     const {urlParamiters} = useParams()
     const {academicYear} = urlParamiters()
+
+    useEffect(() => {
+        setLoading(loading)
+    }, [loading])
 
     useEffect(() => {
         if (academicYear) {
@@ -56,10 +65,15 @@ function Table() {
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if (academicYear) {
+        if (academicYear)
             void getAttendanceData()
         }
     }, [selectedDateViewMode])
+
+
+    useEffect(() => {
+        setpage(1)
+    }, [headerFieldsState])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
