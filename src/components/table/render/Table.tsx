@@ -49,9 +49,6 @@ function Table() {
     const { urlParamiters } = useParams()
     const { academicYear } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
-    const {attendanceMode} = useAttendanceMode()
-    const {urlParamiters} = useParams()
-    const {academicYear} = urlParamiters()
 
     useEffect(() => {
         setLoading(loading)
