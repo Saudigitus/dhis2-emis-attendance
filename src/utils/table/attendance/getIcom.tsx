@@ -17,13 +17,8 @@ export const getIcon = (option: AttendanceOptionsProps, disabled = false) => {
 
     return <>
         {
-            <Tooltip title={option.key}
-                     componentsProps={{
-                         tooltip: {
-                             sx: {textTransform: 'capitalize'}
-                         }
-                     }}>
-                {codeComponent?.[option.code] ?? <ExitToApp style={disabled ? styles : {color: "#28AFEA"}}/>}
+            <Tooltip title={option.key}>
+                {FindIcon()}
             </Tooltip>}
     </>
 }
