@@ -72,8 +72,9 @@ function attendanceOptionIcons(getDataStoreData: DataStoreRecord, value: string,
             return getIcon(attendance)
         }
     } else {
-        return <Tooltip title='Empty'>
-            <RemoveCircleOutline className={styles.empty}/>
-        </Tooltip>
+        return getIcon({
+            key: 'Empty',
+            code: 'Empty'
+        })
     }
 }
