@@ -112,14 +112,11 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
 }
 
 function itemsAttendance(dataStoreOptions: AttendanceOptionsProps[], programOptions: AttendanceEditModeProps["column"], disabled: boolean) {
-    const programOptionsSets: string[] | undefined = programOptions?.options?.optionSet?.options?.map((x) => x.value)
-
     return dataStoreOptions?.map((option) => {
         return {
             code: option.code,
             type: "attendance",
-            disabled: (programOptionsSets?.includes(option.code)) === false,
-            Component: getIcon(option, (disabled || (programOptionsSets?.includes(option.code)) === false))
+            Component: getIcon(option, disabled)
         }
     }) as []
 }
