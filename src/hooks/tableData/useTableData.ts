@@ -47,7 +47,8 @@ export function useTableData() {
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const {
         hide,
-        show } = useShowAlerts()
+        show
+    } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
     const {getDataStoreData} = getSelectedKey()
     const attendanceConfig = getSelectedKey()?.getDataStoreData?.attendance
@@ -72,7 +73,7 @@ export function useTableData() {
                 const events = await eventsResults(page, pageSize, school, headerFieldsState)
 
                 const attendanceValuesByTei: AttendanceQueryResults = {
-                    results: {instances: [] }
+                    results: {instances: []}
                 }
 
                 // Map trackedEntityIds from the events
@@ -81,20 +82,10 @@ export function useTableData() {
                 const trackedEntityToFetch = trackedEntityIds?.join(';')
 
                 // Get events from the programStage attendance for each student
-                if (trackedEntityToFetch?.length > 0) {
-                    // Create an array to store all promises
-                    const promises = trackedEntityIds.map((tei) => getEvents(selectedDate, school, tei));
-
-                    // Wait for all promises to resolve
-                    const resultsArray = await Promise.all(promises);
-
-                    // Extract instances from each result and flatten them into a single array
-                    const instancesArray = resultsArray.map(result => result?.results?.instances).flat();
-
-                    // Push all instances into attendanceValuesByTei.results.instances
-                    attendanceValuesByTei.results.instances.push(...instancesArray);
+                for (const tei of trackedEntityIds) {
+                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate, school, tei)
+                    attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
-
                 console.log(attendanceValuesByTei)
                 // Get the list of trackedEntityIds attributes from the events
                 const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
