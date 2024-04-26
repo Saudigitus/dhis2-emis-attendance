@@ -1,5 +1,5 @@
 interface AttendanceProps {
-    selectedDate: Date
+    selectedDate: Date | null
 }
 
 interface AttendanceAddNewProps {
@@ -21,20 +21,20 @@ interface SchoolCalendar {
             endDate: string
             startDate: string
         }
-    ],
+    ]
     holidays: [
         {
             date: any
             event: string
         }
-    ],
+    ]
     weekDays: {
-        friday: boolean,
-        monday: boolean,
-        saturday: boolean,
-        sunday: boolean,
-        thursday: boolean,
-        tuesday: boolean,
+        friday: boolean
+        monday: boolean
+        saturday: boolean
+        sunday: boolean
+        thursday: boolean
+        tuesday: boolean
         wednesday: boolean
     }
 }
