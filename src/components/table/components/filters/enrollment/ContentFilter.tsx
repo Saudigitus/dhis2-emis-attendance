@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core';
 import style from './enrollmentFilter.module.css'
 import SelectButton from "../selectButton/SelectButton";
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
-import { type CustomAttributeProps } from '../../../../../types/variables/AttributeColumns';
+import {type CustomAttributeProps, VariablesTypes} from '../../../../../types/variables/AttributeColumns';
 import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
 import { type ContentFilterProps, type FiltersValuesProps } from '../../../../../types/table/ContentFiltersTypes';
 
@@ -22,7 +22,7 @@ function ContentFilter(props: ContentFilterProps) {
     const dataElementsQuerybuilder: any[][] = [];
 
     useEffect(() => {
-        const copyHeader = [...headers]
+        const copyHeader = [...headers.filter(x => x.type !== VariablesTypes.Attendance)]
         setlocalFilters(copyHeader.slice(0, 4))
     }, [headers])
 
@@ -31,7 +31,7 @@ function ContentFilter(props: ContentFilterProps) {
     };
 
     const addSearchableHeaders = (e: CustomAttributeProps) => {
-        const copyHeader = [...headers]
+        const copyHeader = [...headers.filter(x => x.type !== VariablesTypes.Attendance)]
         const copyHeaderLocal = [...localFilters]
 
         const pos = copyHeader.findIndex(x => x.id === e.id)
@@ -164,7 +164,7 @@ function ContentFilter(props: ContentFilterProps) {
                 <MenuFilters
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
-                    options={headers?.filter(x => !localFilters.includes(x))}
+                    options={headers.filter(x => x.type !== VariablesTypes.Attendance)?.filter(x => !localFilters.includes(x))}
                     addSearchableHeaders={addSearchableHeaders}
                 />
             </div>
