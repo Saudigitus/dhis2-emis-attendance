@@ -49,11 +49,10 @@ function Table() {
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if (academicYear) {
+        if (academicYear && selectedDateViewMode !== null) {
             void getAttendanceData()
         }
     }, [selectedDateViewMode])
-
 
     useEffect(() => {
         setpage(1)

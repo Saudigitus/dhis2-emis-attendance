@@ -39,6 +39,7 @@ export interface CustomAttributeProps {
     type: VariablesTypes
     value?: string
     class?: string
+    initialOptions?: any
 }
 
 export interface OptionsProps {

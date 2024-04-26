@@ -83,7 +83,7 @@ export function useTableData() {
 
                 // Get events from the programStage attendance for each student
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate, school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate ?? new Date(), school, tei)
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
                 console.log(attendanceValuesByTei)

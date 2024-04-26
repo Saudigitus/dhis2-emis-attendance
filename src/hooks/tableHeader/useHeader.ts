@@ -19,7 +19,7 @@ export function useHeader() {
 
     useEffect(() => {
         if (typeof formatResponse({ data: programConfigState, programStageId: registrationProgramStage }) !== "undefined" && controlRender) {
-            setcolumnHeader(formatResponse({ data: programConfigState, programStageId: registrationProgramStage }).concat(getAttendanceDays(selectedDate, attendanceMode, programConfigState, attendanceProgramStage)) ?? [])
+            setcolumnHeader(formatResponse({ data: programConfigState, programStageId: registrationProgramStage }).concat(getAttendanceDays(selectedDate ?? new Date(), attendanceMode, programConfigState, attendanceProgramStage)) ?? [])
             setcontrolRender(false)
         }
     }, [formatResponse({ data: programConfigState, programStageId: registrationProgramStage }), controlRender])

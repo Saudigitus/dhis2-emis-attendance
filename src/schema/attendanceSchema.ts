@@ -1,10 +1,10 @@
 import { atom } from "recoil"
-import { AttendanceAddNewProps, AttendanceModeProps, AttendanceProps, EnrollmentDetailsProps } from "../types/attendance/AttendanceTypes"
+import { type AttendanceAddNewProps, type AttendanceModeProps, type AttendanceProps } from "../types/attendance/AttendanceTypes"
 
 export const SelectedDateState = atom<AttendanceProps>({
     key: "attendanceViewEvents-state",
     default: {
-        selectedDate: new Date()
+        selectedDate: null
     }
 })
 
@@ -14,7 +14,6 @@ export const SelectedDateAddNewState = atom<AttendanceAddNewProps>({
         selectedDate: new Date()
     }
 })
-
 
 export const AttendanceModeState = atom<AttendanceModeProps>({
     key: "attendanceMode-state",
