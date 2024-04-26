@@ -3,11 +3,8 @@ import {VariablesTypes} from '../../../types/variables/AttributeColumns'
 import {type AttendanceViewModeProps} from '../../../types/table/TableRenderTypes';
 import {getDisplayName} from '../../../utils/table/rows/getDisplayNameByOption';
 import {useAttendanceConst} from '../../../utils/constants/attendance/attendanceConst';
-import {RemoveCircleOutline} from '@material-ui/icons';
 import {useRecoilValue} from 'recoil';
 import {ReasonOfAbsenseState} from '../../../schema/reasonOfAbsenseSchema';
-import {Chip, Tooltip} from '@mui/material';
-import styles from './attendance.module.css'
 import {formatKeyValueTypeHeader} from '../../../utils/programRules/formatKeyValueType';
 import {Attribute} from '../../../types/generated/models';
 import {GetImageUrl} from '../../../utils/table/rows/getImageUrl';
@@ -59,12 +56,7 @@ function attendanceOptionIcons(getDataStoreData: DataStoreRecord, value: string,
         if (value === attendanceConst("absent")) {
             return <div>
                 {seeReason
-                    ? <Chip
-                        // eslint-disable-next-line
-                        label={absenceOption
-                            ? absenceOption.substring(0, 1) + absenceOption.substring(1, absenceOption.length).toLowerCase()
-                            : '- -'
-                        } size='small' className={styles.reasonOfAbsense}/>
+                    ? getIcon({key: absenceOption ?? '- -', code: 'Absense'})
                     : getIcon(attendance)
                 }
             </div>

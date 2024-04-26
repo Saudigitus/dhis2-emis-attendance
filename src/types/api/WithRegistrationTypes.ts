@@ -20,6 +20,7 @@ interface TeiQueryResults {
                 enrollment: string
                 orgUnit: string
                 program: string
+                status: string
             }]
         }]
     }

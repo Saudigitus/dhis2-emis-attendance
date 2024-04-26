@@ -20,25 +20,19 @@ const usetStyles = makeStyles({
         display: 'flex',
         marginLeft: '0.5rem',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
     h4: {
         margin: '0px',
         fontSize: '22px',
-        fontWeigth: '500',
+        fontWeigth: '500'
     }
 });
 
 function Table() {
     const classes = usetStyles()
     const {columns} = useHeader()
-    const {
-        getData,
-        loading,
-        tableData,
-        getAttendanceData,
-        setTableData
-    } = useTableData()
+    const {getData, loading, tableData, getAttendanceData, setTableData} = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const {selectedDate: selectedDateViewMode} = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)

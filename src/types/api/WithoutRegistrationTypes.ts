@@ -35,7 +35,6 @@ interface EventQueryResults {
             trackedEntity: string
             dataValues: DataValuesProps[]
         }]
-    
     }
 }
 
