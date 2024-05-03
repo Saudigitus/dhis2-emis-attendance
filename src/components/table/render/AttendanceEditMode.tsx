@@ -3,7 +3,7 @@ import {format} from 'date-fns';
 import {useRecoilValue} from 'recoil';
 import {useCreateDataValues, useUpdateEvents} from '../../../hooks';
 import {VariablesTypes} from '../../../types/variables/AttributeColumns'
-import MultipleButtons from '../components/multipleButtom/MultipleButtons';
+import MultipleButtons from '../components/reasonOfAbsence/multipleButtom/MultipleButtons';
 import {SelectedDateAddNewState} from '../../../schema/attendanceSchema';
 import {type AttendanceEditModeProps} from '../../../types/table/TableRenderTypes';
 import {type AttendanceOptionsProps} from '../../../types/variables/AttributeColumns';
@@ -13,6 +13,7 @@ import {useAttendanceConst} from '../../../utils/constants/attendance/attendance
 import {ProgramConfigState} from '../../../schema/programSchema';
 import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
 import {getIcon} from "../../../utils/table/attendance/getIcom";
+import ReasonOfAbsence from '../components/reasonOfAbsence/reasonOfAbsesnce';
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
     const {
@@ -101,7 +102,7 @@ function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: str
                 disabled={checkCanceled(enrollmentStatus)}
             />
             : value?.status === attendanceConst("absent") &&
-            <MultipleButtons
+            <ReasonOfAbsence
                 id={props.column.id}
                 items={itemsAbsence(props.column)}
                 selectedTerm={selectedTerm}
