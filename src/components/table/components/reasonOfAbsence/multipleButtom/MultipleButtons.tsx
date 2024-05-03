@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./button.module.css";
 import {ButtonGroup, Button} from "@material-ui/core";
-import {type ButtonProps} from "../../../../types/table/MultipleButtonsTypes";
+import {type ButtonProps} from "../../../../../types/table/MultipleButtonsTypes";
 import classNames from "classnames";
 
 export default function MultipleButtons(props: ButtonProps) {

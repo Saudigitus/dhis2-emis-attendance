@@ -1,28 +1,28 @@
-import {useEffect, useState} from "react";
-import {useDataEngine} from "@dhis2/app-runtime";
+import { useEffect, useState } from "react";
+import { useDataEngine } from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {useParams} from "../commons/useQueryParams";
-import {HeaderFieldsState} from "../../schema/headersSchema";
-import {TableDataState} from "../../schema/tableColumnsSchema";
-import {getSelectedKey} from '../../utils/commons/dataStore/getSelectedKey';
-import {formatResponseRows, attendanceFormater} from "../../utils/table/rows/formatResponseRows";
-import {SelectedDateState} from "../../schema/attendanceSchema";
-import {type AttendanceQueryResults} from "../../types/api/WithoutRegistrationTypes";
-import {type TeiQueryProps, type TeiQueryResults} from "../../types/api/WithRegistrationTypes";
-import {type AttendanceFormaterProps} from "../../types/utils/table/FormatRowsDataTypes";
-import {EnrollmentDetailsTeisState} from "../../schema/enrollmentDetailsSchema";
-import {useGetEvents} from "../events/useGetEvents";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useParams } from "../commons/useQueryParams";
+import { HeaderFieldsState } from "../../schema/headersSchema";
+import { TableDataState } from "../../schema/tableColumnsSchema";
+import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
+import { formatResponseRows, attendanceFormater } from "../../utils/table/rows/formatResponseRows";
+import { SelectedDateState } from "../../schema/attendanceSchema";
+import { type AttendanceQueryResults } from "../../types/api/WithoutRegistrationTypes";
+import { type TeiQueryProps, type TeiQueryResults } from "../../types/api/WithRegistrationTypes";
+import { type AttendanceFormaterProps } from "../../types/utils/table/FormatRowsDataTypes";
+import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema";
+import { useGetEvents } from "../events/useGetEvents";
 
 type TableDataProps = Record<string, string>;
 
 const TEI_QUERY = ({
-                       ouMode,
-                       pageSize,
-                       program,
-                       trackedEntity,
-                       orgUnit
-                   }: TeiQueryProps) => ({
+    ouMode,
+    pageSize,
+    program,
+    trackedEntity,
+    orgUnit
+}: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
@@ -41,8 +41,8 @@ export function useTableData() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [enrollmentTeis, setEnrollmentTeis] = useRecoilState(EnrollmentDetailsTeisState)
     const setTableColumnState = useSetRecoilState(TableDataState)
-    const {selectedDate} = useRecoilValue(SelectedDateState)
-    const {urlParamiters} = useParams()
+    const { selectedDate } = useRecoilValue(SelectedDateState)
+    const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const {
@@ -50,7 +50,7 @@ export function useTableData() {
         show
     } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
-    const {getDataStoreData} = getSelectedKey()
+    const { getDataStoreData } = getSelectedKey()
     const attendanceConfig = getSelectedKey()?.getDataStoreData?.attendance
     const {
         getEvents,
@@ -61,7 +61,7 @@ export function useTableData() {
         show({
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             message: `${("Could not get data")}: ${error.message}`,
-            type: {critical: true}
+            type: { critical: true }
         });
         setTimeout(hide, 5000);
     }
@@ -73,12 +73,12 @@ export function useTableData() {
                 const events = await eventsResults(page, pageSize, school, headerFieldsState)
 
                 const attendanceValuesByTei: AttendanceQueryResults = {
-                    results: {instances: []}
+                    results: { instances: [] }
                 }
 
                 // Map trackedEntityIds from the events
                 const trackedEntityIds = events?.map((x: { trackedEntity: string }) => x.trackedEntity)
-                setEnrollmentTeis({enrollmentDetails: trackedEntityIds})
+                setEnrollmentTeis({ enrollmentDetails: trackedEntityIds })
                 const trackedEntityToFetch = trackedEntityIds?.join(';')
 
                 // Get events from the programStage attendance for each student
@@ -86,7 +86,6 @@ export function useTableData() {
                     const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate ?? new Date(), school, tei)
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
-                console.log(attendanceValuesByTei)
                 // Get the list of trackedEntityIds attributes from the events
                 const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
                     ? await engine.query(TEI_QUERY({
@@ -96,9 +95,8 @@ export function useTableData() {
                         orgUnit: school,
                         trackedEntity: trackedEntityToFetch
                     })) as unknown as TeiQueryResults
-                    : {results: {instances: []}} as unknown as TeiQueryResults
+                    : { results: { instances: [] } } as unknown as TeiQueryResults
 
-                // console.log(teiResults, events, 33)
                 const resultsFormatter = formatResponseRows({
                     eventsInstances: events,
                     teiInstances: teiResults?.results?.instances,
@@ -132,7 +130,7 @@ export function useTableData() {
 
                 for (const [index, tei] of localData.entries()) {
                     const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity);
-                    localData[index] = {...tei, ...attendanceFormater(attendanceDetails, attendanceConfig)};
+                    localData[index] = { ...tei, ...attendanceFormater(attendanceDetails, attendanceConfig) };
                 }
 
                 setTableData(localData);
