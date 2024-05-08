@@ -23,6 +23,7 @@ const useCreateDataValues = () => {
 
     async function createValues(props: CreateEventProps) {
         const { teiDetails, dataElementId, dataElementValue, typeField, rowsData, setTableData, setselectedTerm } = props
+
         const dateFormated = format(new Date(selectedDate), "yyyy-MM-dd")
 
         const data: any = {
@@ -32,6 +33,7 @@ const useCreateDataValues = () => {
                     program: teiDetails.programId,
                     programStage: attendanceConfig.programStage,
                     orgUnit: teiDetails.orgUnitId,
+                    enrollment: teiDetails.enrollmentId,
                     dataValues: [
                         {
                             dataElement: dataElementId,
