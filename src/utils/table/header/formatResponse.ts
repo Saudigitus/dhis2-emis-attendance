@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Attribute } from "../../../types/generated/models";
 import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { type HeaderFormatResponseProps } from "../../../types/utils/table/TableTypes";
@@ -55,7 +54,7 @@ export function formatResponse({ data, programStageId }: HeaderFormatResponsePro
         )
 }
 
-export function getAttendanceDays(date: Date, attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
+export function getAttendanceDays(validDays: string[], attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
     const days: CustomAttributeProps[] = [];
 
     if (attendanceMode === "edit") {
@@ -85,15 +84,15 @@ export function getAttendanceDays(date: Date, attendanceMode: "edit" | "view", d
             }) as []
         )
     } else {
-        for (let i = 4; i > -1; i--) {
+        validDays.map((dateString: string) => {
             days.push(
                 {
-                    id: format(new Date(date.getFullYear(), date.getMonth(), date.getDate() - i), "yyyy-MM-dd"),
-                    displayName: format(new Date(date.getFullYear(), date.getMonth(), date.getDate() - i), "yyyy-MM-dd"),
-                    header: format(new Date(date.getFullYear(), date.getMonth(), date.getDate() - i), "yyyy-MM-dd"),
+                    id: dateString,
+                    displayName: dateString,
+                    header: dateString,
                     required: true,
-                    name: format(new Date(date.getFullYear(), date.getMonth(), date.getDate() - i), "yyyy-MM-dd"),
-                    labelName: format(new Date(date.getFullYear(), date.getMonth(), date.getDate() - i), "yyyy-MM-dd"),
+                    name: dateString,
+                    labelName: dateString,
                     valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
                     options: undefined,
                     initialOptions: undefined,
@@ -108,7 +107,7 @@ export function getAttendanceDays(date: Date, attendanceMode: "edit" | "view", d
                     class: "center"
                 }
             )
-        }
+        })
     }
 
     return days
