@@ -1,4 +1,4 @@
-import {type Attribute } from '../generated';
+import { type Attribute } from '../generated';
 
 export enum VariablesTypes {
     DataElement = "dataElement",
@@ -40,6 +40,7 @@ export interface CustomAttributeProps {
     value?: string
     class?: string
     initialOptions?: any
+    schoolDay?: boolean
 }
 
 export interface OptionsProps {

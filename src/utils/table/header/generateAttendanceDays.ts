@@ -10,9 +10,10 @@ export function generateAttendanceDays() {
 
         do {
             let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - counter)
-            if (!unavailableDays(currentDate)) {
-                validDays.unshift(format(currentDate, "yyyy-MM-dd"))
-            }
+
+            if (!unavailableDays(currentDate)) validDays.unshift({ schoolDay: true, date: format(currentDate, "yyyy-MM-dd") })
+            else validDays.unshift({ schoolDay: false, date: format(currentDate, "yyyy-MM-dd") })
+
             counter++
         } while (validDays.length < 5)
 

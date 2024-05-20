@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import RenderRows from './RenderRows'
 import RenderHeader from './RenderHeader'
-import {Paper} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {CenteredContent, CircularLoader} from "@dhis2/ui";
-import {TeiRefetch} from '../../../schema/refecthTeiSchema';
-import {WithBorder, WithPadding} from '../../../components';
-import {HeaderFieldsState} from '../../../schema/headersSchema';
-import {SelectedDateState} from '../../../schema/attendanceSchema';
-import {HeaderFilters, Pagination, TableComponent, WorkingLists} from '../components'
-import {useHeader, useTableData, useParams, useAttendanceMode} from '../../../hooks';
+import { Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { CenteredContent, CircularLoader } from "@dhis2/ui";
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { WithBorder, WithPadding } from '../../../components';
+import { HeaderFieldsState } from '../../../schema/headersSchema';
+import { SelectedDateState } from '../../../schema/attendanceSchema';
+import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
+import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -31,16 +31,16 @@ const usetStyles = makeStyles({
 
 function Table() {
     const classes = usetStyles()
-    const {columns} = useHeader()
-    const {getData, loading, tableData, getAttendanceData, setTableData} = useTableData()
+    const { columns } = useHeader()
+    const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const {selectedDate: selectedDateViewMode} = useRecoilValue(SelectedDateState)
+    const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const {attendanceMode} = useAttendanceMode()
-    const {urlParamiters} = useParams()
-    const {academicYear} = urlParamiters()
+    const { attendanceMode } = useAttendanceMode()
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
 
     useEffect(() => {
         if (academicYear) {
@@ -69,39 +69,40 @@ function Table() {
 
     return (
         <Paper>
-            {loading &&
-                <CenteredContent>
-                    <CircularLoader/>
-                </CenteredContent>
-            }
             <div className={classes.workingListsContainer}>
                 <h4 className={classes.h4}>Attendances</h4>
-                <WorkingLists/>
+                <WorkingLists />
             </div>
-            <WithBorder type='bottom'/>
+            <WithBorder type='bottom' />
             <WithPadding>
                 <WithBorder type='all'>
-                    <HeaderFilters/>
+                    <HeaderFilters />
                     <div
                         className={classes.tableContainer}
                     >
-                        <TableComponent>
-                            <>
-                                <RenderHeader
-                                    createSortHandler={() => {
-                                    }}
-                                    order='asc'
-                                    orderBy='desc'
-                                    rowsHeader={columns}
-                                />
-                                <RenderRows
-                                    headerData={columns}
-                                    rowsData={tableData}
-                                    attendanceMode={attendanceMode}
-                                    setTableData={setTableData}
-                                />
-                            </>
-                        </TableComponent>
+                        {loading ?
+                            <CenteredContent>
+                                <CircularLoader />
+                            </CenteredContent>
+                            :
+                            <TableComponent>
+                                <>
+                                    <RenderHeader
+                                        createSortHandler={() => {
+                                        }}
+                                        order='asc'
+                                        orderBy='desc'
+                                        rowsHeader={columns}
+                                    />
+                                    <RenderRows
+                                        headerData={columns}
+                                        rowsData={tableData}
+                                        attendanceMode={attendanceMode}
+                                        setTableData={setTableData}
+                                    />
+                                </>
+                            </TableComponent>
+                        }
                     </div>
                     <Pagination
                         loading={loading}
