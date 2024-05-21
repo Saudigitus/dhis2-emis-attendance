@@ -1,17 +1,23 @@
 import { type AttendanceFormaterProps, type AttributesProps, type FormatResponseRowsProps, type RowsDataProps } from "../../../types/utils/table/FormatRowsDataTypes";
 
 // TODO @edsonnhancale remove this attendanceConfig from this function
-export function formatResponseRows({ eventsInstances, teiInstances, attendanceValues, attendanceConfig }: FormatResponseRowsProps): RowsDataProps[] {
+export function formatResponseRows({ eventsInstances, teiInstances, attendanceValues, attendanceConfig, registrationIds, academicYear }: FormatResponseRowsProps): RowsDataProps[] {
     const allRows: RowsDataProps[] = []
+
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find((tei: any) => tei.trackedEntity === event.trackedEntity)
         const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity)
+        const thisAcademicYearEnrollment = teiDetails?.enrollments.find(x =>
+            x.events.find((x: any) =>
+                x.programStage === registrationIds?.programStage)?.dataValues.find((x: any) =>
+                    x.dataElement === registrationIds?.academicYear).value === academicYear)
+
         allRows.push({
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...attendanceFormater(attendanceDetails, attendanceConfig),
             trackedEntity: event.trackedEntity,
-            enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
+            enrollmentId: thisAcademicYearEnrollment?.enrollment,
             orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
             programId: teiDetails?.enrollments?.[0]?.program,
             status: teiDetails?.enrollments?.[0]?.status

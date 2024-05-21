@@ -13,6 +13,7 @@ import { type TeiQueryProps, type TeiQueryResults } from "../../types/api/WithRe
 import { type AttendanceFormaterProps } from "../../types/utils/table/FormatRowsDataTypes";
 import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema";
 import { useGetEvents } from "../events/useGetEvents";
+import { DataStoreState } from "../../schema/dataStoreSchema";
 
 type TableDataProps = Record<string, string>;
 
@@ -31,13 +32,14 @@ const TEI_QUERY = ({
             pageSize,
             trackedEntity,
             orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status,events]"
         }
     }
 })
 
 export function useTableData() {
     const engine = useDataEngine();
+    const dataStoreState = useRecoilValue(DataStoreState);
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [enrollmentTeis, setEnrollmentTeis] = useRecoilState(EnrollmentDetailsTeisState)
     const setTableColumnState = useSetRecoilState(TableDataState)
@@ -101,7 +103,9 @@ export function useTableData() {
                     eventsInstances: events,
                     teiInstances: teiResults?.results?.instances,
                     attendanceValues: attendanceValuesByTei?.results?.instances,
-                    attendanceConfig
+                    attendanceConfig,
+                    registrationIds: dataStoreState[0].registration,
+                    academicYear: urlParamiters().academicYear as unknown as string
                 })
 
                 setTableColumnState(resultsFormatter)

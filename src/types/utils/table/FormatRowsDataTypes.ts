@@ -1,6 +1,7 @@
-import {AttributesProps} from "../../api/WithRegistrationTypes"
-import {DataValuesProps} from "../../api/WithoutRegistrationTypes"
-import {OptionsProps} from "../../variables/AttributeColumns"
+import { AttributesProps } from "../../api/WithRegistrationTypes"
+import { DataValuesProps } from "../../api/WithoutRegistrationTypes"
+import { Registration } from "../../dataStore/DataStoreConfig"
+import { OptionsProps } from "../../variables/AttributeColumns"
 
 interface FormatResponseRowsProps {
     eventsInstances: [{
@@ -15,6 +16,7 @@ interface FormatResponseRowsProps {
             orgUnit: string
             program: string
             status: string
+            events: any[]
         }]
     }]
     attendanceValues: [{
@@ -32,6 +34,8 @@ interface FormatResponseRowsProps {
             icon: string
         }]
     }
+    registrationIds?: Registration,
+    academicYear?: string
 }
 
 type RowsDataProps = Record<string, string | number | boolean | any>;

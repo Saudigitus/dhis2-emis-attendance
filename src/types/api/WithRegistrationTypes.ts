@@ -21,6 +21,7 @@ interface TeiQueryResults {
                 orgUnit: string
                 program: string
                 status: string
+                events: any[]
             }]
         }]
     }
