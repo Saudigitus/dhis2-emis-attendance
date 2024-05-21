@@ -1,4 +1,4 @@
-import {type OptionsProps} from "../variables/AttributeColumns"
+import { type OptionsProps } from "../variables/AttributeColumns"
 
 interface AttendanceEditModeProps {
     value: string | any
@@ -29,7 +29,8 @@ interface AttendanceViewModeProps {
                 options: OptionsProps[]
             }
         }
+        schoolDay?: boolean
     }
 }
 
-export type {AttendanceEditModeProps, AttendanceViewModeProps}
+export type { AttendanceEditModeProps, AttendanceViewModeProps }

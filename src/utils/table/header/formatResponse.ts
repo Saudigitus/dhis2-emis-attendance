@@ -54,7 +54,7 @@ export function formatResponse({ data, programStageId }: HeaderFormatResponsePro
         )
 }
 
-export function getAttendanceDays(validDays: string[], attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
+export function getAttendanceDays(validDays: [{ schoolDay: boolean, date: string }], attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
     const days: CustomAttributeProps[] = [];
 
     if (attendanceMode === "edit") {
@@ -84,15 +84,15 @@ export function getAttendanceDays(validDays: string[], attendanceMode: "edit" | 
             }) as []
         )
     } else {
-        validDays.map((dateString: string) => {
+        validDays.map((dateString: { schoolDay: boolean, date: string }) => {
             days.push(
                 {
-                    id: dateString,
-                    displayName: dateString,
-                    header: dateString,
+                    id: dateString.date,
+                    displayName: dateString.date,
+                    header: dateString.date,
                     required: true,
-                    name: dateString,
-                    labelName: dateString,
+                    name: dateString.date,
+                    labelName: dateString.date,
                     valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
                     options: undefined,
                     initialOptions: undefined,
@@ -104,7 +104,8 @@ export function getAttendanceDays(validDays: string[], attendanceMode: "edit" | 
                     content: '',
                     key: "",
                     type: VariablesTypes.Attendance,
-                    class: "center"
+                    class: "center",
+                    schoolDay: dateString.schoolDay
                 }
             )
         })
