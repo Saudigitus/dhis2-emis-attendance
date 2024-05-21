@@ -95,7 +95,7 @@ export default function OrgUnitTree(props: OrgUnitTreeProps): React.ReactElement
     const renderOrgUnitTree = () => {
         if (stringQuery?.length) {
             return (<OrgUnitTreeComponent
-                roots={searchData?.orgUnits?.organisationUnits  as unknown as string[]}
+                roots={searchData?.orgUnits?.organisationUnits as unknown as string[]}
                 onSelectClick={onOuChange}
                 treeKey={key}
             />);
