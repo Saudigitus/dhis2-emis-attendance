@@ -2,7 +2,6 @@ import {format} from "date-fns";
 import {
     type AttendanceQueryResults, type DataValuesProps,
     type EventQueryProps,
-    EventQueryResults
 } from "../../types/api/WithoutRegistrationTypes";
 import {useDataEngine} from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
@@ -42,7 +41,7 @@ export function useGetEvents() {
             trackedEntity: tei,
             occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
             occurredBefore: format(new Date(selectedDate), "yyyy-MM-dd"),
-            fields: "event,trackedEntity,occurredAt,dataValues[dataElement,value]"
+            fields: "event,trackedEntity,occurredAt,enrollment,dataValues[dataElement,value]"
         })).catch((error) => {
             show({
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -65,7 +64,7 @@ export function useGetEvents() {
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school,
-            fields: "trackedEntity"
+            fields: "trackedEntity,enrollment,orgUnit,program"
         })).then((resp: any) => {
             return resp.results?.instances
         })

@@ -1,11 +1,14 @@
-import {AttributesProps} from "../../api/WithRegistrationTypes"
-import {DataValuesProps} from "../../api/WithoutRegistrationTypes"
-import {OptionsProps} from "../../variables/AttributeColumns"
+import { AttributesProps } from "../../api/WithRegistrationTypes"
+import { DataValuesProps } from "../../api/WithoutRegistrationTypes"
+import { OptionsProps } from "../../variables/AttributeColumns"
 
 interface FormatResponseRowsProps {
     eventsInstances: [{
         trackedEntity: string
         dataValues: DataValuesProps[]
+        enrollment: string
+        orgUnit: string
+        program: string
     }]
     teiInstances: [{
         trackedEntity: string

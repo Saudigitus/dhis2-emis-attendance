@@ -6,15 +6,16 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find((tei: any) => tei.trackedEntity === event.trackedEntity)
-        const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity)
+        const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity).filter((attendance: any) => attendance.enrollment === event.enrollment)
+       
         allRows.push({
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...attendanceFormater(attendanceDetails, attendanceConfig),
             trackedEntity: event.trackedEntity,
-            enrollmentId: teiDetails?.enrollments?.[0]?.enrollment,
-            orgUnitId: teiDetails?.enrollments?.[0]?.orgUnit,
-            programId: teiDetails?.enrollments?.[0]?.program,
-            status: teiDetails?.enrollments?.[0]?.status
+            enrollmentId: event?.enrollment,
+            orgUnitId: event?.orgUnit,
+            programId: event?.program,
+            status: teiDetails?.enrollments.find(x => x.enrollment === event.enrollment)?.status
         })
     }
     return allRows;
