@@ -15,7 +15,7 @@ export function useHeader() {
     const [controlRender, setcontrolRender] = useState(true)
     const { attendanceMode } = useAttendanceMode()
     const { getDataStoreData } = getSelectedKey()
-    const registrationProgramStage = getDataStoreData.registration.programStage
+    const registrationProgramStage = getDataStoreData?.registration.programStage
     const attendanceProgramStage = getDataStoreData.attendance.programStage
     const { getValidDays } = generateAttendanceDays()
 

@@ -8,9 +8,11 @@ import { CenteredContent, CircularLoader } from "@dhis2/ui";
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { WithBorder, WithPadding } from '../../../components';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { SelectedDateState } from '../../../schema/attendanceSchema';
+import { SelectedDateAddNewState, SelectedDateState } from '../../../schema/attendanceSchema';
 import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../components'
 import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
+import { format } from 'date-fns';
+import { generateAttendanceDays } from '../../../utils/table/header/generateAttendanceDays';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -35,12 +37,14 @@ function Table() {
     const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
+    const selectedDateAddNew = useRecoilValue(SelectedDateAddNewState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const { attendanceMode } = useAttendanceMode()
     const { urlParamiters } = useParams()
     const { academicYear } = urlParamiters()
+    const { getValidDays } = generateAttendanceDays()
 
     useEffect(() => {
         if (academicYear) {
@@ -53,6 +57,14 @@ function Table() {
             void getAttendanceData()
         }
     }, [selectedDateViewMode])
+
+    useEffect(() => {
+        if (academicYear) {
+            let days = getValidDays(new Date(selectedDateViewMode ?? new Date))
+            if (!days.find(x => x.date === format(new Date(selectedDateAddNew.selectedDate), "yyyy-MM-dd")))
+                void getAttendanceData(selectedDateAddNew.selectedDate)
+        }
+    }, [selectedDateAddNew])
 
     useEffect(() => {
         setpage(1)

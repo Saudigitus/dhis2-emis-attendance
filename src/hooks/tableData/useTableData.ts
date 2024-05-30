@@ -114,7 +114,7 @@ export function useTableData() {
         }
     }
 
-    async function getAttendanceData() {
+    async function getAttendanceData(date?: any) {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
                 const localData = [...tableData]
@@ -124,7 +124,7 @@ export function useTableData() {
                 const trackedEntityIds = enrollmentTeis.enrollmentDetails
 
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate, school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(date ?? selectedDate, school, tei)
                     attendanceValuesByTei.push(...attendanceResults?.results?.instances)
                 }
 
