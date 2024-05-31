@@ -17,20 +17,16 @@ import { useGetEvents } from "../events/useGetEvents";
 type TableDataProps = Record<string, string>;
 
 const TEI_QUERY = ({
-    ouMode,
     pageSize,
     program,
     trackedEntity,
-    orgUnit
 }: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
             program,
-            ouMode,
             pageSize,
             trackedEntity,
-            orgUnit,
             fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status]"
         }
     }
@@ -89,10 +85,10 @@ export function useTableData() {
                 // Get the list of trackedEntityIds attributes from the events
                 const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
                     ? await engine.query(TEI_QUERY({
-                        ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                        //ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                         pageSize,
                         program: getDataStoreData?.program as unknown as string,
-                        orgUnit: school,
+                        //orgUnit: school,
                         trackedEntity: trackedEntityToFetch
                     })) as unknown as TeiQueryResults
                     : { results: { instances: [] } } as unknown as TeiQueryResults
