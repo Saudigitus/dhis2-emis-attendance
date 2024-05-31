@@ -6,6 +6,7 @@ import {
 import {useDataEngine} from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
 import {getSelectedKey} from "../../utils/commons/dataStore/getSelectedKey";
+import { FormatResponseRowsProps } from "../../types/utils/table/FormatRowsDataTypes";
 
 export const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
     results: {
@@ -52,7 +53,7 @@ export function useGetEvents() {
         }) as unknown as AttendanceQueryResults
     }
 
-    async function eventsResults(page: number, pageSize: number, school: string, headerFieldsState: any): Promise<[{trackedEntity: string, dataValues: DataValuesProps[]}]> {
+    async function eventsResults(page: number, pageSize: number, school: string, headerFieldsState: any): Promise<FormatResponseRowsProps["eventsInstances"]> {
         // Get the events from the programStage registration
         return await engine.query(EVENT_QUERY({
             ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
