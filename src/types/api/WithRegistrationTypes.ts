@@ -22,6 +22,9 @@ interface TeiQueryResults {
                 program: string
                 status: string
             }]
+            programOwners: [{
+                orgUnit: string
+            }]
         }]
     }
 }

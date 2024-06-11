@@ -62,6 +62,7 @@ interface RowTableProps {
     passOnProps?: object
     table?: TableProps
     inactive?: boolean
+    isOwnershipOu?: boolean
 }
 
 type TableDataProps = Record<string, string>;

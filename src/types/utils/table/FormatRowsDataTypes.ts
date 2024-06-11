@@ -19,6 +19,9 @@ interface FormatResponseRowsProps {
             program: string
             status: string
         }]
+        programOwners: [{
+            orgUnit: string
+        }]
     }]
     attendanceValues: [{
         trackedEntity: string

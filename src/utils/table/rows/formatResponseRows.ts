@@ -7,7 +7,7 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find((tei: any) => tei.trackedEntity === event.trackedEntity)
         const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity).filter((attendance: any) => attendance.enrollment === event.enrollment)
-       
+       console.log(teiDetails)
         allRows.push({
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...attendanceFormater(attendanceDetails, attendanceConfig),
@@ -15,7 +15,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
             enrollmentId: event?.enrollment,
             orgUnitId: event?.orgUnit,
             programId: event?.program,
-            status: teiDetails?.enrollments.find(x => x.enrollment === event.enrollment)?.status
+            status: teiDetails?.enrollments.find(x => x.enrollment === event.enrollment)?.status,
+            ownershipOu: teiDetails?.programOwners[0]?.orgUnit
         })
     }
     return allRows;

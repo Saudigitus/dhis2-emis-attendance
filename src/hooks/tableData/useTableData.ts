@@ -27,7 +27,7 @@ const TEI_QUERY = ({
             program,
             pageSize,
             trackedEntity,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,orgUnit,program,status],programOwners"
         }
     }
 })
