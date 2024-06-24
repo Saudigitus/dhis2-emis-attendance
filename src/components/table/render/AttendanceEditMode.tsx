@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react'
-import {format} from 'date-fns';
-import {useRecoilValue} from 'recoil';
-import {useCreateDataValues, useUpdateEvents} from '../../../hooks';
-import {VariablesTypes} from '../../../types/variables/AttributeColumns'
+import React, { useState, useEffect } from 'react'
+import { format } from 'date-fns';
+import { useRecoilValue } from 'recoil';
+import { useCreateDataValues, useUpdateEvents } from '../../../hooks';
+import { VariablesTypes } from '../../../types/variables/AttributeColumns'
 import MultipleButtons from '../components/reasonOfAbsence/multipleButtom/MultipleButtons';
-import {SelectedDateAddNewState} from '../../../schema/attendanceSchema';
-import {type AttendanceEditModeProps} from '../../../types/table/TableRenderTypes';
-import {type AttendanceOptionsProps} from '../../../types/variables/AttributeColumns';
-import {getSelectedKey} from '../../../utils/commons/dataStore/getSelectedKey';
-import {getDisplayName} from '../../../utils/table/rows/getDisplayNameByOption';
-import {useAttendanceConst} from '../../../utils/constants/attendance/attendanceConst';
-import {ProgramConfigState} from '../../../schema/programSchema';
-import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
-import {getIcon} from "../../../utils/table/attendance/getIcom";
+import { SelectedDateAddNewState } from '../../../schema/attendanceSchema';
+import { type AttendanceEditModeProps } from '../../../types/table/TableRenderTypes';
+import { type AttendanceOptionsProps } from '../../../types/variables/AttributeColumns';
+import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey';
+import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
+import { useAttendanceConst } from '../../../utils/constants/attendance/attendanceConst';
+import { ProgramConfigState } from '../../../schema/programSchema';
+import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
+import { getIcon } from "../../../utils/table/attendance/getIcom";
 import ReasonOfAbsence from '../components/reasonOfAbsence/reasonOfAbsesnce';
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
@@ -23,14 +23,14 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
         setTableData
     } = props
     const [selectedTerm, setselectedTerm] = useState<string>("")
-    const {getDataStoreData} = getSelectedKey()
+    const { getDataStoreData } = getSelectedKey()
     const attendanceId = getDataStoreData.attendance.status
     const absentId = getDataStoreData.attendance.absenceReason
     const dataStoreOptions = getDataStoreData.attendance.statusOptions
-    const {selectedDate} = useRecoilValue(SelectedDateAddNewState)
-    const {createValues} = useCreateDataValues()
-    const {updateValues} = useUpdateEvents()
-    const {attendanceConst} = useAttendanceConst()
+    const { selectedDate } = useRecoilValue(SelectedDateAddNewState)
+    const { createValues } = useCreateDataValues()
+    const { updateValues } = useUpdateEvents()
+    const { attendanceConst } = useAttendanceConst()
     const programConfigState = useRecoilValue(ProgramConfigState);
 
     const date = format(new Date(selectedDate), "yyyy-MM-dd")
@@ -91,7 +91,8 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
 export default AttendanceEditMode
 
 function attendanceOptionIcons(props: AttendanceEditModeProps, selectedTerm: string, dataStoreOptions: AttendanceOptionsProps[],
-                               setselectedTerm: any, attendanceId: string, enrollmentStatus: string, value: any, attendanceConst: any) {
+    setselectedTerm: any, attendanceId: string, enrollmentStatus: string, value: any, attendanceConst: any) {
+
     return (
         props.column.id === attendanceId
             ? <MultipleButtons

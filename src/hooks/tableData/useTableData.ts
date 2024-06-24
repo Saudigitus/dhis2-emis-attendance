@@ -125,7 +125,7 @@ export function useTableData() {
                 }
 
                 for (const [index, tei] of localData.entries()) {
-                    const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity).filter((attendance: any) => attendance.enrollment === tei.enrollment);
+                    const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity).filter((attendance: any) => attendance.enrollment === tei.enrollmentId);
                     localData[index] = { ...tei, ...attendanceFormater(attendanceDetails, attendanceConfig) };
                 }
 
