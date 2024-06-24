@@ -28,7 +28,7 @@ function HeaderFilters() {
         {
           attendanceMode === 'edit' ?
             <Chip selected>
-              Selected date: {format(selectedDate, 'dd/MM/yyyy')}
+              Selected date: {selectedDate && format(selectedDate as unknown as Date, 'dd/MM/yyyy')}
             </Chip>
             :
             <Button onClick={handleClick} icon={seeReason ? <IconViewOff24 /> : <IconView24 />}>

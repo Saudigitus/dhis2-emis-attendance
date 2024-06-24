@@ -33,7 +33,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     const { attendanceConst } = useAttendanceConst()
     const programConfigState = useRecoilValue(ProgramConfigState);
 
-    const date = format(new Date(selectedDate), "yyyy-MM-dd")
+    const date = format(new Date(selectedDate as unknown as Date), "yyyy-MM-dd")
 
     function getValueBySelectedDate() {
         const valueByDate = value?.[date]
