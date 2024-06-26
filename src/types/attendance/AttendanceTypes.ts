@@ -3,7 +3,7 @@ interface AttendanceProps {
 }
 
 interface AttendanceAddNewProps {
-    selectedDate: Date
+    selectedDate: Date | null
 }
 
 interface EnrollmentDetailsProps {

@@ -54,6 +54,7 @@ function EnrollmentActionsButtons() {
         open={Boolean(anchorViewLast)}
         anchorEl={anchorViewLast}
         setValue={setSelectedDate}
+        setAddNew={setSelectedDateAddNew}
         localAttendanceMode={localAttendanceMode}
         setAttendanceMode={setAttendanceMode}
       />

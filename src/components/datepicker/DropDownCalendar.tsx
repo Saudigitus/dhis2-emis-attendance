@@ -22,7 +22,11 @@ export default function DropDownCalendar(props: DropDownCalendarProps) {
                 <Calendar setValue={setlocalDateSelected} value={localDateSelected} />
                 <div className={style.datepickerButtons}>
                     <Button onClick={() => { close() }} color="primary" className="mb-2">CANCEL</Button>
-                    <Button disabled={unavailableDays(localDateSelected.selectedDate)} onClick={() => { setValue(localDateSelected); close(); setAttendanceMode(localAttendanceMode) }} color="primary" className="mb-2">OK</Button>
+                    <Button disabled={unavailableDays(localDateSelected.selectedDate)} onClick={() => {
+                        setValue(localDateSelected);
+                        close();
+                        setAttendanceMode(localAttendanceMode)
+                    }} color="primary" className="mb-2">OK</Button>
                 </div>
             </Paper>
         </Popover>

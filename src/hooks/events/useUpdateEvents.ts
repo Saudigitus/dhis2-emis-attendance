@@ -26,7 +26,7 @@ const useUpdateEvents = () => {
 
     async function updateValues(props: CreateEventProps) {
         const { teiDetails, dataElementId, dataElementValue, typeField, rowsData, setTableData, setselectedTerm } = props
-        const dateFormated = format(new Date(selectedDate), "yyyy-MM-dd")
+        const dateFormated = format(new Date(selectedDate as unknown as Date), "yyyy-MM-dd")
         const event = teiDetails?.[dateFormated]?.eventId as string
 
         const data: any = {

@@ -7,7 +7,7 @@ import { HeaderFieldsState } from "../../schema/headersSchema";
 import { TableDataState } from "../../schema/tableColumnsSchema";
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { formatResponseRows, attendanceFormater } from "../../utils/table/rows/formatResponseRows";
-import { SelectedDateState } from "../../schema/attendanceSchema";
+import { SelectedDateAddNewState, SelectedDateState } from "../../schema/attendanceSchema";
 import { type AttendanceQueryResults } from "../../types/api/WithoutRegistrationTypes";
 import { type TeiQueryProps, type TeiQueryResults } from "../../types/api/WithRegistrationTypes";
 import { type AttendanceFormaterProps } from "../../types/utils/table/FormatRowsDataTypes";
@@ -38,6 +38,7 @@ export function useTableData() {
     const [enrollmentTeis, setEnrollmentTeis] = useRecoilState(EnrollmentDetailsTeisState)
     const setTableColumnState = useSetRecoilState(TableDataState)
     const { selectedDate } = useRecoilValue(SelectedDateState)
+    const selectedDateAddNew = useRecoilValue(SelectedDateAddNewState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -79,16 +80,14 @@ export function useTableData() {
 
                 // Get events from the programStage attendance for each student
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDate ?? new Date(), school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), school, tei)
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
                 // Get the list of trackedEntityIds attributes from the events
                 const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
                     ? await engine.query(TEI_QUERY({
-                        //ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
                         pageSize,
                         program: getDataStoreData?.program as unknown as string,
-                        //orgUnit: school,
                         trackedEntity: trackedEntityToFetch
                     })) as unknown as TeiQueryResults
                     : { results: { instances: [] } } as unknown as TeiQueryResults
@@ -110,7 +109,7 @@ export function useTableData() {
         }
     }
 
-    async function getAttendanceData(date?: any) {
+    async function getAttendanceData() {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
                 const localData = [...tableData]
@@ -120,12 +119,12 @@ export function useTableData() {
                 const trackedEntityIds = enrollmentTeis.enrollmentDetails
 
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(date ?? selectedDate, school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDateAddNew.selectedDate ?? selectedDate, school, tei)
                     attendanceValuesByTei.push(...attendanceResults?.results?.instances)
                 }
 
                 for (const [index, tei] of localData.entries()) {
-                    const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity).filter((attendance: any) => attendance.enrollment === tei.enrollment);
+                    const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity).filter((attendance: any) => attendance.enrollment === tei.enrollmentId);
                     localData[index] = { ...tei, ...attendanceFormater(attendanceDetails, attendanceConfig) };
                 }
 

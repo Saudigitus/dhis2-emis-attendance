@@ -11,7 +11,7 @@ export const SelectedDateState = atom<AttendanceProps>({
 export const SelectedDateAddNewState = atom<AttendanceAddNewProps>({
     key: "attendanceAddNewEvents-state",
     default: {
-        selectedDate: new Date()
+        selectedDate: null
     }
 })
 

@@ -37,7 +37,7 @@ function Table() {
     const { getData, loading, tableData, getAttendanceData, setTableData } = useTableData()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { selectedDate: selectedDateViewMode } = useRecoilValue(SelectedDateState)
-    const selectedDateAddNew = useRecoilValue(SelectedDateAddNewState)
+    const [selectedDateAddNew, setDateView] = useRecoilState(SelectedDateAddNewState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
@@ -54,15 +54,16 @@ function Table() {
 
     useEffect(() => {
         if (academicYear && selectedDateViewMode !== null) {
+            setDateView({ selectedDate: null })
             void getAttendanceData()
         }
     }, [selectedDateViewMode])
 
     useEffect(() => {
-        if (academicYear) {
+        if (academicYear && selectedDateAddNew.selectedDate) {
             let days = getValidDays(new Date(selectedDateViewMode ?? new Date))
-            if (!days.find(x => x.date === format(new Date(selectedDateAddNew.selectedDate), "yyyy-MM-dd")))
-                void getAttendanceData(selectedDateAddNew.selectedDate)
+            if (!days.find(x => x.date === format(new Date(selectedDateAddNew?.selectedDate as unknown as Date), "yyyy-MM-dd")))
+                void getAttendanceData()
         }
     }, [selectedDateAddNew])
 
