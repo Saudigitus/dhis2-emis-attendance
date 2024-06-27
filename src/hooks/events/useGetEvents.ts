@@ -60,7 +60,7 @@ export function useGetEvents() {
             page,
             pageSize,
             program: getDataStoreData?.program as unknown as string,
-            order: "createdAt:desc",
+            order: "occurredAt:desc",
             programStage: getDataStoreData?.registration?.programStage as unknown as string,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
