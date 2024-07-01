@@ -1,12 +1,15 @@
 import { format } from "date-fns";
 import {
-    type AttendanceQueryResults, type DataValuesProps,
+    type AttendanceQueryResults,
     type EventQueryProps,
 } from "../../types/api/WithoutRegistrationTypes";
 import { useDataEngine } from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { FormatResponseRowsProps } from "../../types/utils/table/FormatRowsDataTypes";
+import { getDate } from "../../utils/commons/eventsDate";
+import { useRecoilValue } from "recoil";
+import { InfoState } from "../../schema/infoSchema";
 
 export const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
     results: {
@@ -32,6 +35,7 @@ export function useGetEvents() {
     const engine = useDataEngine();
     const { hide, show } = useShowAlerts()
     const { getDataStoreData } = getSelectedKey()
+    const sysInfo = useRecoilValue(InfoState);
 
     async function getEvents(selectedDate: any, school: string, tei: string): Promise<AttendanceQueryResults> {
         return engine.query(EVENT_QUERY({
@@ -41,7 +45,7 @@ export function useGetEvents() {
             orgUnit: school,
             trackedEntity: tei,
             occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
-            occurredBefore: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1), "yyyy-MM-dd"),
+            occurredBefore: getDate(sysInfo, selectedDate),
             fields: "event,trackedEntity,occurredAt,enrollment,dataValues[dataElement,value]"
         })).catch((error) => {
             show({
