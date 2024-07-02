@@ -7,6 +7,7 @@ import { useGetProgramRulesVariables } from '../hooks/programRules/useGetProgram
 import { useOrgUnitsGroups } from '../hooks/orgUnitsGroup/useOrgUnitsGroups';
 import { useGetOptionGroups } from '../hooks/optionGroup/useGetOptionGroups';
 import { useGetSchoolDays } from '../hooks/schoolDays/useGetSchoolDays';
+import { useGetSysInfo } from '../hooks/system/info';
 
 export default function AppWrapper(props: AppProps) {
     const { children } = props
@@ -16,8 +17,9 @@ export default function AppWrapper(props: AppProps) {
     const { loadingOptionGroups } = useGetOptionGroups();
     const { loadingOrgUnitsGroups } = useOrgUnitsGroups()
     const { loadingSchoolDays } = useGetSchoolDays()
+    const { loading: loadingInfo, error: infoError } = useGetSysInfo()
 
-    if (loadingSchoolDays || loading || loadingPRulesVariables || loadingPRules || loadingOptionGroups || loadingOrgUnitsGroups) {
+    if (loadingInfo || loadingSchoolDays || loading || loadingPRulesVariables || loadingPRules || loadingOptionGroups || loadingOrgUnitsGroups) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -25,7 +27,7 @@ export default function AppWrapper(props: AppProps) {
         )
     }
 
-    if (error != null) {
+    if (error != null && infoError != null) {
         return (
             <CenteredContent>
                 Something went wrong wen loading the app, please check if you app is already configured
