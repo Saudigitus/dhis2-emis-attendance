@@ -41,6 +41,7 @@ export function useGetEvents() {
         return engine.query(EVENT_QUERY({
             ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             program: getDataStoreData?.program as unknown as string,
+            order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
             programStage: getDataStoreData?.attendance?.programStage as unknown as string,
             orgUnit: school,
             trackedEntity: tei,
@@ -64,7 +65,7 @@ export function useGetEvents() {
             page,
             pageSize,
             program: getDataStoreData?.program as unknown as string,
-            order: "occurredAt:desc",
+            order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
             programStage: getDataStoreData?.registration?.programStage as unknown as string,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
