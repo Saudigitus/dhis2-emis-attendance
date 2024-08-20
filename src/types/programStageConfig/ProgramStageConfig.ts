@@ -6,6 +6,7 @@ interface ProgramStageDataElements {
         displayInReports: boolean | undefined
         displayName: string
         id: string
+        formName?: string
         valueType: string
         optionSet: {
             id: string

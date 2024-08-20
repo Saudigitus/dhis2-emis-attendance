@@ -3,9 +3,11 @@ import { Event } from '@material-ui/icons';
 import { useSetRecoilState } from 'recoil';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useParams, useAttendanceMode } from '../../../../hooks';
-import { IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
+import { IconAddCircle24, Button, ButtonStrip, IconCalendar24 } from "@dhis2/ui";
 import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/attendanceSchema';
-import {  DropDownCalendar } from '../../../../components';
+import { DropdownButtonComponent, DropDownCalendar, ModalComponent } from '../../../../components';
+import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
+import ModalExportTemplateContent from '../../../modal/ModalExportTemplateContent';
 
 function EnrollmentActionsButtons() {
   const { useQuery } = useParams();
@@ -16,11 +18,18 @@ function EnrollmentActionsButtons() {
   const [anchorElAddNew, setAnchorElAddNew] = useState<null | HTMLElement>(null);
   const [anchorViewLast, setAnchorViewLast] = useState<null | HTMLElement>(null);
   const [localAttendanceMode, setlocalAttendanceMode] = useState<"edit" | "view">("view");
+  const { sectionName } = useGetSectionTypeLabel();
+  const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
 
   const closeAnchor = () => {
     setAnchorElAddNew(null);
     setAnchorViewLast(null);
   };
+
+  const bulkOptions = [
+    { label: `Import ${sectionName} attendances`, divider: true, onClick: () => { } },
+    { label: "Download template", divider: false, onClick: () => setOpenExportEmptyTemplate(true) }
+  ];
 
   return (
     <div>
@@ -36,7 +45,21 @@ function EnrollmentActionsButtons() {
             <Button icon={<Event />}>View attendance records</Button>
           </span>
         </Tooltip>
+
+        <DropdownButtonComponent
+          name={<span >Bulk attendance</span> as unknown as string}
+          disabled={false}
+          icon={<IconCalendar24 />}
+          options={bulkOptions}
+        />
       </ButtonStrip>
+
+      {openExportEmptyTemplate && <ModalComponent title={`Data Import Template Export`} open={openExportEmptyTemplate} setOpen={setOpenExportEmptyTemplate}>
+        <ModalExportTemplateContent
+          sectionName={sectionName}
+          setOpen={setOpenExportEmptyTemplate}
+        />
+      </ModalComponent>}
 
       {/* Add new events */}
       <DropDownCalendar

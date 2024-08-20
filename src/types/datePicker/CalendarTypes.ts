@@ -7,9 +7,14 @@ interface DropDownCalendarProps {
     setAttendanceMode: (arg: "edit" | "view") => void
 }
 
+interface DatePickerProps {
+    setValue: (args: any) => void
+    value: any[]
+}
+
 interface CalendarProps {
     value: { selectedDate: Date }
     setValue: ({ selectedDate }: { selectedDate: Date }) => void
 }
 
-export type { DropDownCalendarProps, CalendarProps }
+export type { DropDownCalendarProps, CalendarProps, DatePickerProps }
