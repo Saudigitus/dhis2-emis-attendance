@@ -11,18 +11,17 @@ import { formFields } from "../../utils/constants/exportTemplate/exportEmptyTemp
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import DatePicker from "../datepicker/rangePicker";
 import { addDays } from "date-fns";
+import { useGetEnrollmentData } from "../../hooks/enrollment/useGetEnrollmentData";
+import { dataExporter } from "../../hooks/dataExporter/dataExporter";
 
 const loading = false;
 function ModalExportTemplateContent(props: ModalExportTemplateProps): React.ReactElement {
   const { setOpen, sectionName } = props;
   const { exportFormFields } = useGetExportTemplateForm();
   const { registration } = getDataStoreKeys()
-
   const { urlParamiters } = useParams();
   const { school: orgUnit, schoolName: orgUnitName, academicYear, class: section, grade } = urlParamiters();
-
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-
   const [values, setValues] = useState<Record<string, string>>({})
   const [initialValues] = useState<object>({
     orgUnitName,
@@ -31,6 +30,8 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     [registration?.section]: section
   })
   const [loadingExport, setLoadingExport] = useState(false)
+  const { getEnrollmentDetails } = useGetEnrollmentData()
+  const { exporter } = dataExporter({ school: orgUnit as unknown as string })
 
   // const { handleExportToWord } = useExportTemplate()
 
@@ -63,7 +64,10 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
-            onSubmit={handleSubmit}
+            onSubmit={async (e) => {
+              e.preventDefault()
+              await exporter()
+            }}
             onChange={onChange(values) as unknown as () => void}
           >
             {

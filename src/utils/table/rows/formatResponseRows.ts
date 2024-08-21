@@ -1,4 +1,4 @@
-import { type AttendanceFormaterProps, type AttributesProps, type FormatResponseRowsProps, type RowsDataProps } from "../../../types/utils/table/FormatRowsDataTypes";
+import { DataValuesProps, type AttendanceFormaterProps, type AttributesProps, type FormatResponseRowsProps, type RowsDataProps } from "../../../types/utils/table/FormatRowsDataTypes";
 
 // TODO @edsonnhancale remove this attendanceConfig from this function
 export function formatResponseRows({ eventsInstances, teiInstances, attendanceValues, attendanceConfig }: FormatResponseRowsProps): RowsDataProps[] {
@@ -7,7 +7,7 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     for (const event of eventsInstances || []) {
         const teiDetails = teiInstances.find((tei: any) => tei.trackedEntity === event.trackedEntity)
         const attendanceDetails = attendanceValues.filter((attendance: any) => attendance.trackedEntity === event.trackedEntity).filter((attendance: any) => attendance.enrollment === event.enrollment)
-       
+
         allRows.push({
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...attendanceFormater(attendanceDetails, attendanceConfig),
@@ -21,10 +21,18 @@ export function formatResponseRows({ eventsInstances, teiInstances, attendanceVa
     return allRows;
 }
 
-function attributes(data: AttributesProps[]): RowsDataProps {
+export function attributes(data: AttributesProps[]): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value
+    }
+    return localData
+}
+
+export function dataValues(data: DataValuesProps[]): RowsDataProps {
+    const localData: RowsDataProps = {}
+    for (const dataElement of data) {
+        localData[dataElement.dataElement] = dataElement.value
     }
     return localData
 }

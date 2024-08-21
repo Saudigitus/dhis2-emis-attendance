@@ -67,7 +67,7 @@ export function useTableData() {
         if (school !== null) {
             try {
                 setLoading(true)
-                const events = await eventsResults(page, pageSize, school, headerFieldsState)
+                const events = await eventsResults(true, page, pageSize, school, headerFieldsState, getDataStoreData?.registration?.programStage, "trackedEntity,enrollment,orgUnit,program", school != null ? "SELECTED" : "ACCESSIBLE")
 
                 const attendanceValuesByTei: AttendanceQueryResults = {
                     results: { instances: [] }

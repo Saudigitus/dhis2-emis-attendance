@@ -11,23 +11,11 @@ import { getDate } from "../../utils/commons/eventsDate";
 import { useRecoilValue } from "recoil";
 import { InfoState } from "../../schema/infoSchema";
 
-export const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, occurredAfter, occurredBefore, fields = "*" }: EventQueryProps) => ({
+const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
-            order,
-            page,
-            pageSize,
-            ouMode,
-            program,
-            programStage,
-            orgUnit,
-            filter,
-            filterAttributes,
-            fields,
-            trackedEntity,
-            occurredAfter,
-            occurredBefore
+            ...queryProps
         }
     }
 })
@@ -58,22 +46,25 @@ export function useGetEvents() {
         }) as unknown as AttendanceQueryResults
     }
 
-    async function eventsResults(page: number, pageSize: number, school: string, headerFieldsState: any): Promise<FormatResponseRowsProps["eventsInstances"]> {
+    async function eventsResults(paging: boolean, page: number, pageSize: number, orgUnit: string, headerFieldsState: any, programStage: string, fields: string, ouMode = "ACCESSIBLE", trackedEntity?: any): Promise<FormatResponseRowsProps["eventsInstances"]> {
         // Get the events from the programStage registration
         return await engine.query(EVENT_QUERY({
-            ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+            ouMode,
             page,
             pageSize,
             program: getDataStoreData?.program as unknown as string,
             order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
-            programStage: getDataStoreData?.registration?.programStage as unknown as string,
+            programStage: programStage as unknown as string,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school,
-            fields: "trackedEntity,enrollment,orgUnit,program"
+            ...(trackedEntity ? { trackedEntity: trackedEntity } : {}),
+            orgUnit,
+            fields,
+            paging
         })).then((resp: any) => {
             return resp.results?.instances
         })
     }
+
     return { getEvents, eventsResults }
 }

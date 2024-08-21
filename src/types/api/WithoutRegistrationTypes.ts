@@ -6,17 +6,18 @@ export const fieldsType = {
 interface EventQueryProps {
     page?: number
     pageSize?: number
-    ouMode: string
+    ouMode?: string
     program: string
     order?: string
     programStage: string
-    orgUnit: string
+    orgUnit?: string
     filter?: string[]
     filterAttributes?: string[]
     trackedEntity?: string
     occurredAfter?: string
     occurredBefore?: string
     fields?: string
+    paging?: boolean
 }
 
 interface GeTDataElementsProps {
