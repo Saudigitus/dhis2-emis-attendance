@@ -10,8 +10,8 @@ import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeL
 import ModalExportTemplateContent from '../../../modal/ModalExportTemplateContent';
 
 function EnrollmentActionsButtons() {
-  const { useQuery } = useParams();
-  const orgUnit = useQuery().get("school")
+  const { urlParamiters } = useParams();
+  const { school: orgUnit, grade, class: section } = urlParamiters()
   const setSelectedDate = useSetRecoilState(SelectedDateState)
   const setSelectedDateAddNew = useSetRecoilState(SelectedDateAddNewState)
   const { setAttendanceMode } = useAttendanceMode()
@@ -48,7 +48,7 @@ function EnrollmentActionsButtons() {
 
         <DropdownButtonComponent
           name={<span >Bulk attendance</span> as unknown as string}
-          disabled={false}
+          disabled={!(section != null && grade != null)}
           icon={<IconCalendar24 />}
           options={bulkOptions}
         />
