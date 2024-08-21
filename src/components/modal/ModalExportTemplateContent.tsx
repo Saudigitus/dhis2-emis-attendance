@@ -57,7 +57,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
   return (
     <div>
       <Tag positive icon={<IconInfo16 />} maxWidth="100%">
-        This file will allow the import of new {sectionName} data into the system. Please respect the blocked fields to avoid conflicts.
+        This file will allow the import of new {sectionName} attendance data into the system. Please respect the blocked fields to avoid conflicts.
       </Tag>
 
       <Form initialValues={{ ...initialValues, orgUnit }} onSubmit={onSubmit}>
