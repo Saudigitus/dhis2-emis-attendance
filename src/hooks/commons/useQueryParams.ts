@@ -29,6 +29,8 @@ const useParams = () => {
             schoolName: useQuery().get('schoolName'),
             academicYear: useQuery().get('academicYear'),
             sectionType: useQuery().get('sectionType'),
+            grade: useQuery().get('grade'),
+            class: useQuery().get('class'),
             ...filterItemsParams
 
         }
