@@ -31,7 +31,12 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
   })
   const [loadingExport, setLoadingExport] = useState(false)
   const { getEnrollmentDetails } = useGetEnrollmentData()
-  const { exporter } = dataExporter({ school: orgUnit as unknown as string })
+  const [selected, setSelected] = useState([{
+    startDate: new Date(),
+    endDate: addDays(new Date(), 31),
+    key: 'selection'
+  }])
+  const { exporter } = dataExporter({ school: orgUnit as unknown as string, selectedDates: selected })
 
   // const { handleExportToWord } = useExportTemplate()
 
@@ -43,11 +48,6 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     setValues(removeFalseKeys(e))
   }
 
-  const [selected, setSelected] = useState([{
-    startDate: new Date(),
-    endDate: addDays(new Date(), 31),
-    key: 'selection'
-  }])
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setOpen(false) } },

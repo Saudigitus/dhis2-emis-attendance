@@ -7,7 +7,6 @@ import { useDataEngine } from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { FormatResponseRowsProps } from "../../types/utils/table/FormatRowsDataTypes";
-import { getDate } from "../../utils/commons/eventsDate";
 import { useRecoilValue } from "recoil";
 import { InfoState } from "../../schema/infoSchema";
 
@@ -25,7 +24,7 @@ export function useGetEvents() {
     const { getDataStoreData } = getSelectedKey()
     const sysInfo = useRecoilValue(InfoState);
 
-    async function getEvents(selectedDate: any, school: string, tei: string): Promise<AttendanceQueryResults> {
+    async function getEvents(startDate: string, endDate: string, school: string, tei: string): Promise<AttendanceQueryResults> {
         return engine.query(EVENT_QUERY({
             ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             program: getDataStoreData?.program as unknown as string,
@@ -33,8 +32,8 @@ export function useGetEvents() {
             programStage: getDataStoreData?.attendance?.programStage as unknown as string,
             orgUnit: school,
             trackedEntity: tei,
-            occurredAfter: format(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 5), "yyyy-MM-dd"),
-            occurredBefore: getDate(sysInfo, selectedDate),
+            occurredAfter: startDate,
+            occurredBefore: endDate,
             fields: "event,trackedEntity,occurredAt,enrollment,dataValues[dataElement,value]"
         })).catch((error) => {
             show({

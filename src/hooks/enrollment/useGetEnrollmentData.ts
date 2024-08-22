@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { format } from 'date-fns';
 import { useRecoilValue } from 'recoil';
 import { useGetTei, useGetEvents, useParams, useShowAlerts } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { attributes, dataValues } from '../../utils/table/rows/formatResponseRows';
 import { HeaderFieldsState } from '../../schema/headersSchema';
 import { getDataStoreKeys } from '../../utils/commons/dataStore/getDataStoreKeys';
+import { attendanceFormatter } from '../../utils/exporter/formatAttendance';
 
 export function useGetEnrollmentData() {
     const { getTei } = useGetTei()
@@ -18,9 +18,9 @@ export function useGetEnrollmentData() {
     const [error, setError] = useState<boolean>(false)
     const [excelData, setExcellData] = useState<any>([])
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const { registration, socioEconomics, program } = getDataStoreKeys()
+    const { registration, program } = getDataStoreKeys()
 
-    const getEnrollmentDetails = (events: any) => {
+    const getEnrollmentDetails = (events: any, attendance: any[]) => {
         const trackedEntityIds = events?.map((x: { trackedEntity: string }) => x.trackedEntity).join(';')
 
         setLoading(true)
@@ -47,24 +47,11 @@ export function useGetEnrollmentData() {
                                 tei?.trackedEntity
                             )
 
-                            if (socioEconomics) {
-                                socioEconomicData = await eventsResults(false,
-                                    "" as unknown as number,
-                                    "" as unknown as number,
-                                    orgUnit as unknown as string,
-                                    [],
-                                    socioEconomics?.programStage as string,
-                                    "*",
-                                    "",
-                                    tei?.trackedEntity
-                                )
-                            }
-
                             rows = [...rows, {
                                 enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
                                 ...attributes(tei?.attributes ?? []),
                                 ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
-                                ...dataValues(socioEconomicData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                                ...attendanceFormatter(attendance[tei?.trackedEntity])
                             }]
                         }
                         setExcellData(rows)

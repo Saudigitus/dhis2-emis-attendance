@@ -1,23 +1,18 @@
 import { useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { getDataStoreKeys } from "../commons/dataStore/getDataStoreKeys"
-import { getSelectedKey } from "../commons/dataStore/getSelectedKey"
 
 export function generateHeaders() {
-    const { registration, socioEconomics } = getDataStoreKeys()
+    const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const colors = {
-        [registration.programStage]: 'FCE5CD',
-        [socioEconomics.programStage]: 'FFF2CC'
-    }
 
     function getHeaders() {
         let formatedHeaders: any[] = []
 
         programConfigState.programStages.filter(x => {
-            if (x.id == registration.programStage || x.id == socioEconomics.programStage) {
+            if (x.id == registration.programStage) {
 
-                let section: any = { name: x.displayName, headers: [], fill: colors[x.id] }
+                let section: any = { name: x.displayName, headers: [], fill: 'FCE5CD' }
 
                 x.programStageDataElements.map((de) => {
                     section = {

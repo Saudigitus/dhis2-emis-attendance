@@ -54,7 +54,7 @@ export function formatResponse({ data, programStageId }: HeaderFormatResponsePro
         )
 }
 
-export function getAttendanceDays(validDays: [{ schoolDay: boolean, date: string }], attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
+export function getAttendanceDays(validDays: { schoolDay: boolean, date: string }[], attendanceMode: "edit" | "view", data: ProgramConfig, attendanceProgramStage: string): CustomAttributeProps[] {
     const days: CustomAttributeProps[] = [];
 
     if (attendanceMode === "edit") {
