@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useGetTei, useGetEvents, useParams, useShowAlerts } from '../../hooks';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { attributes, dataValues } from '../../utils/table/rows/formatResponseRows';
 import { HeaderFieldsState } from '../../schema/headersSchema';
 import { getDataStoreKeys } from '../../utils/commons/dataStore/getDataStoreKeys';
 import { attendanceFormatter } from '../../utils/exporter/formatAttendance';
+import { ProgressState } from '../../schema/linearProgress';
 
 export function useGetEnrollmentData() {
     const { getTei } = useGetTei()
@@ -14,23 +15,19 @@ export function useGetEnrollmentData() {
     const { show } = useShowAlerts()
     const { school: orgUnit } = urlParamiters()
     const { getDataStoreData } = getSelectedKey()
-    const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
-    const [excelData, setExcellData] = useState<any>([])
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { registration, program } = getDataStoreKeys()
+    const updateProgress = useSetRecoilState(ProgressState)
 
-    const getEnrollmentDetails = (events: any, attendance: any[]) => {
+    const getEnrollmentDetails = async (events: any, attendance: any[]) => {
         const trackedEntityIds = events?.map((x: { trackedEntity: string }) => x.trackedEntity).join(';')
-
-        setLoading(true)
 
         if (Object.keys(getDataStoreData)?.length) {
 
             try {
-                getTei(program, orgUnit as string, trackedEntityIds)
+                return getTei(program, orgUnit as string, trackedEntityIds)
                     .then(async (trackedEntityInstance: any) => {
-                        let socioEconomicData: any = {}
                         let rows: any = []
 
                         for (const tei of trackedEntityInstance?.results?.instances) {
@@ -53,8 +50,13 @@ export function useGetEnrollmentData() {
                                 ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
                                 ...attendanceFormatter(attendance[tei?.trackedEntity])
                             }]
+
+                            updateProgress((progress: any) => ({
+                                buffer: progress.buffer + (40 / trackedEntityInstance?.results?.instances?.length), progress: progress.progress + (40 / trackedEntityInstance?.results?.instances?.length)
+                            }))
                         }
-                        setExcellData(rows)
+
+                        return rows
                     })
             }
 
@@ -65,12 +67,9 @@ export function useGetEnrollmentData() {
                     type: { critical: true }
                 });
             }
-
-            finally {
-                setLoading(false)
-            }
         }
+        return []
     }
 
-    return { getEnrollmentDetails, excelData, loading, error }
+    return { getEnrollmentDetails, error }
 }

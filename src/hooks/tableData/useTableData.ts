@@ -14,6 +14,7 @@ import { type AttendanceFormaterProps } from "../../types/utils/table/FormatRows
 import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema";
 import { useGetEvents } from "../events/useGetEvents";
 import { getDates } from "../../utils/commons/getDates";
+import { ProgressState } from "../../schema/linearProgress";
 
 type TableDataProps = Record<string, string>;
 
@@ -54,6 +55,7 @@ export function useTableData() {
         getEvents,
         eventsResults
     } = useGetEvents()
+    const updateProgress = useSetRecoilState(ProgressState)
 
     const showError = (error: any) => {
         show({
@@ -115,7 +117,9 @@ export function useTableData() {
     async function getAttendanceData(exporting?: { exporting: boolean, trackedEntityIds: { tei: string, enrollment: string }[], sDate: Date, eDate: Date }) {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
-                setLoading(true)
+                if (!exporting?.exporting) setLoading(true)
+                else updateProgress({ buffer: 15, progress: 10 })
+
                 let startDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
                     endDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
 
@@ -126,8 +130,12 @@ export function useTableData() {
                 const trackedEntityIds = exporting?.exporting ? exporting?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
 
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(startDate, endDate, school, tei)
-                    attendanceValuesByTei.push(...attendanceResults?.results?.instances)
+                    await getEvents(startDate, endDate, school, tei).then((resp) => {
+                        updateProgress((progress: any) => ({
+                            buffer: progress.buffer + (40 / trackedEntityIds.length), progress: progress.progress + (40 / trackedEntityIds.length)
+                        }))
+                        attendanceValuesByTei.push(...resp?.results?.instances)
+                    })
                 }
 
                 if (exporting?.exporting) {
@@ -146,7 +154,7 @@ export function useTableData() {
             } catch (error: any) {
                 showError(error)
             } finally {
-                setLoading(false)
+                if (!exporting?.exporting) setLoading(false)
             }
         }
     }
