@@ -13,6 +13,7 @@ import { type TeiQueryProps, type TeiQueryResults } from "../../types/api/WithRe
 import { type AttendanceFormaterProps } from "../../types/utils/table/FormatRowsDataTypes";
 import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema";
 import { useGetEvents } from "../events/useGetEvents";
+import { getDates } from "../../utils/commons/getDates";
 
 type TableDataProps = Record<string, string>;
 
@@ -68,6 +69,8 @@ export function useTableData() {
             try {
                 setLoading(true)
                 const events = await eventsResults(true, page, pageSize, school, headerFieldsState, getDataStoreData?.registration?.programStage, "trackedEntity,enrollment,orgUnit,program", school != null ? "SELECTED" : "ACCESSIBLE")
+                let startDate = getDates(false, selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
+                    endDate = getDates(false, selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
 
                 const attendanceValuesByTei: AttendanceQueryResults = {
                     results: { instances: [] }
@@ -80,7 +83,7 @@ export function useTableData() {
 
                 // Get events from the programStage attendance for each student
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(startDate, endDate, school, tei)
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
                 // Get the list of trackedEntityIds attributes from the events
@@ -109,26 +112,37 @@ export function useTableData() {
         }
     }
 
-    async function getAttendanceData() {
+    async function getAttendanceData(exporting?: { exporting: boolean, trackedEntityIds: { tei: string, enrollment: string }[], sDate: Date, eDate: Date }) {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
-                const localData = [...tableData]
                 setLoading(true)
+                let startDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
+                    endDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
+
+                const localData = [...tableData]
+                let dataToExport: any = {}
                 const attendanceValuesByTei: AttendanceFormaterProps[] = []
 
-                const trackedEntityIds = enrollmentTeis.enrollmentDetails
+                const trackedEntityIds = exporting?.exporting ? exporting?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
 
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(selectedDateAddNew.selectedDate ?? selectedDate, school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(startDate, endDate, school, tei)
                     attendanceValuesByTei.push(...attendanceResults?.results?.instances)
                 }
 
-                for (const [index, tei] of localData.entries()) {
-                    const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity).filter((attendance: any) => attendance.enrollment === tei.enrollmentId);
-                    localData[index] = { ...tei, ...attendanceFormater(attendanceDetails, attendanceConfig) };
+                if (exporting?.exporting) {
+                    for (const tei of exporting.trackedEntityIds) {
+                        const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.tei).filter((attendance: any) => attendance.enrollment === tei.enrollment);
+                        dataToExport[tei.tei] = attendanceFormater(attendanceDetails, attendanceConfig)
+                    }
+                    return dataToExport
+                } else {
+                    for (const [index, tei] of localData.entries()) {
+                        const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.trackedEntity).filter((attendance: any) => attendance.enrollment === tei.enrollmentId);
+                        localData[index] = { ...tei, ...attendanceFormater(attendanceDetails, attendanceConfig) };
+                    }
+                    setTableData(localData);
                 }
-
-                setTableData(localData);
             } catch (error: any) {
                 showError(error)
             } finally {

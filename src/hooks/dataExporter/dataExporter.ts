@@ -6,24 +6,44 @@ import { useGetEnrollmentData } from "../enrollment/useGetEnrollmentData"
 import { generateHeaders } from "../../utils/exporter/generateExcelHeaders"
 import { ExcelGenerator } from "../tableHeader/tableExporter"
 import { useEffect } from 'react'
+import { useAttendanceMode } from "../attendanceMode/useAttendanceMode"
+import { ProgramConfigState } from "../../schema/programSchema"
+import { getAttendanceDays } from "../../utils/table/header/formatResponse"
+import { generateAttendanceDays } from "../../utils/table/header/generateAttendanceDays"
+import { useTableData } from "../tableData/useTableData"
 
-export function dataExporter({ school }: { school: string }) {
+export function dataExporter({ school, selectedDates }: { school: string, selectedDates: { startDate: Date, endDate: Date, key: string }[] }) {
     const { eventsResults } = useGetEvents()
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { getDataStoreData } = getSelectedKey()
     const { getEnrollmentDetails, excelData } = useGetEnrollmentData()
     const { getHeaders } = generateHeaders()
+    const { attendanceMode } = useAttendanceMode()
+    const programConfigState = useRecoilValue(ProgramConfigState);
+    const { getValidDaysToExport } = generateAttendanceDays()
+    const { getAttendanceData } = useTableData()
 
     useEffect(() => {
         if (excelData?.length > 0) {
-            const headers = getHeaders()
-            
+            let headers = getHeaders()
+
+            headers = [...headers, {
+                name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
+                    return {
+                        header: x.displayName,
+                        key: x.id,
+                        width: 20,
+                    }
+                })
+            }]
+
             void ExcelGenerator(headers, excelData)
         }
     }, [excelData])
 
     async function exporter() {
-        const events = await eventsResults(false,
+        const events = await eventsResults(
+            false,
             "" as unknown as number,
             "" as unknown as number,
             school,
@@ -33,7 +53,14 @@ export function dataExporter({ school }: { school: string }) {
             school != null ? "SELECTED" : "ACCESSIBLE"
         )
 
-        void getEnrollmentDetails(events)
+        await getAttendanceData({
+            exporting: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {
+                return { tei: x.trackedEntity, enrollment: x.enrollment }
+            }), sDate: selectedDates?.[0].startDate, eDate: selectedDates?.[0].endDate
+        })
+            .then((response) => {
+                void getEnrollmentDetails(events, response)
+            })
     }
 
     return { exporter }
