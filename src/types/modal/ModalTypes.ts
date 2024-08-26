@@ -1,5 +1,7 @@
 interface ImportContentProps {
     setOpen: (value: boolean) => void
+    sectionName: string
+    open: boolean
 }
 
 interface ApproveTranferProps {
