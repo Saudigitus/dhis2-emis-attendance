@@ -21,6 +21,8 @@ export function useGetEnrollmentData() {
     const updateProgress = useSetRecoilState(ProgressState)
 
     const getEnrollmentDetails = async (events: any, attendance: any[]) => {
+        updateProgress((progress: any) => ({ ...progress, phase: 'details' }))
+
         const trackedEntityIds = events?.map((x: { trackedEntity: string }) => x.trackedEntity).join(';')
 
         if (Object.keys(getDataStoreData)?.length) {
@@ -52,7 +54,9 @@ export function useGetEnrollmentData() {
                             }]
 
                             updateProgress((progress: any) => ({
-                            progress: progress.progress + (43 / trackedEntityInstance?.results?.instances?.length)
+                                ...progress,
+                                progress: progress.progress + (43 / trackedEntityInstance?.results?.instances?.length),
+                                buffer: progress.buffer + (44 / trackedEntityIds.length)
                             }))
                         }
 

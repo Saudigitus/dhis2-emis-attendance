@@ -118,7 +118,7 @@ export function useTableData() {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
                 if (!exporting?.exporting) setLoading(true)
-                else updateProgress({ progress: 10 })
+                else updateProgress((progress: any) => ({ ...progress, progress: 10 }))
 
                 let startDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
                     endDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
@@ -132,7 +132,9 @@ export function useTableData() {
                 for (const tei of trackedEntityIds) {
                     await getEvents(startDate, endDate, school, tei).then((resp) => {
                         updateProgress((progress: any) => ({
-                            progress: progress.progress + (43 / trackedEntityIds.length)
+                            ...progress,
+                            progress: progress.progress + (43 / trackedEntityIds.length),
+                            buffer: progress.buffer + (40 / trackedEntityIds.length)
                         }))
                         attendanceValuesByTei.push(...resp?.results?.instances)
                     })
