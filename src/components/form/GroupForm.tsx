@@ -10,9 +10,9 @@ import { useRecoilValue } from "recoil";
 import { ProgressState } from "../../schema/linearProgress";
 
 function GroupForm(props: GroupFormProps) {
-    const { name, fields, description, trackedEntity, setValue, value } = props
+    const { name, fields, description, trackedEntity, setValue, value, disabled } = props
     const updateProgress = useRecoilValue(ProgressState)
-
+    console.log(disabled)
     return (
         <>
             <WithPadding p={name ? "16px 5px 0px 5px" : "0px"}>
@@ -47,9 +47,7 @@ function GroupForm(props: GroupFormProps) {
                                         attribute={
                                             { ...x, trackedEntity, ...(updateProgress?.progress != null ? { style: { opacity: "0.1" } } : {}) }
                                         }
-                                        disabled={
-                                            x.disabled
-                                        }
+                                        disabled={!!(x.disabled || disabled)}
                                         valueType={x.valueType}
                                         setValue={setValue}
                                         value={value}

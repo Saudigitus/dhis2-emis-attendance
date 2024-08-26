@@ -74,7 +74,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
                       description={field.description}
                       key={index}
                       fields={field.fields}
-                      disabled={false}
+                      disabled={updateProgress.progress !== null}
                       value={selected}
                       setValue={setSelected}
                     />

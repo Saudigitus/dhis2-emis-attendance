@@ -41,7 +41,7 @@ function GenericFields({ attribute, disabled, valueType, setValue, value }: Gene
       return <SingleSelectField {...attribute} disabled={disabled || attribute.disabled} />;
 
     case 'DATE_RANGE' as unknown as CustomAttributeProps["valueType"]:
-      return <DatePicker setValue={setValue} value={value} />
+      return <DatePicker disabled={disabled} setValue={setValue} value={value} />
     default:
       return <span>ValueType not mapped</span>;
   }

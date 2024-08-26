@@ -45,5 +45,6 @@ function CircularProgressWithLabel(
 export default function CircularWithValueLabel() {
     const updateProgress = useRecoilValue(ProgressState)
 
+    console.log(updateProgress.progress)
     return <CircularProgressWithLabel value={updateProgress?.progress} />;
 }

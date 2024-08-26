@@ -52,7 +52,7 @@ export function useGetEnrollmentData() {
                             }]
 
                             updateProgress((progress: any) => ({
-                                buffer: progress.buffer + (40 / trackedEntityInstance?.results?.instances?.length), progress: progress.progress + (40 / trackedEntityInstance?.results?.instances?.length)
+                            progress: progress.progress + (43 / trackedEntityInstance?.results?.instances?.length)
                             }))
                         }
 

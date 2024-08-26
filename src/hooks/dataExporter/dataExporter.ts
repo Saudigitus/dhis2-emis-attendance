@@ -26,7 +26,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
     const { ExcelGenerator } = gererateFile()
 
     async function exporter() {
-        updateProgress({ buffer: 10, progress: 0 })
+        updateProgress({ progress: 0 })
 
         const events = await eventsResults(
             false,
@@ -59,8 +59,8 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                         })
                     }]
 
-                    void ExcelGenerator(headers, rows).then(() => {
-                        updateProgress({ buffer: null, progress: null })
+                    void ExcelGenerator(headers, rows).finally(() => {
+                        updateProgress({ progress: null })
                     })
                 })
             })

@@ -8,8 +8,8 @@ import { ProgressState } from '../../schema/linearProgress';
 export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
 
-    async function ExcelGenerator(headers: any[], rows: any[]): Promise<boolean> {
-        updateProgress({ buffer: 95, progress: 90 })
+    async function ExcelGenerator(headers: any[], rows: any[]) {
+        updateProgress({ progress: 90 })
 
         const workbook = new Excel.Workbook();
         const workSheets = getWorkSheets(headers.find(x => x.name === 'Attendance').headers)
@@ -87,13 +87,12 @@ export function gererateFile() {
                 });
             });
 
-            sheet.protect('#saudigitus_SEMIS_app', lock);
+            sheet.protect('#saudigitus_SEMIS_Attendance#', lock);
         })
 
         const buf = await workbook.xlsx.writeBuffer()
-        updateProgress({ buffer: 100, progress: 100 })
         saveAs(new Blob([buf]), `teste.xlsx`)
-        return true
+        updateProgress({ progress: 100 })
     }
 
     return { ExcelGenerator }

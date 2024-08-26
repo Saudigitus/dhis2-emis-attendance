@@ -13,7 +13,6 @@ import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../comp
 import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
 import { format } from 'date-fns';
 import { generateAttendanceDays } from '../../../utils/table/header/generateAttendanceDays';
-import LinearBuffer from '../../progress/linearProgress';
 import { ProgressState } from '../../../schema/linearProgress';
 
 const usetStyles = makeStyles({
@@ -92,7 +91,6 @@ function Table() {
             <WithBorder type='bottom' />
             <WithPadding>
                 <WithBorder type='all'>
-                    {!(updateProgress && updateProgress?.progress == null) && <LinearBuffer />}
                     <HeaderFilters />
                     <div
                         className={classes.tableContainer}
