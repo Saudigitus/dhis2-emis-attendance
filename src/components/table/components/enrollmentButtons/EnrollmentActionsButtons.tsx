@@ -5,7 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { useParams, useAttendanceMode } from '../../../../hooks';
 import { IconAddCircle24, Button, ButtonStrip, IconCalendar24 } from "@dhis2/ui";
 import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/attendanceSchema';
-import { DropdownButtonComponent, DropDownCalendar, ModalComponent } from '../../../../components';
+import { DropdownButtonComponent, DropDownCalendar, ImportContent, ModalComponent } from '../../../../components';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import ModalExportTemplateContent from '../../../modal/ModalExportTemplateContent';
 import { ProgressState } from '../../../../schema/linearProgress';
@@ -21,6 +21,7 @@ function EnrollmentActionsButtons() {
   const [localAttendanceMode, setlocalAttendanceMode] = useState<"edit" | "view">("view");
   const { sectionName } = useGetSectionTypeLabel();
   const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
+  const [openImportTemplate, setOpenImportTemplate] = useState<boolean>(false);
   const progress = useRecoilValue(ProgressState)
 
   const closeAnchor = () => {
@@ -29,7 +30,7 @@ function EnrollmentActionsButtons() {
   };
 
   const bulkOptions = [
-    { label: `Import ${sectionName} attendances`, divider: true, onClick: () => { } },
+    { label: `Import ${sectionName} attendances`, divider: true, onClick: () => setOpenImportTemplate(true) },
     { label: "Download template", divider: false, onClick: () => setOpenExportEmptyTemplate(true) }
   ];
 
@@ -62,6 +63,13 @@ function EnrollmentActionsButtons() {
           setOpen={setOpenExportEmptyTemplate}
         />
       </ModalComponent>}
+
+      {openImportTemplate &&
+        <ImportContent
+          sectionName={sectionName}
+          setOpen={setOpenImportTemplate}
+          open={openImportTemplate}
+        />}
 
       {/* Add new events */}
       <DropDownCalendar
