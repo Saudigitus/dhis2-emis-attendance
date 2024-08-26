@@ -16,7 +16,7 @@ function ModalComponent(props: ModalProps): React.ReactElement {
         setOpen(false);
       }}
     >
-      <ModalTitle>{title}</ModalTitle>
+      {/* <ModalTitle>{title}</ModalTitle> */}
       <ModalContent>{children}</ModalContent>
     </Modal>
   );
