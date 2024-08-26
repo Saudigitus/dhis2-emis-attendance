@@ -11,9 +11,8 @@ import { addDays } from "date-fns";
 import { dataExporter } from "../../hooks/dataExporter/dataExporter";
 import { ProgressState } from "../../schema/linearProgress";
 import { useRecoilValue } from "recoil";
-import { CircularLoader, CenteredContent } from "@dhis2/ui";
-import CircularWithValueLabel from "../progress/circularPRogress";
 import styles from './modal.module.css'
+import ExportProgress from "./exportingProgress";
 
 function ModalExportTemplateContent(props: ModalExportTemplateProps): React.ReactElement {
   const { setOpen, sectionName } = props;
@@ -41,62 +40,67 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     { id: "downloadTemplate", type: "submit", label: "Download template", primary: true, className: updateProgress?.progress != null && styles.remove }
   ];
 
+  function Actions() {
+    return (
+      <ModalActions>
+        <ButtonStrip end>
+          {modalActions.map((action, i) => {
+            return (
+              <Button key={i} {...action} >
+                {action.label}
+              </Button>
+            )
+          })}
+        </ButtonStrip>
+      </ModalActions>
+    )
+  }
+
   return (
     <div>
       {
-        updateProgress?.progress != null &&
-        <div className={styles.overlay_div} style={{ height: "76.2vh" }} >
-          <CenteredContent>
-            <CircularWithValueLabel />
-          </CenteredContent>
-        </div>
-      }
+        updateProgress?.progress != null ?
+          <>
+            <ExportProgress />
+            <Actions />
+          </>
+          :
+          < >
+            <Tag positive icon={<IconInfo16 />} maxWidth="100%">
+              This file will allow the import of new {sectionName} attendance data into the system. Please respect the blocked fields to avoid conflicts.
+            </Tag>
 
-      < >
-        <Tag positive icon={<IconInfo16 />} maxWidth="100%">
-          This file will allow the import of new {sectionName} attendance data into the system. Please respect the blocked fields to avoid conflicts.
-        </Tag>
-
-        <Form initialValues={{ ...initialValues, orgUnit }} onSubmit={() => { }}>
-          {({ form }) => {
-            formRef.current = form;
-            return <form
-              onSubmit={async (e) => {
-                e.preventDefault()
-                await exporter()
+            <Form initialValues={{ ...initialValues, orgUnit }} onSubmit={() => { }}>
+              {({ form }) => {
+                formRef.current = form;
+                return <form
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    await exporter()
+                  }}
+                >
+                  {
+                    formFields(exportFormFields, sectionName)?.map((field: any, index: number) => {
+                      return (
+                        <GroupForm
+                          name={field.section}
+                          description={field.description}
+                          key={index}
+                          fields={field.fields}
+                          disabled={updateProgress.progress !== null}
+                          value={selected}
+                          setValue={setSelected}
+                        />
+                      )
+                    })
+                  }
+                  <br />
+                  <Actions />
+                </form>
               }}
-            >
-              {
-                formFields(exportFormFields, sectionName)?.map((field: any, index: number) => {
-                  return (
-                    <GroupForm
-                      name={field.section}
-                      description={field.description}
-                      key={index}
-                      fields={field.fields}
-                      disabled={updateProgress.progress !== null}
-                      value={selected}
-                      setValue={setSelected}
-                    />
-                  )
-                })
-              }
-              <br />
-              <ModalActions>
-                <ButtonStrip end>
-                  {modalActions.map((action, i) => {
-                    return (
-                      <Button key={i} {...action} >
-                        {action.label}
-                      </Button>
-                    )
-                  })}
-                </ButtonStrip>
-              </ModalActions>
-            </form>
-          }}
-        </Form>
-      </>
+            </Form>
+          </>
+      }
     </div >
   )
 }
