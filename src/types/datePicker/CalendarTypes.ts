@@ -10,6 +10,7 @@ interface DropDownCalendarProps {
 interface DatePickerProps {
     setValue: (args: any) => void
     value: any[]
+    disabled: boolean
 }
 
 interface CalendarProps {

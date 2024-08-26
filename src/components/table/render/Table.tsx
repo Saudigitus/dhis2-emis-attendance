@@ -13,6 +13,7 @@ import { HeaderFilters, Pagination, TableComponent, WorkingLists } from '../comp
 import { useHeader, useTableData, useParams, useAttendanceMode } from '../../../hooks';
 import { format } from 'date-fns';
 import { generateAttendanceDays } from '../../../utils/table/header/generateAttendanceDays';
+import { ProgressState } from '../../../schema/linearProgress';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -45,6 +46,7 @@ function Table() {
     const { urlParamiters } = useParams()
     const { academicYear } = urlParamiters()
     const { getValidDays } = generateAttendanceDays()
+    const updateProgress = useRecoilValue(ProgressState)
 
     useEffect(() => {
         if (academicYear) {

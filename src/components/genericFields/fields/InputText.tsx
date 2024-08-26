@@ -8,6 +8,7 @@ import {
 import React from 'react'
 import style from "./fields.module.css";
 import { FormFieldsProps } from '../../../types/form/GenericFieldsTypes';
+import classNames from 'classnames';
 
 const { Field } = ReactFinalForm
 
@@ -22,7 +23,7 @@ function InputText(props: FormFieldsProps) {
             type="text"
             required
             label={null}
-            className={style.textfield}
+            className={classNames(style.textfield, props?.style && style.opacity)}
             disabled={props.disabled}
         />
     )

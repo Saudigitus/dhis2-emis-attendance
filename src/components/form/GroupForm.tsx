@@ -6,10 +6,13 @@ import styles from './groupform.module.css'
 import { type GroupFormProps } from "../../types/form/GroupFormProps";
 import classNames from "classnames";
 import Subtitle from "../text/Subtitle";
+import { useRecoilValue } from "recoil";
+import { ProgressState } from "../../schema/linearProgress";
 
 function GroupForm(props: GroupFormProps) {
-    const { name, fields, description, trackedEntity, setValue, value } = props
-
+    const { name, fields, description, trackedEntity, setValue, value, disabled } = props
+    const updateProgress = useRecoilValue(ProgressState)
+    console.log(disabled)
     return (
         <>
             <WithPadding p={name ? "16px 5px 0px 5px" : "0px"}>
@@ -34,7 +37,7 @@ function GroupForm(props: GroupFormProps) {
                         return (
                             <div className={classNames("row d-flex align-items-center", x.error ? styles.fieldError : x.warning ? styles.fieldWarning : styles.fieldNormal)} key={i}
                                 style={{ display: "flex" }}>
-                                <div className="col-12 col-md-6 d-flex">
+                                <div className="col-12 col-md-6 d-flex" style={{ ...(updateProgress?.progress != null ? { opacity: "0.4" } : {}) }}>
                                     <Label className={styles.label}>
                                         {x.labelName} {x.required ? " *" : ""}
                                     </Label>
@@ -42,11 +45,9 @@ function GroupForm(props: GroupFormProps) {
                                 <div className="col-12 col-md-6">
                                     <GenericFields
                                         attribute={
-                                            { ...x, trackedEntity }
+                                            { ...x, trackedEntity, ...(updateProgress?.progress != null ? { style: { opacity: "0.1" } } : {}) }
                                         }
-                                        disabled={
-                                            x.disabled
-                                        }
+                                        disabled={!!(x.disabled || disabled)}
                                         valueType={x.valueType}
                                         setValue={setValue}
                                         value={value}

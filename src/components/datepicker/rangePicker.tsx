@@ -9,14 +9,14 @@ import { DatePickerProps } from '../../types/datePicker/CalendarTypes';
 import { Button, TextField } from "@mui/material";
 
 export default function DatePicker(props: DatePickerProps) {
-    const { setValue, value } = props
+    const { setValue, value, disabled } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [selected, setSelected] = useState<any>(null)
 
     return (
         <div>
-            <TextField style={{ width: "100%" }} value={selected && `${format(selected.startDate, 'MMMM d, yyyy')} - ${format(selected.endDate, 'MMMM d, yyyy')}`} size="small" onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorEl(event.currentTarget); setOpen(true) }} />
+            <TextField disabled={disabled} style={{ width: "100%" }} value={selected && `${format(selected.startDate, 'MMMM d, yyyy')} - ${format(selected.endDate, 'MMMM d, yyyy')}`} size="small" onClick={(event: React.MouseEvent<HTMLElement>) => { setAnchorEl(event.currentTarget); setOpen(true) }} />
             <Popover open={open}
                 anchorEl={anchorEl}
                 anchorOrigin={{ vertical: 'top', horizontal: 'left', }}

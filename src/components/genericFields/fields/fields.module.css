@@ -2,6 +2,10 @@
     border-radius: 3px;
 }
 
+.opacity {
+    opacity: 0.1;
+}
+
 .auto-complete__container {
     display: flex;
     align-items: center !important;
@@ -67,6 +71,7 @@
         line-height: 14px !important;
         height: 30px !important;
     }
+
     .customDhis2Button svg {
         width: 18px;
     }

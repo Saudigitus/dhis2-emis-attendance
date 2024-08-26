@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Event } from '@material-ui/icons';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useParams, useAttendanceMode } from '../../../../hooks';
 import { IconAddCircle24, Button, ButtonStrip, IconCalendar24 } from "@dhis2/ui";
@@ -8,6 +8,7 @@ import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/a
 import { DropdownButtonComponent, DropDownCalendar, ModalComponent } from '../../../../components';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import ModalExportTemplateContent from '../../../modal/ModalExportTemplateContent';
+import { ProgressState } from '../../../../schema/linearProgress';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();
@@ -20,6 +21,7 @@ function EnrollmentActionsButtons() {
   const [localAttendanceMode, setlocalAttendanceMode] = useState<"edit" | "view">("view");
   const { sectionName } = useGetSectionTypeLabel();
   const [openExportEmptyTemplate, setOpenExportEmptyTemplate] = useState<boolean>(false);
+  const progress = useRecoilValue(ProgressState)
 
   const closeAnchor = () => {
     setAnchorElAddNew(null);
@@ -48,7 +50,7 @@ function EnrollmentActionsButtons() {
 
         <DropdownButtonComponent
           name={<span >Bulk attendance</span> as unknown as string}
-          disabled={!(section != null && grade != null)}
+          disabled={!(section != null && grade != null) || progress?.progress1 != null}
           icon={<IconCalendar24 />}
           options={bulkOptions}
         />
