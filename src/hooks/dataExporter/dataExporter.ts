@@ -11,6 +11,7 @@ import { getAttendanceDays } from "../../utils/table/header/formatResponse"
 import { generateAttendanceDays } from "../../utils/table/header/generateAttendanceDays"
 import { useTableData } from "../tableData/useTableData"
 import { ProgressState } from "../../schema/linearProgress"
+import { getFilterLables } from "../../utils/exporter/getFilterLables"
 
 export function dataExporter({ school, selectedDates }: { school: string, selectedDates: { startDate: Date, endDate: Date, key: string }[] }) {
     const { eventsResults } = useGetEvents()
@@ -46,8 +47,8 @@ export function dataExporter({ school, selectedDates }: { school: string, select
         })
             .then((response) => {
                 getEnrollmentDetails(events, response).then((rows) => {
-
                     let headers = getHeaders()
+                    let filters = getFilterLables(getDataStoreData.attendance.statusOptions)
 
                     headers = [...headers, {
                         name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
@@ -59,9 +60,10 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                         })
                     }]
 
-                    // void ExcelGenerator(headers, rows).finally(() => {
-                    //     updateProgress({ progress: null })
-                    // })
+
+                    void ExcelGenerator(headers, rows, filters).finally(() => {
+                        updateProgress({ progress: null })
+                    })
                 })
             })
     }

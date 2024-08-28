@@ -12,7 +12,7 @@ import { ProgressState } from "../../schema/linearProgress";
 function GroupForm(props: GroupFormProps) {
     const { name, fields, description, trackedEntity, setValue, value, disabled } = props
     const updateProgress = useRecoilValue(ProgressState)
-    console.log(disabled)
+
     return (
         <>
             <WithPadding p={name ? "16px 5px 0px 5px" : "0px"}>

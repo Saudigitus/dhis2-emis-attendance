@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { ImportContentProps } from "../../types/modal/ModalTypes";
 import { CloudUpload } from "@material-ui/icons";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { createStyles, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import { read, utils } from "xlsx";
+import { excelValidate } from "../../utils/bulkImport/excelValidator";
+import ModalComponent from "./Modal";
+import ShowImportError from "./importErrorMsg";
 
 const useStyles = makeStyles(() => createStyles({
   previewChip: {
@@ -19,6 +22,8 @@ const theme = createTheme({
 
 function ImportContent(props: ImportContentProps): React.ReactElement {
   const { setOpen, open } = props;
+  const [openErrorModal, setOpenErrorModal] = useState(false)
+  const [errorDetails, setErrorDetails] = useState({})
   const classes = useStyles();
 
   const handleFileChange = (file: any) => {
@@ -33,45 +38,54 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
         cellText: true
       });
 
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const rawData = utils.sheet_to_json(worksheet, { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: "" });
-      console.log(rawData)
+      const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
+      if (validation?.invalid) {
+        setOpenErrorModal(true)
+        setErrorDetails({ ...validation })
+      }
     };
+
     reader.readAsArrayBuffer(file[0]);
   }
 
   return (
-    <div>
-      <MuiThemeProvider theme={theme}>
-        <DropzoneDialog
-          dialogTitle={"Bulk Attendance"}
-          submitButtonText={"Start Import"}
-          dropzoneText={"Drag and drop a file here or Browse"}
-          Icon={CloudUpload as any}
-          filesLimit={1}
-          showPreviews={false}
-          showPreviewsInDropzone={true}
-          previewGridProps={{
-            container: {
-              spacing: 1,
-              direction: 'row'
-            }
-          }}
-          previewChipProps={{ classes: { root: classes.previewChip } }}
-          previewText="Selected file:"
-          showFileNames={true}
-          showFileNamesInPreview={true}
-          acceptedFiles={[".xlsx"]}
-          open={open}
-          onClose={() => {
-            setOpen(false)
-          }}
-          onSave={(file: any) => handleFileChange(file)}
-          clearOnUnmount={true}
-        />
-      </MuiThemeProvider>
-    </div>
+    <>
+      {!openErrorModal ?
+        <MuiThemeProvider theme={theme}>
+          <DropzoneDialog
+            dialogTitle={"Bulk Attendance"}
+            submitButtonText={"Start Import"}
+            dropzoneText={"Drag and drop a file here or Browse"}
+            Icon={CloudUpload as any}
+            filesLimit={1}
+            showPreviews={false}
+            showPreviewsInDropzone={true}
+            previewGridProps={{
+              container: {
+                spacing: 1,
+                direction: 'row'
+              }
+            }}
+            previewChipProps={{ classes: { root: classes.previewChip } }}
+            previewText="Selected file:"
+            showFileNames={true}
+            showFileNamesInPreview={true}
+            acceptedFiles={[".xlsx"]}
+            open={open}
+            onClose={() => {
+              setOpen(false)
+            }}
+            onSave={(file: any) => handleFileChange(file)}
+            clearOnUnmount={true}
+          />
+        </MuiThemeProvider>
+        : <ModalComponent title={`Bulk Attendance feedback`} open={openErrorModal} setOpen={setOpenErrorModal}>
+          <ShowImportError
+            setOpen={setOpenErrorModal}
+            errorDetails={errorDetails}
+          />
+        </ModalComponent>}
+    </>
   );
 }
 

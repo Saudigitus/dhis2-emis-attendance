@@ -8,7 +8,7 @@ import { ProgressState } from '../../schema/linearProgress';
 export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
 
-    async function ExcelGenerator(headers: any[], rows: any[]) {
+    async function ExcelGenerator(headers: any[], rows: any[], filters: string) {
         updateProgress({ progress: 90 })
 
         const workbook = new Excel.Workbook();
@@ -74,7 +74,7 @@ export function gererateFile() {
                 if (regex.test(columnHeader as string)) {
                     sheet.eachRow((row: any) => {
                         const cell = row.getCell(colIndex);
-                        cell.dataValidation = dataValidation;
+                        cell.dataValidation = { ...dataValidation, formulae: ['"' + filters + '"'] };
                     });
                 }
             });
