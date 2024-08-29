@@ -12,7 +12,15 @@ export function generateHeaders() {
         programConfigState.programStages.filter(x => {
             if (x.id == registration.programStage) {
 
-                let section: any = { name: x.displayName, headers: [], fill: 'FCE5CD' }
+                let section: any = {
+                    name: x.displayName,
+                    headers: [{
+                        header: 'School',
+                        key: 'school',
+                        width: 20,
+                    }],
+                    fill: 'FCE5CD'
+                }
 
                 x.programStageDataElements.map((de) => {
                     section = {

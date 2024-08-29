@@ -7,6 +7,8 @@ import { ProgressState } from '../../schema/linearProgress';
 export default function LinearBuffer() {
     const updateProgress = useRecoilValue(ProgressState)
 
+    console.log(updateProgress)
+
     return (
         <Box sx={{ width: '100%' }}>
             <LinearProgress variant="buffer" value={updateProgress.progress} valueBuffer={updateProgress.buffer} />

@@ -13,12 +13,13 @@ export function useGetEnrollmentData() {
     const { eventsResults } = useGetEvents()
     const { urlParamiters } = useParams()
     const { show } = useShowAlerts()
-    const { school: orgUnit } = urlParamiters()
+    const { school: orgUnit, schoolName } = urlParamiters()
     const { getDataStoreData } = getSelectedKey()
     const [error, setError] = useState<boolean>(false)
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { registration, program } = getDataStoreKeys()
     const updateProgress = useSetRecoilState(ProgressState)
+    const value = useRecoilValue(ProgressState)
 
     const getEnrollmentDetails = async (events: any, attendance: any[]) => {
         updateProgress((progress: any) => ({ ...progress, phase: 'details' }))
@@ -47,6 +48,7 @@ export function useGetEnrollmentData() {
                             )
 
                             rows = [...rows, {
+                                'school': schoolName,
                                 enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
                                 ...attributes(tei?.attributes ?? []),
                                 ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
@@ -56,7 +58,7 @@ export function useGetEnrollmentData() {
                             updateProgress((progress: any) => ({
                                 ...progress,
                                 progress: progress.progress + (43 / trackedEntityInstance?.results?.instances?.length),
-                                buffer: progress.buffer + (44 / trackedEntityIds.length)
+                                buffer: progress.buffer + (40 / trackedEntityInstance.results?.instances?.length)
                             }))
                         }
 

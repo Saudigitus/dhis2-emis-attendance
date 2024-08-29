@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { ImportContentProps } from "../../types/modal/ModalTypes";
+import { ImportContentProps } from "../../../types/modal/ModalTypes";
 import { CloudUpload } from "@material-ui/icons";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { createStyles, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
-import { read, utils } from "xlsx";
-import { excelValidate } from "../../utils/bulkImport/excelValidator";
-import ModalComponent from "./Modal";
-import ShowImportError from "./importErrorMsg";
+import { read } from "xlsx";
+import { excelValidate } from "../../../utils/bulkImport/excelValidator";
+import ModalComponent from "../Modal";
+import ModalSummaryContent from "./ModalSummaryContent";
 
 const useStyles = makeStyles(() => createStyles({
   previewChip: {
@@ -79,10 +79,10 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
             clearOnUnmount={true}
           />
         </MuiThemeProvider>
-        : <ModalComponent title={`Bulk Attendance feedback`} open={openErrorModal} setOpen={setOpenErrorModal}>
-          <ShowImportError
+        : <ModalComponent title={`Bulk attendance summary`} open={openErrorModal} setOpen={setOpenErrorModal}>
+          <ModalSummaryContent
             setOpen={setOpenErrorModal}
-            errorDetails={errorDetails}
+             summaryData={errorDetails}
           />
         </ModalComponent>}
     </>

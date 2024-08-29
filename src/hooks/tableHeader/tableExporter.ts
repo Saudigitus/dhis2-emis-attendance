@@ -9,7 +9,6 @@ export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
 
     async function ExcelGenerator(headers: any[], rows: any[], filters: string) {
-        updateProgress({ progress: 90 })
 
         const workbook = new Excel.Workbook();
         const workSheets = getWorkSheets(headers.find(x => x.name === 'Attendance').headers)

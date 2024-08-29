@@ -134,7 +134,7 @@ export function useTableData() {
                         updateProgress((progress: any) => ({
                             ...progress,
                             progress: progress.progress + (43 / trackedEntityIds.length),
-                            buffer: progress.buffer + (40 / trackedEntityIds.length)
+                            buffer: progress.buffer + (50 / trackedEntityIds.length)
                         }))
                         attendanceValuesByTei.push(...resp?.results?.instances)
                     })
