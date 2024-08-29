@@ -2,6 +2,19 @@ import { useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { getDataStoreKeys } from "../commons/dataStore/getDataStoreKeys"
 
+export const dfHeaders = [
+    {
+        "header": "enrollment",
+        "key": "enrollment",
+        "width": 20
+    },
+    {
+        "header": "studentId",
+        "key": "studentId",
+        "width": 20
+    }
+]
+
 export function generateHeaders() {
     const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
@@ -12,7 +25,7 @@ export function generateHeaders() {
         programConfigState.programStages.filter(x => {
             if (x.id == registration.programStage) {
 
-                let section: any = { name: x.displayName, headers: [], fill: 'FCE5CD' }
+                let section: any = { name: x.displayName, headers: [...dfHeaders], fill: 'FCE5CD' }
 
                 x.programStageDataElements.map((de) => {
                     section = {

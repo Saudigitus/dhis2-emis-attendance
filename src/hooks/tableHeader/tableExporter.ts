@@ -4,6 +4,7 @@ import { getWorkSheets } from '../../utils/exporter/getWorkSheet';
 import { alinhamento, border, dataValidation, fill, lock } from '../../utils/exporter/exporterConsts';
 import { useSetRecoilState } from 'recoil';
 import { ProgressState } from '../../schema/linearProgress';
+import { dfHeaders } from '../../utils/exporter/generateExcelHeaders';
 
 export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
@@ -38,7 +39,7 @@ export function gererateFile() {
             let secondRow = sheet.getRow(2);
             secondRow.values = columns.map((col: any) => col.subHeader);
 
-            // Merge cells in the first row for headers with multiple subheaders
+            // Merge cells in the first row for headers with multiple subheaders 
             headers.forEach(section => {
                 const mergeCount = (section.name == 'Attendance' ? workSheets[workSheet] : section.headers).length;
 
@@ -71,6 +72,13 @@ export function gererateFile() {
             const headerRow = sheet.getRow(2);
             headerRow.eachCell((headerCell: any, colIndex: number) => {
                 const columnHeader = headerCell.value;
+                let index = dfHeaders.findIndex(x => x.key === sheet.getColumn(colIndex)._key)
+
+                if (index !== -1) {
+                    const col = sheet.getColumn(colIndex)
+                    col.hidden = true
+                }
+
                 if (regex.test(columnHeader as string)) {
                     sheet.eachRow((row: any) => {
                         const cell = row.getCell(colIndex);
