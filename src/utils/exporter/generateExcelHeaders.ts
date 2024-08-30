@@ -2,6 +2,19 @@ import { useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { getDataStoreKeys } from "../commons/dataStore/getDataStoreKeys"
 
+export const dfHeaders = [
+    {
+        "header": "enrollment",
+        "key": "enrollment",
+        "width": 25
+    },
+    {
+        "header": "studentId",
+        "key": "studentId",
+        "width": 25
+    }
+]
+
 export function generateHeaders() {
     const { registration } = getDataStoreKeys()
     const programConfigState = useRecoilValue(ProgramConfigState);
@@ -14,10 +27,10 @@ export function generateHeaders() {
 
                 let section: any = {
                     name: x.displayName,
-                    headers: [{
+                    headers: [...dfHeaders,{
                         header: 'School',
                         key: 'school',
-                        width: 20,
+                        width: 25,
                     }],
                     fill: 'FCE5CD'
                 }
@@ -25,9 +38,9 @@ export function generateHeaders() {
                 x.programStageDataElements.map((de) => {
                     section = {
                         ...section, headers: [...section.headers, {
-                            header: de.dataElement.displayName,
-                            key: de.dataElement.id,
-                            width: 20,
+                            header: de?.dataElement.displayName,
+                            key: de?.dataElement.id,
+                            width: 25,
                         }]
                     }
                 })
@@ -40,11 +53,20 @@ export function generateHeaders() {
             return {
                 header: x.trackedEntityAttribute.displayName,
                 key: x.trackedEntityAttribute.id,
-                width: 20,
+                width: 25,
             }
         })
 
         formatedHeaders.unshift({ name: 'Student profile', headers: att, fill: 'D9EAD3' })
+        formatedHeaders.unshift({
+            name: 'Data Elements',
+            headers: [{
+                header: 'Attedance Data Elements',
+                key: 'dataElements',
+                width: 25,
+            }],
+            fill: ''
+        })
 
         return formatedHeaders
     }

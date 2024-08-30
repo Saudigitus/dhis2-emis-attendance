@@ -50,6 +50,8 @@ export function useGetEnrollmentData() {
                             rows = [...rows, {
                                 'school': schoolName,
                                 enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
+                                enrollment: enrollment,
+                                studentId: tei.trackedEntity,
                                 ...attributes(tei?.attributes ?? []),
                                 ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
                                 ...attendanceFormatter(attendance[tei?.trackedEntity])

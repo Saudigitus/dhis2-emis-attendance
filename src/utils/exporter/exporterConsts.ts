@@ -10,7 +10,7 @@ export const fill = {
     pattern: 'solid',
 }
 
-export const alinhamento = {
+export const alignment = {
     horizontal: 'center',
     vertical: 'middle'
 }
@@ -19,7 +19,7 @@ export const lock = {
     selectLockedCells: true,
     selectUnlockedCells: true,
     formatCells: true,
-    formatColumns: true,
+    formatColumns: false,
     formatRows: true,
     insertColumns: false,
     insertRows: false,  // Prevents inserting new rows

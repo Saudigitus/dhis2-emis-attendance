@@ -16,12 +16,7 @@ import { getIcon } from "../../../utils/table/attendance/getIcom";
 import ReasonOfAbsence from '../components/reasonOfAbsence/reasonOfAbsesnce';
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
-    const {
-        column,
-        value,
-        rowsData,
-        setTableData
-    } = props
+    const { column, value, rowsData, setTableData } = props
     const [selectedTerm, setselectedTerm] = useState<string>("")
     const { getDataStoreData } = getSelectedKey()
     const attendanceId = getDataStoreData.attendance.status
