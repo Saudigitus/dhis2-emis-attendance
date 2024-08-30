@@ -5,9 +5,11 @@ import { alignment, border, dataValidation, fill, lock } from '../../utils/expor
 import { useSetRecoilState } from 'recoil';
 import { ProgressState } from '../../schema/linearProgress';
 import { dfHeaders } from '../../utils/exporter/generateExcelHeaders';
+import { unavailableSchoolDays } from '../../utils/constants/attendance/unavailableSchoolDays';
 
 export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
+    const { unavailableDays } = unavailableSchoolDays()
 
     async function ExcelGenerator(headers: any[], rows: any[], filters: string) {
 
@@ -90,7 +92,18 @@ export function gererateFile() {
             sheet.eachRow({ includeEmpty: true }, (row: any) => {
                 row.eachCell({ includeEmpty: true }, (cell: any) => {
                     if (regex.test(cell._column._key) && cell._row._number > 2) {
-                        cell.protection = { locked: false };
+                        if (unavailableDays(new Date(cell._column._key))) {
+
+                            cell.dataValidation = null
+                            cell.value = 'Non School Day'
+                            cell.fill = { fgColor: { argb: 'f8f9fa' }, ...fill as unknown as any }
+                            cell.border = border as unknown as any
+                            cell.font = { size: 10 };
+
+                        } else cell.protection = { locked: false };
+                    } else if (cell._row._number > 2) {
+                        cell.fill = { fgColor: { argb: 'f8f9fa' }, ...fill as unknown as any }
+                        cell.border = border as unknown as any
                     }
                 });
             });
