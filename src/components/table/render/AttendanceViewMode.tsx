@@ -16,12 +16,7 @@ import { getIcon } from "../../../utils/table/attendance/getIcom";
 import { type DataStoreRecord } from "../../../types/dataStore/DataStoreConfig";
 
 function AttendanceViewMode(props: AttendanceViewModeProps) {
-    const {
-        column,
-        value,
-        headers,
-        trackedEntity
-    } = props
+    const { column, value, headers, trackedEntity } = props
     const { attendanceConst } = useAttendanceConst()
     const seeReason = useRecoilValue(ReasonOfAbsenseState)
     const { imageUrl } = GetImageUrl()

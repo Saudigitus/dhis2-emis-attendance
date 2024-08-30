@@ -1,9 +1,10 @@
 import Excel from 'exceljs'
 import { saveAs } from 'file-saver'
 import { getWorkSheets } from '../../utils/exporter/getWorkSheet';
-import { alinhamento, border, dataValidation, fill, lock } from '../../utils/exporter/exporterConsts';
+import { alignment, border, dataValidation, fill, lock } from '../../utils/exporter/exporterConsts';
 import { useSetRecoilState } from 'recoil';
 import { ProgressState } from '../../schema/linearProgress';
+import { dfHeaders } from '../../utils/exporter/generateExcelHeaders';
 
 export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
@@ -38,7 +39,7 @@ export function gererateFile() {
             let secondRow = sheet.getRow(2);
             secondRow.values = columns.map((col: any) => col.subHeader);
 
-            // Merge cells in the first row for headers with multiple subheaders
+            // Merge cells in the first row for headers with multiple subheaders 
             headers.forEach(section => {
                 const mergeCount = (section.name == 'Attendance' ? workSheets[workSheet] : section.headers).length;
 
@@ -50,13 +51,13 @@ export function gererateFile() {
                 cell.fill = { fgColor: { argb: section.fill }, ...fill as unknown as any }
                 cell.border = border as unknown as any
                 cell.font = { bold: true };
-                cell.alignment = alinhamento as unknown as any;
+                cell.alignment = alignment as unknown as any;
 
                 colIndex += mergeCount;
             });
 
             headers.map((section) => {
-                (section.name == 'Attendance' ? workSheets[workSheet] : section.headers).map(() => {
+                (section?.name == 'Attendance' ? workSheets[workSheet] : section.headers).map(() => {
                     counter++
 
                     const cell = secondRow.getCell(counter);
@@ -71,6 +72,14 @@ export function gererateFile() {
             const headerRow = sheet.getRow(2);
             headerRow.eachCell((headerCell: any, colIndex: number) => {
                 const columnHeader = headerCell.value;
+                const colKey = sheet.getColumn(colIndex)._key
+                const index = dfHeaders.findIndex(x => x.key === colKey)
+
+                if (index !== -1 || colKey === 'dataElements') {
+                    const col = sheet.getColumn(colIndex)
+                    col.hidden = true
+                }
+
                 if (regex.test(columnHeader as string)) {
                     sheet.eachRow((row: any) => {
                         const cell = row.getCell(colIndex);
