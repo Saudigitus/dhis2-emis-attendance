@@ -10,7 +10,7 @@ export const fill = {
     pattern: 'solid',
 }
 
-export const alinhamento = {
+export const alignment = {
     horizontal: 'center',
     vertical: 'middle'
 }

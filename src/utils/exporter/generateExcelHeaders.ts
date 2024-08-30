@@ -6,12 +6,12 @@ export const dfHeaders = [
     {
         "header": "enrollment",
         "key": "enrollment",
-        "width": 20
+        "width": 25
     },
     {
         "header": "studentId",
         "key": "studentId",
-        "width": 20
+        "width": 25
     }
 ]
 
@@ -30,9 +30,9 @@ export function generateHeaders() {
                 x.programStageDataElements.map((de) => {
                     section = {
                         ...section, headers: [...section.headers, {
-                            header: de.dataElement.displayName,
-                            key: de.dataElement.id,
-                            width: 20,
+                            header: de?.dataElement.displayName,
+                            key: de?.dataElement.id,
+                            width: 25,
                         }]
                     }
                 })
@@ -45,11 +45,20 @@ export function generateHeaders() {
             return {
                 header: x.trackedEntityAttribute.displayName,
                 key: x.trackedEntityAttribute.id,
-                width: 20,
+                width: 25,
             }
         })
 
         formatedHeaders.unshift({ name: 'Student profile', headers: att, fill: 'D9EAD3' })
+        formatedHeaders.unshift({
+            name: 'Data Elements',
+            headers: [{
+                header: 'Attedance Data Elements',
+                key: 'dataElements',
+                width: 25,
+            }],
+            fill: ''
+        })
 
         return formatedHeaders
     }
