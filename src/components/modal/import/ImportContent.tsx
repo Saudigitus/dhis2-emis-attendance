@@ -7,6 +7,8 @@ import { read } from "xlsx";
 import { excelValidate } from "../../../utils/bulkImport/excelValidator";
 import ModalComponent from "../Modal";
 import ModalSummaryContent from "./ModalSummaryContent";
+import { getSheetData } from "../../../utils/bulkImport/generateEvents";
+import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
 
 const useStyles = makeStyles(() => createStyles({
   previewChip: {
@@ -19,12 +21,13 @@ const theme = createTheme({
   overrides: {},
 });
 
-
 function ImportContent(props: ImportContentProps): React.ReactElement {
   const { setOpen, open } = props;
   const [openErrorModal, setOpenErrorModal] = useState(false)
   const [errorDetails, setErrorDetails] = useState({})
+  const [sheetData, setSheetData] = useState([])
   const classes = useStyles();
+  const { getDataStoreData } = getSelectedKey()
 
   const handleFileChange = (file: any) => {
     const reader: FileReader = new FileReader();
@@ -39,11 +42,10 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
       });
 
       const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
+      const allData = getSheetData(workbook.SheetNames.slice(0, -1), workbook.Sheets, getDataStoreData.attendance)
 
-      if (validation?.invalid) {
-        setOpenErrorModal(true)
-        setErrorDetails({ ...validation })
-      }
+      setOpenErrorModal(true)
+      setErrorDetails({ ...validation })
     };
 
     reader.readAsArrayBuffer(file[0]);
@@ -83,7 +85,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
         : <ModalComponent title={`Bulk attendance summary`} open={openErrorModal} setOpen={setOpenErrorModal}>
           <ModalSummaryContent
             setOpen={setOpenErrorModal}
-             summaryData={errorDetails}
+            summaryData={errorDetails}
           />
         </ModalComponent>}
     </>

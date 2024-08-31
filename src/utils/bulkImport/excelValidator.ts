@@ -45,13 +45,12 @@ export function excelValidate(sheetNames: any[], sheets: any) {
          */
         for (let j = 2; j < rawData.length; j++) {
             for (let i = rawData[j].length - 1; i >= (rawData[j].length - attendanceHeadersLength); i--) {
-                console.log(rawData[j])
+
                 if (!rawData[j][i]) {
-                    invalid = true
                     const index = validation_summary.invalid.findIndex((x: any) => (x.ref == rawData[j][0] && x.sheet == sheetName))
 
                     if (index == -1)
-                        validation_summary.invalid = [...validation_summary.invalid, { sheet: sheetName, school: rawData[j][7], name: `${rawData[j][2]} ${rawData[j][3]}`, columns: 1, ref: rawData[j][0] }]
+                        validation_summary.invalid = [...validation_summary.invalid, { sheet: sheetName, school: rawData[j][8], name: `${rawData[j][2]} ${rawData[j][3]}`, columns: 1, ref: rawData[j][0] }]
                     else validation_summary.invalid[index] = {
                         ...validation_summary.invalid[index],
                         columns: (validation_summary.invalid[index].columns + 1)
@@ -59,7 +58,7 @@ export function excelValidate(sheetNames: any[], sheets: any) {
                 } else if (rawData[j][i] != 'Non School Day') {
                     const index = validation_summary.new.findIndex((x: any) => x.ref == rawData[j][0])
 
-                    if (index == -1) validation_summary.new = [...validation_summary.new, { sheet: sheetName, school: rawData[j][7], name: `${rawData[j][2]} ${rawData[j][3]}`, columns: 1, ref: rawData[j][0] }]
+                    if (index == -1) validation_summary.new = [...validation_summary.new, { sheet: sheetName, school: rawData[j][8], name: `${rawData[j][2]} ${rawData[j][3]}`, columns: 1, ref: rawData[j][0] }]
                     else validation_summary.new[index] = {
                         ...validation_summary.new[index],
                         columns: (validation_summary.new[index].columns + 1)
@@ -70,5 +69,5 @@ export function excelValidate(sheetNames: any[], sheets: any) {
 
     }
 
-    return { invalid: invalid, summary: validation_summary }
+    return {  summary: validation_summary }
 }

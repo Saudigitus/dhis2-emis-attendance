@@ -19,7 +19,6 @@ export function useGetEnrollmentData() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { registration, program } = getDataStoreKeys()
     const updateProgress = useSetRecoilState(ProgressState)
-    const value = useRecoilValue(ProgressState)
 
     const getEnrollmentDetails = async (events: any, attendance: any[]) => {
         updateProgress((progress: any) => ({ ...progress, phase: 'details' }))
@@ -49,14 +48,17 @@ export function useGetEnrollmentData() {
                                 tei?.trackedEntity
                             )
 
+                            const currEnrollment = registrationData?.find((x: any) => x.enrollment === enrollment)
+
                             rows = [...rows, {
-                                'ref': "" + counter + " ",
-                                'school': schoolName,
-                                enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
+                                ref: "" + counter + " ",
+                                school: schoolName,
+                                orgUnit: currEnrollment?.orgUnit,
+                                enrollmentDate: currEnrollment?.occurredAt,
                                 enrollment: enrollment,
                                 studentId: tei.trackedEntity,
                                 ...attributes(tei?.attributes ?? []),
-                                ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                                ...dataValues(currEnrollment?.dataValues ?? []),
                                 ...attendanceFormatter(attendance[tei?.trackedEntity])
                             }]
 

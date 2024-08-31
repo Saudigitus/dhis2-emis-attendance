@@ -10,3 +10,10 @@ export function getFilterLables(options: Attendance['statusOptions']) {
 
     return filter.substring(0, filter.length - 1)
 }
+
+export function getOptionCode(key: string, options: Attendance['statusOptions']) {
+    for (let index = 0; index < options.length; index++) {
+        if (options[index].key === key.substring(0, 1).toLocaleLowerCase() + key.substring(1, key.length))
+            return options[index].code
+    }
+}

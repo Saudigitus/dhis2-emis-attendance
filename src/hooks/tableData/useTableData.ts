@@ -117,15 +117,16 @@ export function useTableData() {
     async function getAttendanceData(exporting?: { exporting: boolean, trackedEntityIds: { tei: string, enrollment: string }[], sDate: Date, eDate: Date }) {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
-                if (!exporting?.exporting) setLoading(true)
-                else updateProgress((progress: any) => ({ ...progress, progress: 10 }))
-
                 let startDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
                     endDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
-
+    
                 const localData = [...tableData]
                 let dataToExport: any = {}
                 const attendanceValuesByTei: AttendanceFormaterProps[] = []
+                
+                if (!exporting?.exporting) setLoading(true)
+                else updateProgress((progress: any) => ({ ...progress, progress: 10 }))
+
 
                 const trackedEntityIds = exporting?.exporting ? exporting?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
 

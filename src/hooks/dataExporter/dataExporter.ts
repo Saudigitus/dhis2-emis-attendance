@@ -60,7 +60,6 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                         })
                     }]
 
-
                     void ExcelGenerator(headers, rows, filters).finally(() => {
                         updateProgress({ progress: null })
                     })

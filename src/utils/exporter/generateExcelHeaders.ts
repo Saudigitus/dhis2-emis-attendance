@@ -4,13 +4,18 @@ import { getDataStoreKeys } from "../commons/dataStore/getDataStoreKeys"
 
 export const dfHeaders = [
     {
-        "header": "enrollment",
+        "header": "Enrollment",
         "key": "enrollment",
         "width": 25
     },
     {
-        "header": "studentId",
+        "header": "Tracked Entity Id",
         "key": "studentId",
+        "width": 25
+    },
+    {
+        "header": "School UID",
+        "key": "orgUnit",
         "width": 25
     }
 ]
