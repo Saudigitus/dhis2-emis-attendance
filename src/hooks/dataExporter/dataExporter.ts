@@ -41,7 +41,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
         )
 
         await getAttendanceData({
-            exporting: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {
+            dealingWithExcel: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {
                 return { tei: x.trackedEntity, enrollment: x.enrollment }
             }), sDate: selectedDates?.[0].startDate, eDate: selectedDates?.[0].endDate
         })

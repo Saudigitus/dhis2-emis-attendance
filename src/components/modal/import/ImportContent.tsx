@@ -25,7 +25,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
   const { setOpen, open } = props;
   const [openErrorModal, setOpenErrorModal] = useState(false)
   const [errorDetails, setErrorDetails] = useState({})
-  const [sheetData, setSheetData] = useState([])
+  const [sheetData, setSheetData] = useState<{ attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { startDate: string, endDate: string } } | any>({})
   const classes = useStyles();
   const { getDataStoreData } = getSelectedKey()
 
@@ -43,7 +43,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
 
       const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
       const allData = getSheetData(workbook.SheetNames.slice(0, -1), workbook.Sheets, getDataStoreData.attendance)
-
+      setSheetData(allData)
       setOpenErrorModal(true)
       setErrorDetails({ ...validation })
     };
@@ -86,6 +86,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
           <ModalSummaryContent
             setOpen={setOpenErrorModal}
             summaryData={errorDetails}
+            sheetData={sheetData}
           />
         </ModalComponent>}
     </>

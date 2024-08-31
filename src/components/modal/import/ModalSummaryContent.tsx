@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
+import React, { useState } from "react";
+import { IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
 import WithPadding from "../../template/WithPadding";
 import styles from "../modal.module.css";
 import { type ButtonActionProps } from "../../../types/buttons/ButtonActions";
@@ -9,17 +9,26 @@ import { InfoOutlined } from "@material-ui/icons";
 import { LinearProgress } from "@material-ui/core";
 import SummaryCards from "./SummaryCards";
 import SummaryDetails from "./SummaryDetails";
+import { useTableData } from "../../../hooks";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
     summaryData: any
+    sheetData: { attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { sDate: Date, eDate: Date } }
 }
 
 const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
-    const { setOpen, summaryData } = props;
+    const { setOpen, summaryData, sheetData } = props;
     const [showDetails, setShowDetails] = useState(false)
     const [loading, setLoading] = useState(false)
+    const { getAttendanceData } = useTableData()
 
+    async function importAttendanceValues() {
+        await getAttendanceData({ dealingWithExcel: true, ...sheetData.dateRange, trackedEntityIds: sheetData.trackedEntityIds })
+            .then((resp) => {
+                console.log(resp, 'resp', sheetData.trackedEntityIds)
+            })
+    }
 
     const handleShowDetails = () => {
         setShowDetails(!showDetails);
@@ -37,7 +46,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             primary: true,
             loading: false,
             disabled: false,
-            onClick: () => { }
+            onClick: () => { void importAttendanceValues() }
         },
         {
             label: "Close",

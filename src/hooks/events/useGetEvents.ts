@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import {
     type AttendanceQueryResults,
     type EventQueryProps,
@@ -7,8 +6,6 @@ import { useDataEngine } from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { FormatResponseRowsProps } from "../../types/utils/table/FormatRowsDataTypes";
-import { useRecoilValue } from "recoil";
-import { InfoState } from "../../schema/infoSchema";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -22,7 +19,6 @@ export function useGetEvents() {
     const engine = useDataEngine();
     const { hide, show } = useShowAlerts()
     const { getDataStoreData } = getSelectedKey()
-    const sysInfo = useRecoilValue(InfoState);
 
     async function getEvents(startDate: string, endDate: string, school: string, tei: string): Promise<AttendanceQueryResults> {
         return engine.query(EVENT_QUERY({
