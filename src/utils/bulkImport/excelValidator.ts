@@ -3,9 +3,7 @@ import { utils } from "xlsx";
 export function excelValidate(sheetNames: any[], sheets: any) {
     const regex = /^\d{4}-\d{2}-\d{2}$/
     const regexSheetName = /^(January|February|March|April|May|June|July|August|September|October|November|December)-\d{4}$/;
-    let validation_summary: any = {}
-    let invalidSheetNames: string[] = []
-    let sheetsWithInvaliHEaders: string[] = []
+    let validation_summary: any = { new: [], invalid: [], invalidSheets: [] }
     let invalid = false
 
     function checkMajorHeaders(majorHeaders: string[]) {
@@ -20,12 +18,12 @@ export function excelValidate(sheetNames: any[], sheets: any) {
     }
 
     for (const sheetName of sheetNames) {
-        validation_summary[sheetName] = { new: [], invalid: [] }
         /**
          * Validate sheet names to ensure that the user uploads the downloaded file without new or renamed sheets
          */
-        if (!regexSheetName.test(sheetName)) {
-            invalidSheetNames.push(sheetName)
+        if (!regexSheetName.test(sheetName) && sheetName !== 'Metadata') {
+            invalid = true
+            validation_summary.invalidSheets = [...validation_summary.invalidSheets, { sheet: sheetName, description: "You either renamed or added this sheet into you excel file" }]
             continue
         }
 
@@ -36,8 +34,9 @@ export function excelValidate(sheetNames: any[], sheets: any) {
         /**
          * Check if there are only three major headers : Student profile, Enrollment details and Attendance
          */
-        if (!checkMajorHeaders(majorHeaders)) {
-            sheetsWithInvaliHEaders.push(sheetName)
+        if (!checkMajorHeaders(majorHeaders) && sheetName !== 'Metadata') {
+            invalid = true
+            validation_summary.invalidSheets = [...validation_summary.invalidSheets, { sheet: sheetName, description: "This sheet contains invalid headers" }]
             continue
         }
 
@@ -46,23 +45,24 @@ export function excelValidate(sheetNames: any[], sheets: any) {
          */
         for (let j = 2; j < rawData.length; j++) {
             for (let i = rawData[j].length - 1; i >= (rawData[j].length - attendanceHeadersLength); i--) {
-
+                console.log(rawData[j])
                 if (!rawData[j][i]) {
                     invalid = true
-                    const index = validation_summary[sheetName].invalid.findIndex((x: any) => x.ref == j + 1)
+                    const index = validation_summary.invalid.findIndex((x: any) => (x.ref == rawData[j][0] && x.sheet == sheetName))
 
-                    if (index == -1) validation_summary[sheetName].invalid = [...validation_summary[sheetName].invalid, { school: rawData[j][4], name: `${rawData[j][1]} ${rawData[j][2]}`, columns: 1, ref: j + 1 }]
-                    else validation_summary[sheetName].invalid[index] = {
-                        ...validation_summary[sheetName].invalid[index],
-                        columns: (validation_summary[sheetName].invalid[index].columns + 1)
+                    if (index == -1)
+                        validation_summary.invalid = [...validation_summary.invalid, { sheet: sheetName, school: rawData[j][7], name: `${rawData[j][2]} ${rawData[j][3]}`, columns: 1, ref: rawData[j][0] }]
+                    else validation_summary.invalid[index] = {
+                        ...validation_summary.invalid[index],
+                        columns: (validation_summary.invalid[index].columns + 1)
                     }
-                } else {
-                    const index = validation_summary[sheetName].new.findIndex((x: any) => x.ref == j + 1)
+                } else if (rawData[j][i] != 'Non School Day') {
+                    const index = validation_summary.new.findIndex((x: any) => x.ref == rawData[j][0])
 
-                    if (index == -1) validation_summary[sheetName].new = [...validation_summary[sheetName].new, { school: rawData[j][4], name: `${rawData[j][1]} ${rawData[j][2]}`, columns: 1, ref: j + 1 }]
-                    else validation_summary[sheetName].new[index] = {
-                        ...validation_summary[sheetName].new[index],
-                        columns: (validation_summary[sheetName].new[index].columns + 1)
+                    if (index == -1) validation_summary.new = [...validation_summary.new, { sheet: sheetName, school: rawData[j][7], name: `${rawData[j][2]} ${rawData[j][3]}`, columns: 1, ref: rawData[j][0] }]
+                    else validation_summary.new[index] = {
+                        ...validation_summary.new[index],
+                        columns: (validation_summary.new[index].columns + 1)
                     }
                 }
             }
@@ -70,5 +70,5 @@ export function excelValidate(sheetNames: any[], sheets: any) {
 
     }
 
-    return { invalid: invalid, summary: validation_summary, sheetsWithInvaliHEaders: sheetsWithInvaliHEaders, invalidSheetNames: invalidSheetNames }
+    return { invalid: invalid, summary: validation_summary }
 }

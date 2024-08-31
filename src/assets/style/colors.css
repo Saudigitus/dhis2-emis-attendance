@@ -11,6 +11,8 @@
     --font-third-color: #1E6194;
     --mui-error-color: rgb(211, 47, 47);
     --badge-background-error-color: #FF5F5F;
+    --summary-card-border-warning: #FF9F1C;
+    --summary-card-warning-background: #ffd6af8a;
     --summary-card-border-success: #4CAF50;
     --summary-card-success-background: #F4FBF4;
     --summary-card-border-error: #DEA9A7;

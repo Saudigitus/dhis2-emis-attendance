@@ -39,6 +39,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
       });
 
       const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
+
       if (validation?.invalid) {
         setOpenErrorModal(true)
         setErrorDetails({ ...validation })

@@ -6,22 +6,25 @@ interface SummaryRowProps {
     reference: string
     expandedRows: any[]
     expandedToggle: any
-    chip: string
+    tab: string
     index: number
 }
 
 export const SummaryRow = (props: SummaryRowProps): React.ReactElement => {
-    const { data, reference, expandedRows, expandedToggle, chip, index } = props
+    const { data, reference, expandedRows, expandedToggle, tab, index } = props
 
     return (
         <DataTableRow
             expanded={expandedRows.includes(reference)}
             onExpandToggle={() => expandedToggle(`${reference}`)}
         >
-            <DataTableCell align="center">{chip == 'invalidSheets' ? index + 1 : data?.ref}</DataTableCell>
-            {chip !== 'invalidSheets' && <DataTableCell align="center">{data?.school}</DataTableCell>}
-            <DataTableCell align="center">{data?.name}</DataTableCell>
-            <DataTableCell align="center">{chip == 'invalidSheets' ? data.description : data?.columns}</DataTableCell>
+            <DataTableCell align="center">{tab == 'invalidSheets' ? index + 1 : data?.ref}</DataTableCell>
+            <DataTableCell align="center">{data?.sheet}</DataTableCell>
+            {tab !== 'invalidSheets' && <>
+                <DataTableCell align="center">{data?.school}</DataTableCell>
+                <DataTableCell align="center">{data?.name}</DataTableCell>
+            </>}
+            <DataTableCell align="center">{tab == 'invalidSheets' ? data.description : data?.columns}</DataTableCell>
         </DataTableRow>
     )
 }
@@ -29,15 +32,12 @@ export const SummaryRow = (props: SummaryRowProps): React.ReactElement => {
 interface SummaryTableProps {
     displayData: Record<string, any>[]
     activeTab: string
-    chip: string
 }
 
 export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
-    const { displayData, activeTab, chip } = props
+    const { displayData, activeTab } = props
     const [expandedRows, setExpandedRows] = useState<string[]>([])
-    const recordsName = activeTab === "new" ? "new students" : activeTab
-
-    console.log(displayData,'dataaa')
+    const recordsName = activeTab === "new" ? "new records" : activeTab
 
     const expandedToggle = (rowId: string) => {
         if (expandedRows.includes(rowId)) {
@@ -53,15 +53,15 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                 <thead>
                     <tr>
                         <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Ref</th>
-                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Name</th>
-
+                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Sheet</th>
                         {
-                            chip == 'invalidSheets' ?
+                            activeTab == 'invalidSheets' ?
                                 <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Description</th>
                                 :
                                 <>
+                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Name</th>
                                     <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>School</th>
-                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>{activeTab === 'invalid' ? 'invalidSheets attendance cells' : 'Filled attendance cells'}</th>
+                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>{activeTab === 'invalid' ? 'Invalid attendance cells' : 'Filled attendance cells'}</th>
                                 </>
                         }
                     </tr>
@@ -71,13 +71,13 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                         displayData?.map((student, index) => {
                             return (
                                 <SummaryRow
-                                    key={`student-${student.ref}`}
-                                    reference={`student-${student.ref}`}
+                                    // key={`student-${student.ref}`}
+                                    reference={`student-${student?.ref}`}
                                     data={student}
                                     expandedRows={expandedRows}
                                     expandedToggle={expandedToggle}
-                                    chip={chip}
                                     index={index}
+                                    tab={activeTab}
                                 />
                             )
                         })

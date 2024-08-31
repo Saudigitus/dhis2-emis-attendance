@@ -27,7 +27,7 @@ export function generateHeaders() {
 
                 let section: any = {
                     name: x.displayName,
-                    headers: [...dfHeaders,{
+                    headers: [...dfHeaders, {
                         header: 'School',
                         key: 'school',
                         width: 25,
@@ -57,15 +57,12 @@ export function generateHeaders() {
             }
         })
 
-        formatedHeaders.unshift({ name: 'Student profile', headers: att, fill: 'D9EAD3' })
         formatedHeaders.unshift({
-            name: 'Data Elements',
-            headers: [{
-                header: 'Attedance Data Elements',
-                key: 'dataElements',
+            name: 'Student profile', headers: [{
+                header: 'Ref',
+                key: 'ref',
                 width: 25,
-            }],
-            fill: ''
+            }, ...att], fill: 'D9EAD3'
         })
 
         return formatedHeaders

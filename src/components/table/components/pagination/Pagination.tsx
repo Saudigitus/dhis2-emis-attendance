@@ -8,7 +8,6 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
 
-
 function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage }: PaginationProps): React.ReactElement {
     return (
         <div

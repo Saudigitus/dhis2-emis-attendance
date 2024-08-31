@@ -9,7 +9,6 @@ import { InfoOutlined } from "@material-ui/icons";
 import { LinearProgress } from "@material-ui/core";
 import SummaryCards from "./SummaryCards";
 import SummaryDetails from "./SummaryDetails";
-import { Paper } from "@mui/material";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -67,9 +66,9 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
             <WithPadding />
             <Collapse in={showDetails}>
-                <Paper elevation={3} className={styles.detailsContainer}>
+                <div className={styles.detailsContainer}>
                     <SummaryDetails summaryData={summaryData} />
-                </Paper>
+                </div>
             </Collapse>
 
             {loading && <LinearProgress />}

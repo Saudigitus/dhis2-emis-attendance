@@ -32,8 +32,10 @@ export function useGetEnrollmentData() {
                 return getTei(program, orgUnit as string, trackedEntityIds)
                     .then(async (trackedEntityInstance: any) => {
                         let rows: any = []
+                        let counter = 0
 
                         for (const tei of trackedEntityInstance?.results?.instances) {
+                            counter++
                             let enrollment = events.find((x: any) => x.trackedEntity == tei?.trackedEntity)?.enrollment
 
                             const registrationData: any = await eventsResults(false,
@@ -48,6 +50,7 @@ export function useGetEnrollmentData() {
                             )
 
                             rows = [...rows, {
+                                'ref': "" + counter + " ",
                                 'school': schoolName,
                                 enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
                                 enrollment: enrollment,

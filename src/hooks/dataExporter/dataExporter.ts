@@ -24,7 +24,6 @@ export function dataExporter({ school, selectedDates }: { school: string, select
     const { getValidDaysToExport } = generateAttendanceDays()
     const { getAttendanceData } = useTableData()
     const updateProgress = useSetRecoilState(ProgressState)
-    const { statusOptions, ...otherProperties } = getDataStoreData.attendance;
     const { ExcelGenerator } = gererateFile()
 
     async function exporter() {
@@ -50,7 +49,6 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                 getEnrollmentDetails(events, response).then((rows) => {
                     let headers = getHeaders()
                     let filters = getFilterLables(getDataStoreData.attendance.statusOptions)
-                    rows[0]['dataElements'] = JSON.stringify(otherProperties)
 
                     headers = [...headers, {
                         name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
