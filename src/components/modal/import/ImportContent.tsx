@@ -33,6 +33,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
     const reader: FileReader = new FileReader();
     reader.onload = async (e: ProgressEvent<FileReader>) => {
       const data: Uint8Array = new Uint8Array(e.target?.result as any);
+
       const workbook = read(data, {
         type: 'array',
         cellDates: true,
@@ -42,7 +43,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
       });
 
       const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
-      const allData = getSheetData(workbook.SheetNames.slice(0, -1), workbook.Sheets, getDataStoreData.attendance)
+      const allData = getSheetData(workbook.SheetNames.slice(0, -1), workbook.Sheets, getDataStoreData.program, getDataStoreData.attendance)
       setSheetData(allData)
       setOpenErrorModal(true)
       setErrorDetails({ ...validation })

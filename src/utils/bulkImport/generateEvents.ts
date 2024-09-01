@@ -2,7 +2,7 @@ import { utils } from "xlsx";
 import type { Attendance } from "../../types/dataStore/DataStoreConfig";
 import { getOptionCode } from "../exporter/getFilterLables";
 
-export function getSheetData(names: string[], sheets: any, attendanceConfig: Attendance): { attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { sDate: string, eDate: string } } {
+export function getSheetData(names: string[], sheets: any, program: string, attendanceConfig: Attendance): { attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { sDate: string, eDate: string } } {
     let attendanceEvents: any = []
     let teis: { tei: string, enrollment: string }[] = []
 
@@ -51,8 +51,8 @@ export function getSheetData(names: string[], sheets: any, attendanceConfig: Att
                     attendanceEvents.push(
                         {
                             trackedEntityInstance: rawData[index][6],
-                            program: rawData[index][6],
-                            programStage: rawData[index][6],
+                            program: program,
+                            programStage: attendanceConfig.programStage,
                             orgUnit: rawData[index][7],
                             enrollment: rawData[index][5],
                             dataValues: [
