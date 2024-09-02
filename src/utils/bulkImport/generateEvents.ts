@@ -9,8 +9,8 @@ export function getSheetData(names: string[], sheets: any, program: string, atte
     function get1stDateIndex(headers: string[]) {
         const regex = /^\d{4}-\d{2}-\d{2}$/
 
-        for (let index = 0; index < headers.length; index++)
-            if (regex.test(headers[index])) return index
+        for (let index = 0; index < headers?.length; index++)
+            if (regex.test(headers?.[index])) return index
 
         return -1
     }
@@ -20,7 +20,7 @@ export function getSheetData(names: string[], sheets: any, program: string, atte
 
         if (names.length > 1) {
             const firstSheet = utils.sheet_to_json(sheets[names[0]], { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: "" }) as unknown as Array<any>;
-            const lastSheet = utils.sheet_to_json(sheets[names[names.length - 1]], { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: "" }) as unknown as Array<any>;
+            const lastSheet = utils.sheet_to_json(sheets[names[names?.length - 1]], { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: "" }) as unknown as Array<any>;
             const indexOf1stDateInSheet = get1stDateIndex(firstSheet[1])
 
             dateRange.sDate = new Date(firstSheet[1][indexOf1stDateInSheet])
@@ -30,7 +30,7 @@ export function getSheetData(names: string[], sheets: any, program: string, atte
             const indexOf1stDateInSheet = get1stDateIndex(rawData[1])
 
             dateRange.sDate = new Date(rawData[1][indexOf1stDateInSheet])
-            dateRange.eDate = new Date(rawData[1][rawData[1].length - 1])
+            dateRange.eDate = new Date(rawData[1][rawData[1]?.length - 1])
         }
 
         return dateRange
@@ -41,13 +41,15 @@ export function getSheetData(names: string[], sheets: any, program: string, atte
         const indexOf1stDateInSheet = get1stDateIndex(rawData[1])
 
         if (indexOf1stDateInSheet === -1) continue
-        else for (let index = 2; index < rawData.length; index++) {
+        else for (let index = 2; index < rawData?.length; index++) {
             for (let cell = indexOf1stDateInSheet; cell < rawData[index]?.length; cell++) {
 
                 if (rawData[index][cell] == 'Non School Day' || !rawData[index][cell])
                     continue
                 else {
-                    teis.push({ tei: rawData[index][6], enrollment: rawData[index][5] })
+                    if (teis.findIndex(x => x.tei === rawData[index][6]) === -1)
+                        teis.push({ tei: rawData[index][6], enrollment: rawData[index][5] })
+
                     attendanceEvents.push(
                         {
                             trackedEntityInstance: rawData[index][6],

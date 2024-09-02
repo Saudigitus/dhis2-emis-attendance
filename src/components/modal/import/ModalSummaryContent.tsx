@@ -6,12 +6,15 @@ import { type ButtonActionProps } from "../../../types/buttons/ButtonActions";
 import Title from "../../text/Title";
 import { Collapse } from "@material-ui/core";
 import { InfoOutlined } from "@material-ui/icons";
-import { LinearProgress } from "@material-ui/core";
 import SummaryCards from "./SummaryCards";
 import SummaryDetails from "./SummaryDetails";
-import { useCreateDataValues, useTableData, useUpdateEvents } from "../../../hooks";
+import { useTableData } from "../../../hooks";
 import { getEventsToUpate } from "../../../utils/bulkImport/getEventsToUpdate";
 import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
+import { ProgressState } from "../../../schema/linearProgress";
+import { useRecoilState } from "recoil";
+import ImportProgress from "./importProgress";
+import useUploadEvents from "../../../hooks/events/useUploadEvents";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -22,21 +25,49 @@ interface ModalContentProps {
 const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const { setOpen, summaryData, sheetData } = props;
     const [showDetails, setShowDetails] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [doneProcessing, setDoneProcessing] = useState(false)
+    const [importStats, setImportStats] = useState({ imported: 0, updated: 0, ignored: 0, error: 0 })
     const { getAttendanceData } = useTableData()
-    const { uploadValues } = useCreateDataValues()
-    const { uploadValues: updateExistingValues } = useUpdateEvents()
+    const { uploadValues, useUpdateValues } = useUploadEvents()
     const { getDataStoreData } = getSelectedKey()
+    const [progress, updateProgress] = useRecoilState(ProgressState)
 
     async function importAttendanceValues() {
-        await getAttendanceData({ dealingWithExcel: true, ...sheetData.dateRange, trackedEntityIds: sheetData.trackedEntityIds })
-            .then(async (resp) => {
-                const separatedEvents = getEventsToUpate(sheetData.attendanceEvents, resp, getDataStoreData.attendance.status)
-                if (separatedEvents.new.length > 0) await uploadValues(separatedEvents.new)
-                for (const event of separatedEvents.toUpdate) {
-                    await updateExistingValues(event.event, event.id)
-                }
-            })
+        updateProgress((progress: any) => ({ progress: 0, buffer: 15 }))
+        const attData = await getAttendanceData({ dealingWithExcel: true, ...sheetData.dateRange, trackedEntityIds: sheetData.trackedEntityIds })
+        const separatedEvents = getEventsToUpate(sheetData.attendanceEvents, attData, getDataStoreData.attendance.status)
+
+        if (separatedEvents.new.length > 0)
+            for (let index = 0; index < separatedEvents.new.length / 3; index++) {
+                await uploadValues(separatedEvents.new.slice(index * 3, (index + 1) * 3)).then((resp) => {
+                    console.log(resp, 'response')
+                    updateProgress((progress: any) => ({
+                        ...progress,
+                        progress: progress.progress + (40 / (separatedEvents.new.length / 3)),
+                        buffer: progress.buffer + (45 / (separatedEvents.new.length / 3))
+                    }))
+
+                    setImportStats((stats) => ({ ...stats, imported: separatedEvents.new.length }))
+                })
+            }
+
+        if (separatedEvents.toUpdate.length > 0)
+            for (const event of separatedEvents.toUpdate) {
+                await useUpdateValues(event.event, event.id).then((res) => {
+                    updateProgress((progress: any) => ({
+                        ...progress,
+                        progress: progress.progress + (30 / separatedEvents.toUpdate.length),
+                        buffer: progress.buffer + (35 / separatedEvents.toUpdate.length)
+                    }))
+
+                    setImportStats((stats) => ({ ...stats, updated: stats.updated + 1 }))
+                })
+            }
+
+        if (separatedEvents.toUpdate.length === 0 && separatedEvents.new.length === 0) {
+            updateProgress((progress: any) => ({ progress: 100, buffer: 100 }))
+        }
+
     }
 
     const handleShowDetails = () => {
@@ -48,18 +79,20 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             label: "Dry Run",
             loading: false,
             disabled: false,
-            onClick: () => { }
+            onClick: () => { },
+            className: progress?.progress != null && styles.remove
         },
         {
             label: "Import new students",
             primary: true,
             loading: false,
             disabled: false,
-            onClick: () => { void importAttendanceValues() }
+            onClick: () => { void importAttendanceValues() },
+            className: progress?.progress != null && styles.remove
         },
         {
             label: "Close",
-            disabled: loading,
+            disabled: false,
             loading: false,
             onClick: () => {
                 setOpen(false)
@@ -67,29 +100,8 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         }
     ];
 
-    return (
-        <>
-            <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Attendance import preview </Tag>
-
-            <WithPadding />
-            <Title label={`Import Summary`} />
-            <WithPadding />
-
-            <SummaryCards {...summaryData} />
-
-            <WithPadding />
-            <ButtonStrip>
-                <Button small icon={<InfoOutlined className={styles.infoIcon} />} onClick={handleShowDetails}>More details</Button>
-            </ButtonStrip>
-
-            <WithPadding />
-            <Collapse in={showDetails}>
-                <div className={styles.detailsContainer}>
-                    <SummaryDetails summaryData={summaryData} />
-                </div>
-            </Collapse>
-
-            {loading && <LinearProgress />}
+    function Actions() {
+        return (
             <ModalActions>
                 <ButtonStrip end>
                     {modalActions.map((action, i) => (
@@ -102,6 +114,42 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                     ))}
                 </ButtonStrip>
             </ModalActions>
+        )
+    }
+
+    return (
+        <>
+            {
+                progress?.progress != null ?
+                    <>
+                        <ImportProgress />
+                        <Actions />
+                    </>
+                    :
+                    <>
+                        <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Attendance import preview </Tag>
+
+                        <WithPadding />
+                        <Title label={`Import Summary`} />
+                        <WithPadding />
+
+                        <SummaryCards doneProcessing={doneProcessing} {...importStats} {...summaryData} />
+
+                        <WithPadding />
+                        <ButtonStrip>
+                            <Button small icon={<InfoOutlined className={styles.infoIcon} />} onClick={handleShowDetails}>More details</Button>
+                        </ButtonStrip>
+
+                        <WithPadding />
+                        <Collapse in={showDetails}>
+                            <div className={styles.detailsContainer}>
+                                <SummaryDetails summaryData={summaryData} />
+                            </div>
+                        </Collapse>
+
+                        <Actions />
+                    </>
+            }
         </>
     );
 }

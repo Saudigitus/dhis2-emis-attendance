@@ -128,8 +128,8 @@ export function useTableData() {
                     await getEvents(startDate, endDate, school, tei).then((resp) => {
                         updateProgress((progress: any) => ({
                             ...progress,
-                            progress: progress.progress + (43 / trackedEntityIds.length),
-                            buffer: progress.buffer + (50 / trackedEntityIds.length)
+                            progress: progress.progress + (30 / trackedEntityIds.length),
+                            buffer: progress.buffer + (30 / trackedEntityIds.length)
                         }))
                         attendanceValuesByTei.push(...resp?.results?.instances)
                     })
