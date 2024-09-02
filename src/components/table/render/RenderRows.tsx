@@ -1,95 +1,109 @@
-import React from 'react'
-import i18n from '@dhis2/d2-i18n';
-import classNames from 'classnames';
-import {RowCell, RowTable} from '../components';
-import AttendanceViewMode from './AttendanceViewMode';
-import AttendanceEditMode from './AttendanceEditMode';
-import {type RenderRowsProps} from '../../../types/table/TableContentTypes';
-import {makeStyles, type Theme, createStyles} from '@material-ui/core/styles';
-import {VariablesTypes} from '../../../types/variables/AttributeColumns';
-import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
+import React from "react";
+import i18n from "@dhis2/d2-i18n";
+import classNames from "classnames";
+import { RowCell, RowTable } from "../components";
+import AttendanceViewMode from "./AttendanceViewMode";
+import AttendanceEditMode from "./AttendanceEditMode";
+import { type RenderRowsProps } from "../../../types/table/TableContentTypes";
+import { makeStyles, type Theme, createStyles } from "@material-ui/core/styles";
+import { VariablesTypes } from "../../../types/variables/AttributeColumns";
+import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        row: {width: "100%"},
-        dataRow: {
-            cursor: 'pointer',
-            '&:hover': {
-                backgroundColor: '#F1FBFF'
-            }
-        },
-        cell: {
-            padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${theme.spacing(1) /
-            2}px ${theme.spacing(1) * 3}px`,
-            '&:last-child': {
-                paddingRight: theme.spacing(1) * 3
-            },
-            borderBottomColor: "rgba(224, 224, 224, 1)"
-        },
-        bodyCell: {
-            fontSize: theme.typography.pxToRem(13),
-            color: theme.palette.text.primary
-        },
-        opacity: {opacity: 0.5}
-    })
+  createStyles({
+    row: { width: "100%" },
+    dataRow: {
+      cursor: "pointer",
+      "&:hover": {
+        backgroundColor: "#F1FBFF",
+      },
+    },
+    cell: {
+      padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${
+        theme.spacing(1) / 2
+      }px ${theme.spacing(1) * 3}px`,
+      "&:last-child": {
+        paddingRight: theme.spacing(1) * 3,
+      },
+      borderBottomColor: "rgba(224, 224, 224, 1)",
+    },
+    bodyCell: {
+      fontSize: theme.typography.pxToRem(13),
+      color: theme.palette.text.primary,
+    },
+    opacity: { opacity: 0.5 },
+  })
 );
 
 function RenderRows(props: RenderRowsProps): React.ReactElement {
-    const {
-        headerData,
-        rowsData,
-        attendanceMode,
-        setTableData
-    } = props
-    const classes = useStyles()
+  const {
+    headerData,
+    rowsData,
+    attendanceMode,
+    setTableData,
+    getAttendanceData,
+  } = props
+  const classes = useStyles();
 
-    if (rowsData.length === 0) {
-        return (
-            <RowTable
-                className={classes.row}
-            >
-                <RowCell
-                    className={classNames(classes.cell, classes.bodyCell)}
-                    colspan={headerData?.filter(x => x.visible)?.length}
-                >
-                    {i18n.t('No data to display')}
-                </RowCell>
-            </RowTable>
-        );
-    }
-
+  if (rowsData.length === 0) {
     return (
-        <React.Fragment>
-            {
-                rowsData.map((row, index) => {
-                    const cells = headerData?.filter(x => (x.visible && x.type !== VariablesTypes.DataElement))?.map(column => (
-                        <RowCell
-                            key={column.id}
-                            className={classNames(classes.cell, classes.bodyCell)}
-                            cellClass={column?.class}
-                        >
-                            {attendanceMode === "view"
-                                ? <AttendanceViewMode headers={headerData} trackedEntity={row.trackedEntity}
-                                                      column={column} value={row[column.id]}/>
-                                : <AttendanceEditMode column={column} value={row} rowsData={rowsData}
-                                                      setTableData={setTableData}/>
-                            }
-                        </RowCell>
-                    ));
+      <RowTable className={classes.row}>
+        <RowCell
+          className={classNames(classes.cell, classes.bodyCell)}
+          colspan={headerData?.filter((x) => x.visible)?.length}
+        >
+          {i18n.t("No data to display")}
+        </RowCell>
+      </RowTable>
+    );
+  }
 
-                    return (
-                        <RowTable
-                            key={index}
-                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.status) && classes.opacity)}
-                            inactive={checkCanceled(row.status)}
-                        >
-                            {cells}
-                        </RowTable>
-                    );
-                })
-            }
-        </React.Fragment>
-    )
+  return (
+    <React.Fragment>
+      {rowsData.map((row, index) => {
+        const cells = headerData
+          ?.filter((x) => x.visible && x.type !== VariablesTypes.DataElement)
+          ?.map((column) => (
+            <RowCell
+              key={column.id}
+              className={classNames(classes.cell, classes.bodyCell)}
+              cellClass={column?.class}
+            >
+              {attendanceMode === "view" ? (
+                <AttendanceViewMode
+                  headers={headerData}
+                  trackedEntity={row.trackedEntity}
+                  column={column}
+                  value={row[column.id]}
+                />
+              ) : (
+                <AttendanceEditMode
+                  column={column}
+                  value={row}
+                  rowsData={rowsData}
+                  setTableData={setTableData}
+                  getAttendanceData={getAttendanceData}
+                />
+              )}
+            </RowCell>
+          ));
+
+        return (
+          <RowTable
+            key={index}
+            className={classNames(
+              classes.row,
+              classes.dataRow,
+              checkCanceled(row.status) && classes.opacity
+            )}
+            inactive={checkCanceled(row.status)}
+          >
+            {cells}
+          </RowTable>
+        );
+      })}
+    </React.Fragment>
+  );
 }
 
-export default RenderRows
+export default RenderRows;

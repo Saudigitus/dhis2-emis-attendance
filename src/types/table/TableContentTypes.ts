@@ -33,10 +33,11 @@ interface RenderHeaderProps {
 }
 
 interface RenderRowsProps {
-    headerData: CustomAttributeProps[],
-    rowsData: any[],
+    headerData: CustomAttributeProps[]
+    rowsData: any[]
     attendanceMode: "view" | "edit"
     setTableData: any
+    getAttendanceData: any
 }
 
 interface TableSortProps {

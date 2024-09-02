@@ -14,6 +14,7 @@ interface AttendanceEditModeProps {
     }
     rowsData: any[]
     setTableData: any
+    getAttendanceData: any
 }
 
 interface AttendanceViewModeProps {

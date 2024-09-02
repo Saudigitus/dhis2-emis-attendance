@@ -69,6 +69,7 @@ export function useTableData() {
                 setLoading(true)
                 const events = await eventsResults(page, pageSize, school, headerFieldsState)
 
+
                 const attendanceValuesByTei: AttendanceQueryResults = {
                     results: { instances: [] }
                 }
@@ -83,6 +84,10 @@ export function useTableData() {
                     const attendanceResults: AttendanceQueryResults = await getEvents(selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), school, tei)
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
+
+                console.log("attendanceValuesByTei : ", attendanceValuesByTei)
+
+                
                 // Get the list of trackedEntityIds attributes from the events
                 const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
                     ? await engine.query(TEI_QUERY({
