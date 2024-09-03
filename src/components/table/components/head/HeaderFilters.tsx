@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip } from "@dhis2/ui";
+import { Chip, Button, IconView24, IconViewOff24 } from "@dhis2/ui";
 import { SelectedDateAddNewState } from "../../../../schema/attendanceSchema";
 import { format } from "date-fns";
 import { TableColumnState } from "../../../../schema/tableColumnsSchema";
@@ -8,7 +8,6 @@ import styles from "./header.module.css";
 import { useHeader, useAttendanceMode } from "../../../../hooks";
 import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
 import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
-import { Button, IconView24, IconViewOff24 } from "@dhis2/ui";
 import { ReasonOfAbsenseState } from "../../../../schema/reasonOfAbsenseSchema";
 import { useAttendanceConst } from "../../../../utils/constants/attendance/attendanceConst";
 import {
@@ -27,8 +26,8 @@ function HeaderFilters({ bulkAction }: any) {
   const [bulkActions, setBulkActions] = useRecoilState(bulkActionsState);
   const { attendanceMode } = useAttendanceMode();
 
-  const setTableHeaders = (tableHeaders: any) => setTableColumns(tableHeaders);
-  const handleClick = () => setSeeReason(!seeReason);
+  const setTableHeaders = (tableHeaders: any) => { setTableColumns(tableHeaders); };
+  const handleClick = () => { setSeeReason(!seeReason); };
 
   const [disabled, _] = React.useState(false);
 
@@ -45,23 +44,26 @@ function HeaderFilters({ bulkAction }: any) {
                 border: "1px solid #ccc",
                 cursor: "pointer",
               }}
-              onClick={() => setBulkActions("present")}
+              title="Mark all as Present"
+              onClick={() => {
+                setBulkActions("present");
+              }}
             >
               <CheckCircleOutline
                 style={disabled ? styles : { color: "#21B26D" }}
               />
             </span>
-            <span
+            {/* <span
               style={{
                 padding: "5px 10px",
                 margin: "5px",
                 border: "1px solid #ccc",
                 cursor: "pointer",
               }}
-              onClick={() => setBulkActions("late")}
+              onClick={() => { setBulkActions("late"); }}
             >
               <AccessTime style={disabled ? styles : { color: "#EAB631" }} />
-            </span>
+            </span> */}
             <span
               style={{
                 padding: "5px 10px",
@@ -69,7 +71,10 @@ function HeaderFilters({ bulkAction }: any) {
                 border: "1px solid #ccc",
                 cursor: "pointer",
               }}
-              onClick={() => setBulkActions("absent")}
+              title="Mark all as Absent"
+              onClick={() => {
+                setBulkActions("absent");
+              }}
             >
               <HighlightOff style={disabled ? styles : { color: "#F05C5C" }} />
             </span>

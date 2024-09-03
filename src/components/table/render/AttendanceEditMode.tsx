@@ -46,17 +46,6 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
   }
 
   function onChangeAttendance(v: string, type: string) {
-    console.log("values: ", {
-      dataElementId: column.id,
-      dataElementValue: v,
-      rowsData,
-      setTableData,
-      teiDetails: value,
-      typeField: type,
-      setselectedTerm,
-    });
-
-    // return
     if (value[date]?.eventId) {
       void updateValues({
         dataElementId: column.id,
@@ -84,7 +73,7 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
     if (await isAttendanceDataElement(column.id, bulkActions)) {
       onChangeAttendance(bulkActions, VariablesTypes.Attendance);
       setBulkActions(null);
-      getAttendanceData()
+      getAttendanceData();
     }
   };
 
