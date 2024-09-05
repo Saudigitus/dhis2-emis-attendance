@@ -17,8 +17,9 @@ import {
 } from "@material-ui/icons";
 import { getIcon } from "../../../../utils/table/attendance/getIcom";
 import { bulkActionsState } from "../../../../schema/bulkActionsSchema";
+import { getSelectedKey } from "../../../../utils/commons/dataStore/getSelectedKey";
 
-function HeaderFilters({ bulkAction }: any) {
+function HeaderFilters() {
   const { columns } = useHeader();
   const [updatedCols, setTableColumns] = useRecoilState(TableColumnState);
   const { selectedDate } = useRecoilValue(SelectedDateAddNewState);
@@ -26,8 +27,15 @@ function HeaderFilters({ bulkAction }: any) {
   const [bulkActions, setBulkActions] = useRecoilState(bulkActionsState);
   const { attendanceMode } = useAttendanceMode();
 
-  const setTableHeaders = (tableHeaders: any) => { setTableColumns(tableHeaders); };
-  const handleClick = () => { setSeeReason(!seeReason); };
+  const { getDataStoreData } = getSelectedKey();
+  const dataStoreOptions = getDataStoreData?.attendance?.statusOptions || [];
+
+  const setTableHeaders = (tableHeaders: any) => {
+    setTableColumns(tableHeaders);
+  };
+  const handleClick = () => {
+    setSeeReason(!seeReason);
+  };
 
   const [disabled, _] = React.useState(false);
 
@@ -37,47 +45,50 @@ function HeaderFilters({ bulkAction }: any) {
       <div className="mt-2">
         {attendanceMode === "edit" ? (
           <>
-            <span
-              style={{
-                padding: "5px 10px",
-                margin: "5px",
-                border: "1px solid #ccc",
-                cursor: "pointer",
-              }}
-              title="Mark all as Present"
-              onClick={() => {
-                setBulkActions("present");
-              }}
-            >
-              <CheckCircleOutline
-                style={disabled ? styles : { color: "#21B26D" }}
-              />
-            </span>
-            {/* <span
-              style={{
-                padding: "5px 10px",
-                margin: "5px",
-                border: "1px solid #ccc",
-                cursor: "pointer",
-              }}
-              onClick={() => { setBulkActions("late"); }}
-            >
-              <AccessTime style={disabled ? styles : { color: "#EAB631" }} />
-            </span> */}
-            <span
-              style={{
-                padding: "5px 10px",
-                margin: "5px",
-                border: "1px solid #ccc",
-                cursor: "pointer",
-              }}
-              title="Mark all as Absent"
-              onClick={() => {
-                setBulkActions("absent");
-              }}
-            >
-              <HighlightOff style={disabled ? styles : { color: "#F05C5C" }} />
-            </span>
+            {dataStoreOptions.map((option) => {
+              if (option.icon === "Done") {
+                return (
+                  <span
+                    style={{
+                      padding: "5px 10px",
+                      margin: "5px",
+                      border: "1px solid #ccc",
+                      cursor: "pointer",
+                    }}
+                    title={`Mark all as ${option.key}`}
+                    onClick={() => {
+                      setBulkActions(option.code);
+                    }}
+                  >
+                    <CheckCircleOutline
+                      style={disabled ? styles : { color: option.color }}
+                    />
+                  </span>
+                );
+              }
+
+              if (option.icon === "Clear") {
+                return (
+                  <span
+                    style={{
+                      padding: "5px 10px",
+                      margin: "5px",
+                      border: "1px solid #ccc",
+                      cursor: "pointer",
+                    }}
+                    title={`Mark all as ${option.key}`}
+                    onClick={() => {
+                      setBulkActions(option.code);
+                    }}
+                  >
+                    <HighlightOff
+                      style={disabled ? styles : { color: option.color }}
+                    />
+                  </span>
+                );
+              }
+            })}
+
             <Chip selected>
               Selected date:{" "}
               {selectedDate &&

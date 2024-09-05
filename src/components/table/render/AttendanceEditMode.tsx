@@ -15,10 +15,16 @@ import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
 import { getIcon } from "../../../utils/table/attendance/getIcom";
 import ReasonOfAbsence from "../components/reasonOfAbsence/reasonOfAbsesnce";
 import { bulkActionsState } from "../../../schema/bulkActionsSchema";
-import useCheckIfAttendanceElement from "../../../hooks/events/useCheckIfAttendanceElement";
 
 function AttendanceEditMode(props: AttendanceEditModeProps) {
-  const { column, value, rowsData, setTableData, getAttendanceData } = props;
+  const {
+    column,
+    value,
+    rowsData,
+    setTableData,
+    getAttendanceData,
+    rowsDataIndex,
+  } = props;
   const [selectedTerm, setselectedTerm] = useState<string>("");
   const { getDataStoreData } = getSelectedKey();
   const attendanceId = getDataStoreData.attendance.status;
@@ -29,7 +35,6 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
   const { updateValues } = useUpdateEvents();
   const { attendanceConst } = useAttendanceConst();
   const programConfigState = useRecoilValue(ProgramConfigState);
-  const { isAttendanceDataElement } = useCheckIfAttendanceElement();
 
   const [bulkActions, setBulkActions] = useRecoilState<any>(bulkActionsState);
 
@@ -70,16 +75,17 @@ function AttendanceEditMode(props: AttendanceEditModeProps) {
   }
 
   const handleBulkAction = async () => {
-    if (await isAttendanceDataElement(column.id, bulkActions)) {
+    if (column.id === attendanceId) {
       onChangeAttendance(bulkActions, VariablesTypes.Attendance);
       setBulkActions(null);
-      getAttendanceData();
+      if (rowsDataIndex && rowsDataIndex + 1 === rowsData.length) {
+        getAttendanceData();
+      }
     }
   };
 
   useEffect(() => {
     if (bulkActions) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       handleBulkAction();
     }
   }, [bulkActions]);

@@ -83,6 +83,7 @@ function RenderRows(props: RenderRowsProps): React.ReactElement {
                   rowsData={rowsData}
                   setTableData={setTableData}
                   getAttendanceData={getAttendanceData}
+                  rowsDataIndex={index}
                 />
               )}
             </RowCell>

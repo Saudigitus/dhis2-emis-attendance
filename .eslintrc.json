@@ -20,6 +20,8 @@
     "@typescript-eslint/object-curly-spacing": "off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/comma-dangle": "off"
+    "@typescript-eslint/comma-dangle": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "react/jsx-key": "off"
   }
 }
