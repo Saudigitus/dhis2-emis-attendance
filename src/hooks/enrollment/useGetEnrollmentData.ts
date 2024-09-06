@@ -28,7 +28,7 @@ export function useGetEnrollmentData() {
         if (Object.keys(getDataStoreData)?.length) {
 
             try {
-                return getTei(program, orgUnit as string, trackedEntityIds)
+                return getTei(program, trackedEntityIds)
                     .then(async (trackedEntityInstance: any) => {
                         let rows: any = []
                         let counter = 0

@@ -32,10 +32,12 @@ export const SummaryRow = (props: SummaryRowProps): React.ReactElement => {
 interface SummaryTableProps {
     displayData: Record<string, any>[]
     activeTab: string
+    doneProcessing: boolean
+    importStats: any
 }
 
 export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
-    const { displayData, activeTab } = props
+    const { displayData, activeTab, doneProcessing, importStats } = props
     const [expandedRows, setExpandedRows] = useState<string[]>([])
     const recordsName = activeTab === "new" ? "new records" : activeTab
 
@@ -52,35 +54,58 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
             <DataTable>
                 <thead>
                     <tr>
-                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Ref</th>
-                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Sheet</th>
                         {
-                            activeTab == 'invalidSheets' ?
-                                <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Description</th>
-                                :
+                            doneProcessing ?
                                 <>
-                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Name</th>
-                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>School</th>
-                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>{activeTab === 'invalid' ? 'Invalid attendance cells' : 'Filled attendance cells'}</th>
+                                    <>
+                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Status</th>
+                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Imported</th>
+                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Updated</th>
+                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Igonored</th>
+                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Conflicts</th>
+                                    </>
+                                </> :
+                                <>
+                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Ref</th>
+                                    <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Sheet</th>
+                                    {
+                                        activeTab == 'invalidSheets' ?
+                                            <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Description</th>
+                                            :
+                                            <>
+                                                <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Name</th>
+                                                <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>School</th>
+                                                <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>{activeTab === 'invalid' ? 'Invalid attendance cells' : 'Filled attendance cells'}</th>
+                                            </>
+                                    }
                                 </>
                         }
                     </tr>
                 </thead>
                 <DataTableBody>
                     {
-                        displayData?.map((student, index) => {
-                            return (
-                                <SummaryRow
-                                    // key={`student-${student.ref}`}
-                                    reference={`student-${student?.ref}`}
-                                    data={student}
-                                    expandedRows={expandedRows}
-                                    expandedToggle={expandedToggle}
-                                    index={index}
-                                    tab={activeTab}
-                                />
-                            )
-                        })
+                        doneProcessing ?
+                            <DataTableRow>
+                                <DataTableCell align="center">{ }</DataTableCell>
+                                <DataTableCell align="center">{importStats?.imported}</DataTableCell>
+                                <DataTableCell align="center">{importStats?.updated}</DataTableCell>
+                                <DataTableCell align="center">{importStats?.ignored}</DataTableCell>
+                                <DataTableCell align="center">{importStats?.error}</DataTableCell>
+                            </DataTableRow>
+                            :
+                            displayData?.map((student, index) => {
+                                return (
+                                    <SummaryRow
+                                        // key={`student-${student.ref}`}
+                                        reference={`student-${student?.ref}`}
+                                        data={student}
+                                        expandedRows={expandedRows}
+                                        expandedToggle={expandedToggle}
+                                        index={index}
+                                        tab={activeTab}
+                                    />
+                                )
+                            })
                     }
                     {(displayData?.length === 0) &&
                         <DataTableRow>
@@ -88,7 +113,7 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                         </DataTableRow>
                     }
                 </DataTableBody>
-            </DataTable>
+            </DataTable >
 
         </>)
 }

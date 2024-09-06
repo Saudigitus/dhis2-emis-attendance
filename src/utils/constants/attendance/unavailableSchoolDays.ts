@@ -6,15 +6,15 @@ export const unavailableSchoolDays = () => {
     const config = useRecoilValue(SchoolCalendarSate);
 
     function unavailableDays(date: Date) {
-        if (isHoliday(date, config.holidays)) {
+        if (isHoliday(date, config?.holidays)) {
             return true
         }
 
-        if (isweekDayDisabled(date, config.weekDays)) {
+        if (isweekDayDisabled(date, config?.weekDays)) {
             return true
         }
 
-        if (isClassPeriod(date, config.classPeriods)) {
+        if (isClassPeriod(date, config?.classPeriods)) {
             return false
         }
 

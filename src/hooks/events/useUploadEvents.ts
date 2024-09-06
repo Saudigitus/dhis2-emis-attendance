@@ -1,23 +1,27 @@
-import { useDataEngine, useDataMutation } from "@dhis2/app-runtime";
+import { useDataEngine } from "@dhis2/app-runtime";
 
 const postEvent: any = {
-    resource: 'events',
+    resource: 'tracker',
     type: 'create',
-    data: ({ form }: { form: any }) => form
+    data: ({ form }: { form: any }) => form,
+    params: {
+        importStrategy: "CREATE_AND_UPDATE",
+        async: false
+    }
 }
 
 const putEvent: any = {
-    resource: 'events',
-    type: 'update',
-    id: ({ id }: { id: any }) => id,
-    data: ({ form }: { form: any }) => form
+    resource: 'tracker',
+    type: 'create',
+    data: ({ form }: { form: any }) => form,
+    params: {
+        importStrategy: "UPDATE",
+        async: false
+    }
 }
 
 const useUploadEvents = () => {
     const engine = useDataEngine()
-
-    // const [mutate, response] = useDataMutation(postEvent)
-    const [upate, responseUpdate] = useDataMutation(putEvent)
 
     async function uploadValues(data: any) {
         let response: any = ""
@@ -29,24 +33,23 @@ const useUploadEvents = () => {
 
             return response
         } catch (error) {
-
-            console.log(response, error)
         }
-
 
     }
 
-    async function useUpdateValues(data: any, id: string) {
+    async function useUpdateValues(data: any) {
         try {
-            return await upate({ form: data, id: id }).then((x: any) => {
-                return x
+            let response = await engine.mutate(putEvent, {
+                variables: { form: { events: data } }
             })
+
+            console.log(response)
         } catch (error) {
             return error
         }
     }
 
-    return { uploadValues, useUpdateValues, responseUpdate: responseUpdate }
+    return { uploadValues, useUpdateValues }
 }
 
 export default useUploadEvents

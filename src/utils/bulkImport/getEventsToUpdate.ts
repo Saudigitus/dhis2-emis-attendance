@@ -8,12 +8,9 @@ export function getEventsToUpate(excelEvents: any, apiEvents: any, statusId: str
             const ExcelEventIndex = newEvents.findIndex((x: any) => x.eventDate === eventDay && x.trackedEntityInstance === teiId)
 
             if (ExcelEventIndex !== -1) {
-                if (apiEvents[teiId][eventDay]?.status != newEvents[ExcelEventIndex]?.dataValues[0].value) {
-                    eventsToUpdate = [...eventsToUpdate, {
-                        event: newEvents[ExcelEventIndex],
-                        id: `${apiEvents[teiId][eventDay]?.eventId}/${statusId}`
-                    }]
-                }
+                eventsToUpdate = [...eventsToUpdate, {
+                    ...newEvents[ExcelEventIndex], event: apiEvents[teiId][eventDay]?.eventId,
+                }]
 
                 newEvents.splice(ExcelEventIndex, 1)
             }

@@ -38,13 +38,13 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         const separatedEvents = getEventsToUpate(sheetData.attendanceEvents, attData, getDataStoreData.attendance.status)
 
         if (separatedEvents.new.length > 0)
-            for (let index = 0; index < separatedEvents.new.length / 3; index++) {
-                await uploadValues(separatedEvents.new.slice(index * 3, (index + 1) * 3)).then((resp) => {
-                    console.log(resp, 'response')
+            for (let index = 0; index < separatedEvents.new.length / 20; index++) {
+                await uploadValues(separatedEvents.new.slice(index * 20, (index + 1) * 20)).then((resp) => {
+
                     updateProgress((progress: any) => ({
                         ...progress,
-                        progress: progress.progress + (40 / (separatedEvents.new.length / 3)),
-                        buffer: progress.buffer + (45 / (separatedEvents.new.length / 3))
+                        progress: progress.progress + (40 / (separatedEvents.new.length / 20)),
+                        buffer: progress.buffer + (45 / (separatedEvents.new.length / 20))
                     }))
 
                     setImportStats((stats) => ({ ...stats, imported: separatedEvents.new.length }))
@@ -52,8 +52,8 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             }
 
         if (separatedEvents.toUpdate.length > 0)
-            for (const event of separatedEvents.toUpdate) {
-                await useUpdateValues(event.event, event.id).then((res) => {
+            for (let index = 0; index < separatedEvents.toUpdate.length / 20; index++) {
+                await useUpdateValues(separatedEvents.toUpdate.slice(index * 20, (index + 1) * 20)).then((res) => {
                     updateProgress((progress: any) => ({
                         ...progress,
                         progress: progress.progress + (30 / separatedEvents.toUpdate.length),
@@ -67,7 +67,6 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         if (separatedEvents.toUpdate.length === 0 && separatedEvents.new.length === 0) {
             updateProgress((progress: any) => ({ progress: 100, buffer: 100 }))
         }
-
     }
 
     const handleShowDetails = () => {
@@ -87,7 +86,15 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             primary: true,
             loading: false,
             disabled: false,
-            onClick: () => { void importAttendanceValues() },
+            onClick: () => {
+                importAttendanceValues().then(() => {
+                    updateProgress({ progress: 100, buffer: 100 })
+                })
+                    .finally(() => {
+                        updateProgress({ progress: null, buffer: null })
+                        setDoneProcessing(true)
+                    })
+            },
             className: progress?.progress != null && styles.remove
         },
         {
@@ -143,7 +150,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                         <WithPadding />
                         <Collapse in={showDetails}>
                             <div className={styles.detailsContainer}>
-                                <SummaryDetails summaryData={summaryData} />
+                                <SummaryDetails doneProcessing={doneProcessing} importStats={importStats} summaryData={summaryData} />
                             </div>
                         </Collapse>
 

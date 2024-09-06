@@ -3,7 +3,7 @@ import { TabBar, Tab } from '@dhis2/ui'
 import { Pagination } from "../../table/components";
 import { SummaryTable } from "./SummaryContent";
 
-const SummaryDetails = ({ summaryData }: { summaryData: any }): React.ReactElement => {
+const SummaryDetails = ({ summaryData, doneProcessing, importStats }: { summaryData: any, doneProcessing: boolean, importStats: any }): React.ReactElement => {
     const [data, setData] = useState<any>([])
     const [activeTab, setActiveTab] = useState("new")
     const [pagination, setPagination] = useState<any>({ new: { page: 1, pageSize: 10 }, invalid: { page: 1, pageSize: 10 }, invalidSheets: { page: 1, pageSize: 10 } });
@@ -44,6 +44,8 @@ const SummaryDetails = ({ summaryData }: { summaryData: any }): React.ReactEleme
                 <SummaryTable
                     displayData={data}
                     activeTab={activeTab}
+                    doneProcessing={doneProcessing}
+                    importStats={importStats}
                 />
 
                 <br />

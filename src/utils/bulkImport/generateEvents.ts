@@ -63,7 +63,8 @@ export function getSheetData(names: string[], sheets: any, program: string, atte
                                     value: getOptionCode(rawData[index][cell], attendanceConfig.statusOptions)
                                 }
                             ],
-                            eventDate: rawData[1][cell]
+                            eventDate: rawData[1][cell],
+                            occurredAt: rawData[1][cell]
                         }
                     )
                 }
