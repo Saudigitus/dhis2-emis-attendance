@@ -13,7 +13,7 @@ export function useGetEnrollmentData() {
     const { eventsResults } = useGetEvents()
     const { urlParamiters } = useParams()
     const { show } = useShowAlerts()
-    const { school: orgUnit } = urlParamiters()
+    const { school: orgUnit, schoolName } = urlParamiters()
     const { getDataStoreData } = getSelectedKey()
     const [error, setError] = useState<boolean>(false)
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
@@ -28,11 +28,13 @@ export function useGetEnrollmentData() {
         if (Object.keys(getDataStoreData)?.length) {
 
             try {
-                return getTei(program, orgUnit as string, trackedEntityIds)
+                return getTei(program, trackedEntityIds)
                     .then(async (trackedEntityInstance: any) => {
                         let rows: any = []
+                        let counter = 0
 
                         for (const tei of trackedEntityInstance?.results?.instances) {
+                            counter++
                             let enrollment = events.find((x: any) => x.trackedEntity == tei?.trackedEntity)?.enrollment
 
                             const registrationData: any = await eventsResults(false,
@@ -46,19 +48,24 @@ export function useGetEnrollmentData() {
                                 tei?.trackedEntity
                             )
 
+                            const currEnrollment = registrationData?.find((x: any) => x.enrollment === enrollment)
+
                             rows = [...rows, {
-                                enrollmentDate: registrationData?.find((x: any) => x.enrollment === enrollment)?.occurredAt,
+                                ref: "" + counter + " ",
+                                school: schoolName,
+                                orgUnit: currEnrollment?.orgUnit,
+                                enrollmentDate: currEnrollment?.occurredAt,
                                 enrollment: enrollment,
                                 studentId: tei.trackedEntity,
                                 ...attributes(tei?.attributes ?? []),
-                                ...dataValues(registrationData?.find((x: any) => x.enrollment === enrollment)?.dataValues ?? []),
+                                ...dataValues(currEnrollment?.dataValues ?? []),
                                 ...attendanceFormatter(attendance[tei?.trackedEntity])
                             }]
 
                             updateProgress((progress: any) => ({
                                 ...progress,
                                 progress: progress.progress + (43 / trackedEntityInstance?.results?.instances?.length),
-                                buffer: progress.buffer + (44 / trackedEntityIds.length)
+                                buffer: progress.buffer + (40 / trackedEntityInstance.results?.instances?.length)
                             }))
                         }
 

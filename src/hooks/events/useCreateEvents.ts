@@ -21,6 +21,12 @@ const useCreateDataValues = () => {
 
     const [mutate, response] = useDataMutation(putEvent)
 
+    async function uploadValues(data: any) {
+        await mutate({ form: { events: data } }).then((x: any) => {
+            console.log(x)
+        })
+    }
+
     async function createValues(props: CreateEventProps) {
         const { teiDetails, dataElementId, dataElementValue, typeField, rowsData, setTableData, setselectedTerm } = props
 
@@ -78,7 +84,7 @@ const useCreateDataValues = () => {
         setTimeout(hide, 5000);
     }
 
-    return { createValues }
+    return { createValues, uploadValues }
 }
 
 export default useCreateDataValues

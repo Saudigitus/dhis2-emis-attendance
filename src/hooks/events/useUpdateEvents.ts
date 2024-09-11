@@ -14,7 +14,11 @@ const putEvent: any = {
     data: ({ form }: { form: any }) => form
 }
 
-
+// const mutation: any = {
+//     resource: 'events',
+//     type: 'update',
+//     data: ({ events }: { events: any }) => events
+// };
 
 const useUpdateEvents = () => {
     const [controlError, setcontrolError] = useState(true)
@@ -23,6 +27,17 @@ const useUpdateEvents = () => {
     const { hide, show } = useShowAlerts()
 
     const [mutate, response] = useDataMutation(putEvent)
+    // const [update, updateResponse] = useDataMutation(mutation)
+
+    async function uploadValues(data: any, id: string) {
+        // await update({ events: data }).then((x: any) => {
+        //     console.log(x, updateResponse)
+        // })
+
+        await mutate({ form: data, id: id }).then((x: any) => {
+            // console.log(x, response)
+        })
+    }
 
     async function updateValues(props: CreateEventProps) {
         const { teiDetails, dataElementId, dataElementValue, typeField, rowsData, setTableData, setselectedTerm } = props
@@ -86,7 +101,7 @@ const useUpdateEvents = () => {
         setTimeout(hide, 5000);
     }
 
-    return { updateValues }
+    return { updateValues, uploadValues }
 }
 
 export default useUpdateEvents

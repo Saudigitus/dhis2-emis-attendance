@@ -7,8 +7,8 @@ import { IconAddCircle24, Button, ButtonStrip, IconCalendar24 } from "@dhis2/ui"
 import { SelectedDateAddNewState, SelectedDateState } from '../../../../schema/attendanceSchema';
 import { DropdownButtonComponent, DropDownCalendar, ImportContent, ModalComponent } from '../../../../components';
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
-import ModalExportTemplateContent from '../../../modal/ModalExportTemplateContent';
 import { ProgressState } from '../../../../schema/linearProgress';
+import ModalExportTemplateContent from '../../../modal/export/ModalExportTemplateContent';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();

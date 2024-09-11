@@ -11,6 +11,7 @@ import { getAttendanceDays } from "../../utils/table/header/formatResponse"
 import { generateAttendanceDays } from "../../utils/table/header/generateAttendanceDays"
 import { useTableData } from "../tableData/useTableData"
 import { ProgressState } from "../../schema/linearProgress"
+import { getFilterLables } from "../../utils/exporter/getFilterLables"
 
 export function dataExporter({ school, selectedDates }: { school: string, selectedDates: { startDate: Date, endDate: Date, key: string }[] }) {
     const { eventsResults } = useGetEvents()
@@ -23,7 +24,6 @@ export function dataExporter({ school, selectedDates }: { school: string, select
     const { getValidDaysToExport } = generateAttendanceDays()
     const { getAttendanceData } = useTableData()
     const updateProgress = useSetRecoilState(ProgressState)
-    const { statusOptions, ...otherProperties } = getDataStoreData.attendance;
     const { ExcelGenerator } = gererateFile()
 
     async function exporter() {
@@ -41,14 +41,14 @@ export function dataExporter({ school, selectedDates }: { school: string, select
         )
 
         await getAttendanceData({
-            exporting: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {
+            dealingWithExcel: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {
                 return { tei: x.trackedEntity, enrollment: x.enrollment }
             }), sDate: selectedDates?.[0].startDate, eDate: selectedDates?.[0].endDate
         })
             .then((response) => {
                 getEnrollmentDetails(events, response).then((rows) => {
                     let headers = getHeaders()
-                    rows[0]['dataElements'] = JSON.stringify(otherProperties)
+                    let filters = getFilterLables(getDataStoreData.attendance.statusOptions)
 
                     headers = [...headers, {
                         name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
@@ -60,7 +60,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                         })
                     }]
 
-                    void ExcelGenerator(headers, rows).finally(() => {
+                    void ExcelGenerator(headers, rows, filters).finally(() => {
                         updateProgress({ progress: null })
                     })
                 })

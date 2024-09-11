@@ -12,7 +12,7 @@ import FlyoutMenuComponent from "./menu/FlyoutMenu";
 import WithPadding from "./template/WithPadding";
 import WithBorder from "./template/WithBorder";
 import ModalComponent from "./modal/Modal";
-import ImportContent from "./modal/ImportContent"
+import ImportContent from "./modal/import/ImportContent"
 import Title from "./text/Title";
 import { Item, MenuItemContainer } from "./menuItem/index"
 import Subtitle from "./text/Subtitle";

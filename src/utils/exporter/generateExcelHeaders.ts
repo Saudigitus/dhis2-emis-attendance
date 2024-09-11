@@ -4,13 +4,18 @@ import { getDataStoreKeys } from "../commons/dataStore/getDataStoreKeys"
 
 export const dfHeaders = [
     {
-        "header": "enrollment",
+        "header": "Enrollment",
         "key": "enrollment",
         "width": 25
     },
     {
-        "header": "studentId",
+        "header": "Tracked Entity Id",
         "key": "studentId",
+        "width": 25
+    },
+    {
+        "header": "School UID",
+        "key": "orgUnit",
         "width": 25
     }
 ]
@@ -25,7 +30,15 @@ export function generateHeaders() {
         programConfigState.programStages.filter(x => {
             if (x.id == registration.programStage) {
 
-                let section: any = { name: x.displayName, headers: [...dfHeaders], fill: 'FCE5CD' }
+                let section: any = {
+                    name: x.displayName,
+                    headers: [...dfHeaders, {
+                        header: 'School',
+                        key: 'school',
+                        width: 25,
+                    }],
+                    fill: 'FCE5CD'
+                }
 
                 x.programStageDataElements.map((de) => {
                     section = {
@@ -49,15 +62,12 @@ export function generateHeaders() {
             }
         })
 
-        formatedHeaders.unshift({ name: 'Student profile', headers: att, fill: 'D9EAD3' })
         formatedHeaders.unshift({
-            name: 'Data Elements',
-            headers: [{
-                header: 'Attedance Data Elements',
-                key: 'dataElements',
+            name: 'Student profile', headers: [{
+                header: 'Ref',
+                key: 'ref',
                 width: 25,
-            }],
-            fill: ''
+            }, ...att], fill: 'D9EAD3'
         })
 
         return formatedHeaders

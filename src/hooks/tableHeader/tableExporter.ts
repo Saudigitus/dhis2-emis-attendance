@@ -2,17 +2,24 @@ import Excel from 'exceljs'
 import { saveAs } from 'file-saver'
 import { getWorkSheets } from '../../utils/exporter/getWorkSheet';
 import { alignment, border, dataValidation, fill, lock } from '../../utils/exporter/exporterConsts';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ProgressState } from '../../schema/linearProgress';
 import { dfHeaders } from '../../utils/exporter/generateExcelHeaders';
 import { unavailableSchoolDays } from '../../utils/constants/attendance/unavailableSchoolDays';
+import { ProgramConfigState } from '../../schema/programSchema';
+import { getMetaData } from '../../utils/exporter/getMetadata';
+import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
+import metadataHeaders from '../../utils/constants/exportTemplate/metadataHeaders.json'
 
 export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
     const { unavailableDays } = unavailableSchoolDays()
+    const program = useRecoilValue(ProgramConfigState)
+    const { getDataStoreData } = getSelectedKey()
+    const metadata = getMetaData(program, getDataStoreData)
+    const password = '#saudigitus_SEMIS_Attendance#'
 
-    async function ExcelGenerator(headers: any[], rows: any[]) {
-        updateProgress({ progress: 90 })
+    async function ExcelGenerator(headers: any[], rows: any[], filters: string) {
 
         const workbook = new Excel.Workbook();
         const workSheets = getWorkSheets(headers.find(x => x.name === 'Attendance').headers)
@@ -85,7 +92,7 @@ export function gererateFile() {
                 if (regex.test(columnHeader as string)) {
                     sheet.eachRow((row: any) => {
                         const cell = row.getCell(colIndex);
-                        cell.dataValidation = dataValidation;
+                        cell.dataValidation = { ...dataValidation, formulae: ['"' + filters + '"'] };
                     });
                 }
             });
@@ -109,8 +116,13 @@ export function gererateFile() {
                 });
             });
 
-            sheet.protect('#saudigitus_SEMIS_Attendance#', lock);
+            sheet.protect(password, lock);
         })
+
+        sheet = workbook.addWorksheet('Metadata')
+        sheet.columns = metadataHeaders
+        metadata.map((row: any) => sheet.addRow(row))
+        sheet.protect(password, lock)
 
         const buf = await workbook.xlsx.writeBuffer()
         saveAs(new Blob([buf]), `teste.xlsx`)

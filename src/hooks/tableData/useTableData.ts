@@ -44,17 +44,11 @@ export function useTableData() {
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
-    const {
-        hide,
-        show
-    } = useShowAlerts()
+    const { hide, show } = useShowAlerts()
     const school = urlParamiters().school as unknown as string
     const { getDataStoreData } = getSelectedKey()
     const attendanceConfig = getSelectedKey()?.getDataStoreData?.attendance
-    const {
-        getEvents,
-        eventsResults
-    } = useGetEvents()
+    const { getEvents, eventsResults } = useGetEvents()
     const updateProgress = useSetRecoilState(ProgressState)
 
     const showError = (error: any) => {
@@ -114,34 +108,35 @@ export function useTableData() {
         }
     }
 
-    async function getAttendanceData(exporting?: { exporting: boolean, trackedEntityIds: { tei: string, enrollment: string }[], sDate: Date, eDate: Date }) {
+    async function getAttendanceData(excel?: { dealingWithExcel: boolean, trackedEntityIds: { tei: string, enrollment: string }[], sDate: Date, eDate: Date }) {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
-                if (!exporting?.exporting) setLoading(true)
-                else updateProgress((progress: any) => ({ ...progress, progress: 10 }))
-
-                let startDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
-                    endDate = getDates(exporting?.exporting, exporting?.exporting ? exporting.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
+                let startDate = getDates(excel?.dealingWithExcel, excel?.dealingWithExcel ? excel.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
+                    endDate = getDates(excel?.dealingWithExcel, excel?.dealingWithExcel ? excel.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
 
                 const localData = [...tableData]
                 let dataToExport: any = {}
                 const attendanceValuesByTei: AttendanceFormaterProps[] = []
 
-                const trackedEntityIds = exporting?.exporting ? exporting?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
+                if (!excel?.dealingWithExcel) setLoading(true)
+                else updateProgress((progress: any) => ({ ...progress, progress: 10 }))
+
+
+                const trackedEntityIds = excel?.dealingWithExcel ? excel?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
 
                 for (const tei of trackedEntityIds) {
                     await getEvents(startDate, endDate, school, tei).then((resp) => {
                         updateProgress((progress: any) => ({
                             ...progress,
-                            progress: progress.progress + (43 / trackedEntityIds.length),
-                            buffer: progress.buffer + (40 / trackedEntityIds.length)
+                            progress: progress.progress + (30 / trackedEntityIds.length),
+                            buffer: progress.buffer + (30 / trackedEntityIds.length)
                         }))
                         attendanceValuesByTei.push(...resp?.results?.instances)
                     })
                 }
 
-                if (exporting?.exporting) {
-                    for (const tei of exporting.trackedEntityIds) {
+                if (excel?.dealingWithExcel) {
+                    for (const tei of excel.trackedEntityIds) {
                         const attendanceDetails = attendanceValuesByTei.filter((x) => x.trackedEntity === tei.tei).filter((attendance: any) => attendance.enrollment === tei.enrollment);
                         dataToExport[tei.tei] = attendanceFormater(attendanceDetails, attendanceConfig)
                     }
@@ -156,7 +151,7 @@ export function useTableData() {
             } catch (error: any) {
                 showError(error)
             } finally {
-                if (!exporting?.exporting) setLoading(false)
+                if (!excel?.dealingWithExcel) setLoading(false)
             }
         }
     }

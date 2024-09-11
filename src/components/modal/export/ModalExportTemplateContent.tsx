@@ -1,17 +1,17 @@
 import React, { useState, useRef } from "react";
 import { ModalActions, Button, ButtonStrip, Tag, IconInfo16 } from "@dhis2/ui";
 import { Form } from "react-final-form";
-import GroupForm from "../form/GroupForm";
-import { type ModalExportTemplateProps } from "../../types/modal/ModalTypes";
-import { useParams } from "../../hooks";
-import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
-import useGetExportTemplateForm from "../../hooks/form/useGetExportTemplateForm";
-import { formFields } from "../../utils/constants/exportTemplate/exportEmptyTemplateForm";
+import GroupForm from "../../form/GroupForm";
+import { type ModalExportTemplateProps } from "../../../types/modal/ModalTypes";
+import { useParams } from "../../../hooks";
+import { getDataStoreKeys } from "../../../utils/commons/dataStore/getDataStoreKeys";
+import useGetExportTemplateForm from "../../../hooks/form/useGetExportTemplateForm";
+import { formFields } from "../../../utils/constants/exportTemplate/exportEmptyTemplateForm";
 import { addDays } from "date-fns";
-import { dataExporter } from "../../hooks/dataExporter/dataExporter";
-import { ProgressState } from "../../schema/linearProgress";
+import { dataExporter } from "../../../hooks/dataExporter/dataExporter";
+import { ProgressState } from "../../../schema/linearProgress";
 import { useRecoilValue } from "recoil";
-import styles from './modal.module.css'
+import styles from '../modal.module.css'
 import ExportProgress from "./exportingProgress";
 
 function ModalExportTemplateContent(props: ModalExportTemplateProps): React.ReactElement {

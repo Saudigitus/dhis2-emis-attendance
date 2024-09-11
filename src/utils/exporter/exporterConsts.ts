@@ -35,7 +35,6 @@ export const lock = {
 export const dataValidation = {
     type: 'list',
     allowBlank: true,
-    formulae: ['"present,absent,late"'],  // Options must be a comma-separated string
     showDropDown: true,
     showErrorMessage: true,
     errorTitle: 'Invalid Entry',

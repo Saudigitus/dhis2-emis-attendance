@@ -1,12 +1,12 @@
 import Lottie from "lottie-react";
-import search from '../../assets/animations/search.json'
-import styles from './modal.module.css'
-import loading from '../../assets/animations/loading.json'
-import LinearBuffer from "../progress/linearProgress";
-import calendar3 from '../../assets/animations/calendar3.json'
-import { ProgressState } from "../../schema/linearProgress";
+import search from '../../../assets/animations/search.json'
+import styles from '../modal.module.css'
+import loading from '../../../assets/animations/loading.json'
+import LinearBuffer from "../../progress/linearProgress";
+import calendar3 from '../../../assets/animations/calendar3.json'
+import { ProgressState } from "../../../schema/linearProgress";
 import { useRecoilValue } from "recoil";
-import useGetSectionTypeLabel from "../../hooks/commons/useGetSectionTypeLabel";
+import useGetSectionTypeLabel from "../../../hooks/commons/useGetSectionTypeLabel";
 
 export default function ExportProgress() {
     const progress = useRecoilValue(ProgressState)
