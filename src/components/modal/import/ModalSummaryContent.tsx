@@ -12,87 +12,112 @@ import { useTableData } from "../../../hooks";
 import { getEventsToUpate } from "../../../utils/bulkImport/getEventsToUpdate";
 import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
 import { ProgressState } from "../../../schema/linearProgress";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import ImportProgress from "./importProgress";
 import useUploadEvents from "../../../hooks/events/useUploadEvents";
+import { LinearProgress } from "@material-ui/core";
+import { ImportStatsSchema } from "../../../schema/importStatsSchema";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
     summaryData: any
-    sheetData: { attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { sDate: Date, eDate: Date } }
+    sheetData: {
+        attendanceEvents: any[],
+        trackedEntityIds: {
+            tei: string,
+            enrollment: string
+        }[],
+        dateRange: {
+            sDate: Date,
+            eDate: Date
+        }
+    }
 }
 
 const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const { setOpen, summaryData, sheetData } = props;
     const [showDetails, setShowDetails] = useState(false)
-    const [doneProcessing, setDoneProcessing] = useState(false)
-    const [importStats, setImportStats] = useState({ imported: 0, updated: 0, ignored: 0, error: 0 })
+    const [doneProcessing, setDoneProcessing] = useState({ validate: false, commit: false })
     const { getAttendanceData } = useTableData()
     const { uploadValues, useUpdateValues } = useUploadEvents()
     const { getDataStoreData } = getSelectedKey()
     const [progress, updateProgress] = useRecoilState(ProgressState)
+    const setStats = useSetRecoilState(ImportStatsSchema)
 
-    async function importAttendanceValues() {
-        updateProgress((progress: any) => ({ progress: 0, buffer: 15 }))
-        const attData = await getAttendanceData({ dealingWithExcel: true, ...sheetData.dateRange, trackedEntityIds: sheetData.trackedEntityIds })
-        const separatedEvents = getEventsToUpate(sheetData.attendanceEvents, attData, getDataStoreData.attendance.status)
-
-        if (separatedEvents.new.length > 0)
-            for (let index = 0; index < separatedEvents.new.length / 20; index++) {
-                await uploadValues(separatedEvents.new.slice(index * 20, (index + 1) * 20)).then((resp) => {
-
-                    updateProgress((progress: any) => ({
-                        ...progress,
-                        progress: progress.progress + (40 / (separatedEvents.new.length / 20)),
-                        buffer: progress.buffer + (45 / (separatedEvents.new.length / 20))
-                    }))
-
-                    setImportStats((stats) => ({ ...stats, imported: separatedEvents.new.length }))
-                })
-            }
-
-        if (separatedEvents.toUpdate.length > 0)
-            for (let index = 0; index < separatedEvents.toUpdate.length / 20; index++) {
-                await useUpdateValues(separatedEvents.toUpdate.slice(index * 20, (index + 1) * 20)).then((res) => {
-                    updateProgress((progress: any) => ({
-                        ...progress,
-                        progress: progress.progress + (30 / separatedEvents.toUpdate.length),
-                        buffer: progress.buffer + (35 / separatedEvents.toUpdate.length)
-                    }))
-
-                    setImportStats((stats) => ({ ...stats, updated: stats.updated + 1 }))
-                })
-            }
-
-        if (separatedEvents.toUpdate.length === 0 && separatedEvents.new.length === 0) {
-            updateProgress((progress: any) => ({ progress: 100, buffer: 100 }))
+    function splitArrayIntoChunks(array: any[], chunkSize: number) {
+        const result = [];
+        for (let i = 0; i < array.length; i += chunkSize) {
+            const chunk = array.slice(i, i + chunkSize);
+            result.push(chunk);
         }
+        return result;
     }
 
-    const handleShowDetails = () => {
-        setShowDetails(!showDetails);
+    async function importAttendanceValues(importMode: "VALIDATE" | "COMMIT") {
+        updateProgress((progress: any) => ({ progress: 0, buffer: 15 }))
+        setStats({ statsCount: { created: 0, ignored: 0, total: 0, updated: 0 }, errorDetails: [] })
+
+        const attData = await getAttendanceData({ dealingWithExcel: true, ...sheetData.dateRange, trackedEntityIds: sheetData.trackedEntityIds })
+
+        const separatedEvents = getEventsToUpate(sheetData.attendanceEvents, attData, getDataStoreData.attendance.status)
+        const toRegister = splitArrayIntoChunks(separatedEvents.new, 60)
+        const toUpdate = splitArrayIntoChunks(separatedEvents.toUpdate, 60)
+        const newTotalLoad = separatedEvents.toUpdate.length > 0 ? 40 : 80
+        const updateTotalLoad = separatedEvents.new.length > 0 ? 40 : 80
+
+        if (toRegister.length > 0) {
+            for (const events of toRegister) {
+                await uploadValues(events, importMode).finally(() => {
+                    updateProgress((progress: any) => ({
+                        ...progress,
+                        progress: progress.progress + (newTotalLoad / toRegister.length),
+                        buffer: progress.buffer + (newTotalLoad + 5 / toRegister.length)
+                    }))
+                })
+            }
+        }
+
+        if (toUpdate.length > 0) {
+            for (const event of toUpdate) {
+                await useUpdateValues(event, importMode).finally(() => {
+                    updateProgress((progress: any) => ({
+                        ...progress,
+                        progress: progress.progress + (updateTotalLoad / toUpdate.length),
+                        buffer: progress.buffer + (updateTotalLoad + 5 / toUpdate.length)
+                    }))
+                })
+            }
+        }
+
+        updateProgress((progress: any) => ({ progress: 100, buffer: 100 }))
     }
+
+    const handleShowDetails = () => { setShowDetails(!showDetails); }
 
     const modalActions: ButtonActionProps[] = [
         {
             label: "Dry Run",
             loading: false,
-            disabled: false,
-            onClick: () => { },
+            disabled: doneProcessing.validate || doneProcessing.commit,
+            onClick: () => {
+                setDoneProcessing({ validate: true, commit: false })
+                void importAttendanceValues('VALIDATE')
+                    .finally(() => {
+                        updateProgress({ progress: null, buffer: null })
+                    })
+            },
             className: progress?.progress != null && styles.remove
         },
         {
             label: "Import new students",
             primary: true,
             loading: false,
-            disabled: false,
+            disabled: doneProcessing.commit || summaryData?.summary?.new?.length === 0,
             onClick: () => {
-                importAttendanceValues().then(() => {
-                    updateProgress({ progress: 100, buffer: 100 })
-                })
+                setDoneProcessing((done: any) => ({ ...done, commit: true }))
+                void importAttendanceValues('COMMIT')
                     .finally(() => {
                         updateProgress({ progress: null, buffer: null })
-                        setDoneProcessing(true)
                     })
             },
             className: progress?.progress != null && styles.remove
@@ -127,7 +152,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     return (
         <>
             {
-                progress?.progress != null ?
+                (progress?.progress != null && doneProcessing.commit) ?
                     <>
                         <ImportProgress />
                         <Actions />
@@ -140,7 +165,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                         <Title label={`Import Summary`} />
                         <WithPadding />
 
-                        <SummaryCards doneProcessing={doneProcessing} {...importStats} {...summaryData} />
+                        <SummaryCards doneProcessing={doneProcessing.commit || doneProcessing.validate} {...summaryData} />
 
                         <WithPadding />
                         <ButtonStrip>
@@ -150,10 +175,10 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
                         <WithPadding />
                         <Collapse in={showDetails}>
                             <div className={styles.detailsContainer}>
-                                <SummaryDetails doneProcessing={doneProcessing} importStats={importStats} summaryData={summaryData} />
+                                <SummaryDetails doneProcessing={doneProcessing.commit || doneProcessing.validate} summaryData={summaryData} />
                             </div>
                         </Collapse>
-
+                        {progress?.progress != null && doneProcessing.validate && <LinearProgress />}
                         <Actions />
                     </>
             }

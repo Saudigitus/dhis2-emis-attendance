@@ -3,12 +3,14 @@ import { TabBar, Tab } from '@dhis2/ui'
 import { Pagination } from "../../table/components";
 import { SummaryTable } from "./SummaryContent";
 
-const SummaryDetails = ({ summaryData, doneProcessing, importStats }: { summaryData: any, doneProcessing: boolean, importStats: any }): React.ReactElement => {
+const SummaryDetails = ({ summaryData, doneProcessing }: { summaryData: any, doneProcessing: boolean }): React.ReactElement => {
     const [data, setData] = useState<any>([])
     const [activeTab, setActiveTab] = useState("new")
     const [pagination, setPagination] = useState<any>({ new: { page: 1, pageSize: 10 }, invalid: { page: 1, pageSize: 10 }, invalidSheets: { page: 1, pageSize: 10 } });
     const currentPage = pagination[activeTab]?.page;
     const tabPageSize = pagination[activeTab]?.pageSize;
+    const newRecs = summaryData?.summary?.new?.reduce((sum: any, item: any) => sum + item.columns, 0);
+    const invalid = summaryData?.summary?.invalid?.reduce((sum: any, item: any) => sum + item.columns, 0);
 
     const handlePageChange = (newPage: number) => {
         setPagination((prev: any) => ({
@@ -25,31 +27,30 @@ const SummaryDetails = ({ summaryData, doneProcessing, importStats }: { summaryD
 
     return (
         <>
-            <TabBar>
+            {!doneProcessing && <TabBar>
                 <Tab onClick={() => { setActiveTab('new') }} selected={activeTab === 'new'}>
-                    {summaryData.summary?.new?.length}<br /> New Records
+                    {newRecs}<br /> New Records
                 </Tab>
                 <Tab onClick={() => { setActiveTab('invalid') }} selected={activeTab === 'invalid'}>
-                    {summaryData.summary?.invalid?.length}<br /> Invalid Records
+                    {invalid}<br /> Invalid Records
                 </Tab>
                 <Tab onClick={() => { setActiveTab('invalidSheets') }} selected={activeTab === 'invalidSheets'}>
                     {summaryData.summary?.invalidSheets?.length}<br /> Invalid Sheets
                 </Tab>
-            </TabBar>
+            </TabBar>}
 
             <br />
 
-            <div style={{ height: "137px", overflow: "auto" }}>
+            <div style={{ height: doneProcessing ? "200px" : "137px", overflow: "auto" }}>
 
                 <SummaryTable
                     displayData={data}
                     activeTab={activeTab}
                     doneProcessing={doneProcessing}
-                    importStats={importStats}
                 />
 
                 <br />
-                {summaryData.summary?.[activeTab]?.length > 0 &&
+                {(summaryData.summary?.[activeTab]?.length > 0 && !doneProcessing) &&
                     <Pagination
                         page={currentPage}
                         onPageChange={handlePageChange}

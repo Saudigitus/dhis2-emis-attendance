@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import { DataTable, DataTableBody, DataTableCell, DataTableRow, } from '@dhis2/ui'
+import { ImportStatsSchema } from '../../../schema/importStatsSchema';
+import { useRecoilValue } from 'recoil';
+import { ErrorDetailsTable } from './ErrorDetailsTable';
 
 interface SummaryRowProps {
     data: any
     reference: string
-    expandedRows: any[]
-    expandedToggle: any
     tab: string
     index: number
 }
 
 export const SummaryRow = (props: SummaryRowProps): React.ReactElement => {
-    const { data, reference, expandedRows, expandedToggle, tab, index } = props
+    const { data, tab, index } = props
 
     return (
-        <DataTableRow
-            expanded={expandedRows.includes(reference)}
-            onExpandToggle={() => expandedToggle(`${reference}`)}
-        >
+        <DataTableRow >
             <DataTableCell align="center">{tab == 'invalidSheets' ? index + 1 : data?.ref}</DataTableCell>
             <DataTableCell align="center">{data?.sheet}</DataTableCell>
             {tab !== 'invalidSheets' && <>
@@ -33,24 +31,16 @@ interface SummaryTableProps {
     displayData: Record<string, any>[]
     activeTab: string
     doneProcessing: boolean
-    importStats: any
 }
 
 export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
-    const { displayData, activeTab, doneProcessing, importStats } = props
-    const [expandedRows, setExpandedRows] = useState<string[]>([])
+    const { displayData, activeTab, doneProcessing } = props
+    const [expanded, setExpanded] = useState<boolean>(false)
     const recordsName = activeTab === "new" ? "new records" : activeTab
-
-    const expandedToggle = (rowId: string) => {
-        if (expandedRows.includes(rowId)) {
-            setExpandedRows(expandedRows.filter((row) => row !== rowId))
-        } else {
-            setExpandedRows([...expandedRows, rowId])
-        }
-    }
+    const stats = useRecoilValue(ImportStatsSchema)
 
     return (
-        <  >
+        <>
             <DataTable>
                 <thead>
                     <tr>
@@ -58,11 +48,10 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                             doneProcessing ?
                                 <>
                                     <>
-                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Status</th>
+                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}></th>
                                         <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Imported</th>
                                         <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Updated</th>
                                         <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Igonored</th>
-                                        <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Conflicts</th>
                                     </>
                                 </> :
                                 <>
@@ -75,7 +64,7 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                                             <>
                                                 <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>Name</th>
                                                 <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>School</th>
-                                                <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>{activeTab === 'invalid' ? 'Invalid attendance cells' : 'Filled attendance cells'}</th>
+                                                <th style={{ textAlign: "center", background: "#eee", fontSize: "15px", padding: "10px", fontWeight: "400" }}>{activeTab === 'invalid' ? 'Invalid Records' : 'Valid Records'}</th>
                                             </>
                                     }
                                 </>
@@ -85,22 +74,21 @@ export const SummaryTable = (props: SummaryTableProps): React.ReactElement => {
                 <DataTableBody>
                     {
                         doneProcessing ?
-                            <DataTableRow>
-                                <DataTableCell align="center">{ }</DataTableCell>
-                                <DataTableCell align="center">{importStats?.imported}</DataTableCell>
-                                <DataTableCell align="center">{importStats?.updated}</DataTableCell>
-                                <DataTableCell align="center">{importStats?.ignored}</DataTableCell>
-                                <DataTableCell align="center">{importStats?.error}</DataTableCell>
+                            <DataTableRow
+                                expanded={expanded}
+                                onExpandToggle={() => setExpanded(!expanded)}
+                                expandableContent={<ErrorDetailsTable />}
+                            >
+                                <DataTableCell align="center">{stats.statsCount?.created}</DataTableCell>
+                                <DataTableCell align="center">{stats.statsCount?.updated}</DataTableCell>
+                                <DataTableCell align="center">{stats.statsCount?.ignored}</DataTableCell>
                             </DataTableRow>
                             :
                             displayData?.map((student, index) => {
                                 return (
                                     <SummaryRow
-                                        // key={`student-${student.ref}`}
                                         reference={`student-${student?.ref}`}
                                         data={student}
-                                        expandedRows={expandedRows}
-                                        expandedToggle={expandedToggle}
                                         index={index}
                                         tab={activeTab}
                                     />

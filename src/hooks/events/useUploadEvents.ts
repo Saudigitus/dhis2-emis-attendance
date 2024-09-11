@@ -1,52 +1,69 @@
-import { useDataEngine } from "@dhis2/app-runtime";
+import { useDataMutation } from "@dhis2/app-runtime";
+import { ImportStatsSchema } from "../../schema/importStatsSchema";
+import { useSetRecoilState } from "recoil";
 
 const postEvent: any = {
     resource: 'tracker',
     type: 'create',
-    data: ({ form }: { form: any }) => form,
-    params: {
-        importStrategy: "CREATE_AND_UPDATE",
-        async: false
-    }
+    data: ({ form }: any) => form,
+    params: ({ params }: any) => params
 }
 
 const putEvent: any = {
     resource: 'tracker',
     type: 'create',
-    data: ({ form }: { form: any }) => form,
-    params: {
-        importStrategy: "UPDATE",
-        async: false
-    }
+    data: ({ form }: any) => form,
+    params: ({ params }: any) => params
 }
 
 const useUploadEvents = () => {
-    const engine = useDataEngine()
-
-    async function uploadValues(data: any) {
-        let response: any = ""
-
-        try {
-            response = await engine.mutate(postEvent, {
-                variables: { form: { events: data } }
-            })
-
-            return response
-        } catch (error) {
-        }
-
+    const setStats = useSetRecoilState(ImportStatsSchema)
+    const params = {
+        async: false,
+        atomicMode: "OBJECT",
+        reportMode: "FULL"
     }
 
-    async function useUpdateValues(data: any) {
-        try {
-            let response = await engine.mutate(putEvent, {
-                variables: { form: { events: data } }
-            })
+    function importSummary(summary: any) {
+        setStats((prevStats: any) => ({
+            ...prevStats,
+            statsCount: {
+                ignored: summary?.stats?.ignored ? summary?.stats?.ignored + prevStats.statsCount?.ignored : prevStats.statsCount?.ignored,
+                created: summary?.stats?.created ? summary?.stats?.created + prevStats.statsCount?.created : prevStats.statsCount?.created,
+                updated: summary?.stats?.updated ? summary?.stats?.updated + prevStats.statsCount?.updated : prevStats.statsCount?.updated,
+                total: summary?.stats?.total ? summary?.stats?.total + prevStats.statsCount?.total : prevStats.statsCount?.total,
+            }
+        }))
 
-            console.log(response)
-        } catch (error) {
-            return error
+        if (summary?.validationReport?.errorReports) {
+            setStats((prevStats) => ({
+                ...prevStats,
+                errorDetails: [
+                    ...prevStats.errorDetails,
+                    ...summary?.validationReport?.errorReports
+                ]
+            }))
         }
+    }
+
+    const [mutate,] = useDataMutation(postEvent, {
+        onComplete(data) {
+            importSummary(data)
+        },
+    })
+
+    const [update,] = useDataMutation(putEvent, {
+        onComplete(data) {
+            importSummary(data)
+        },
+    })
+
+    async function uploadValues(data: any, importMode: string) {
+        return await mutate({ form: { events: data }, params: { ...params, importStrategy: "CREATE_AND_UPDATE", importMode } })
+    }
+
+    async function useUpdateValues(data: any, importMode: string) {
+        return await update({ form: { events: data }, params: { ...params, importStrategy: "UPDATE", importMode } })
     }
 
     return { uploadValues, useUpdateValues }

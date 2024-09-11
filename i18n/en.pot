@@ -5,11 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2023-07-13T07:19:04.656Z\n"
-"PO-Revision-Date: 2023-07-13T07:19:04.656Z\n"
+"POT-Creation-Date: 2024-09-09T13:05:48.138Z\n"
+"PO-Revision-Date: 2024-09-09T13:05:48.138Z\n"
 
 msgid "Column"
 msgstr "Column"
+
+msgid "Errors"
+msgstr "Errors"
 
 msgid "Select columns"
 msgstr "Select columns"
