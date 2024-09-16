@@ -44,6 +44,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     if (updateProgress?.progress >= 100) {
       const timeout = setTimeout(() => {
         setUpdateProgress({ progress: null, buffer: null });
+        setOpen(false)
       }, 400);
       return () => clearTimeout(timeout)
     }

@@ -32,11 +32,12 @@ interface ModalContentProps {
             sDate: Date,
             eDate: Date
         }
-    }
+    },
+    setOpenDragNDrop: (value: boolean) => void
 }
 
 const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
-    const { setOpen, summaryData, sheetData } = props;
+    const { setOpen, summaryData, sheetData, setOpenDragNDrop } = props;
     const [showDetails, setShowDetails] = useState(false)
     const [doneProcessing, setDoneProcessing] = useState({ validate: false, commit: false })
     const { getAttendanceData } = useTableData()
@@ -132,6 +133,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             loading: false,
             onClick: () => {
                 setOpen(false)
+                setOpenDragNDrop(false)
             }
         }
     ];

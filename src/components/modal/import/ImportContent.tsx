@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ImportContentProps } from "../../../types/modal/ModalTypes";
 import { CloudUpload } from "@material-ui/icons";
 import { DropzoneDialog } from "material-ui-dropzone";
@@ -23,7 +23,7 @@ const theme = createTheme({
 
 function ImportContent(props: ImportContentProps): React.ReactElement {
   const { setOpen, open } = props;
-  const [openErrorModal, setOpenErrorModal] = useState(false)
+  const [openSummaryModal, setOpenSummaryModal] = useState(false)
   const [errorDetails, setErrorDetails] = useState({})
   const [sheetData, setSheetData] = useState<{ attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { startDate: string, endDate: string } } | any>({})
   const classes = useStyles();
@@ -45,7 +45,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
       const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
       const allData = getSheetData(workbook.SheetNames.slice(0, -1), workbook.Sheets, getDataStoreData.program, getDataStoreData.attendance)
       setSheetData(allData)
-      setOpenErrorModal(true)
+      setOpenSummaryModal(true)
       setErrorDetails({ ...validation })
     };
 
@@ -54,7 +54,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
 
   return (
     <>
-      {!openErrorModal ?
+      {!openSummaryModal ?
         <MuiThemeProvider theme={theme}>
           <DropzoneDialog
             dialogTitle={"Bulk Attendance"}
@@ -83,11 +83,12 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
             clearOnUnmount={true}
           />
         </MuiThemeProvider>
-        : <ModalComponent title={`Bulk attendance summary`} open={openErrorModal} setOpen={setOpenErrorModal}>
+        : <ModalComponent title={`Bulk attendance summary`} open={openSummaryModal} setOpen={setOpenSummaryModal}>
           <ModalSummaryContent
-            setOpen={setOpenErrorModal}
+            setOpen={setOpenSummaryModal}
             summaryData={errorDetails}
             sheetData={sheetData}
+            setOpenDragNDrop={setOpen}
           />
         </ModalComponent>}
     </>
