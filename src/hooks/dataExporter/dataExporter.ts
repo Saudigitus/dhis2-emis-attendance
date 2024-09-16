@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { HeaderFieldsState } from "../../schema/headersSchema"
 import { useGetEvents } from "../events/useGetEvents"
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey"
@@ -23,11 +23,11 @@ export function dataExporter({ school, selectedDates }: { school: string, select
     const programConfigState = useRecoilValue(ProgramConfigState);
     const { getValidDaysToExport } = generateAttendanceDays()
     const { getAttendanceData } = useTableData()
-    const updateProgress = useSetRecoilState(ProgressState)
+    const [, updateProgress] = useRecoilState(ProgressState)
     const { ExcelGenerator } = gererateFile()
 
     async function exporter() {
-        updateProgress({ buffer: 15, progress: 5, phase: 'attendance' })
+        updateProgress({ buffer: 15, progress: 0, phase: 'attendance' })
 
         const events = await eventsResults(
             false,
@@ -40,31 +40,29 @@ export function dataExporter({ school, selectedDates }: { school: string, select
             school != null ? "SELECTED" : "ACCESSIBLE"
         )
 
-        await getAttendanceData({
+        updateProgress({ buffer: 15, progress: 10, phase: 'attendance' })
+
+        const response = await getAttendanceData({
             dealingWithExcel: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {
                 return { tei: x.trackedEntity, enrollment: x.enrollment }
             }), sDate: selectedDates?.[0].startDate, eDate: selectedDates?.[0].endDate
         })
-            .then((response) => {
-                getEnrollmentDetails(events, response).then((rows) => {
-                    let headers = getHeaders()
-                    let filters = getFilterLables(getDataStoreData.attendance.statusOptions)
 
-                    headers = [...headers, {
-                        name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
-                            return {
-                                header: x.displayName,
-                                key: x.id,
-                                width: 25,
-                            }
-                        })
-                    }]
+        let headers = getHeaders()
+        const rows = await getEnrollmentDetails(events, response)
+        let filters = getFilterLables(getDataStoreData.attendance.statusOptions)
 
-                    void ExcelGenerator(headers, rows, filters).finally(() => {
-                        updateProgress({ progress: null })
-                    })
-                })
+        headers = [...headers, {
+            name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
+                return {
+                    header: x.displayName,
+                    key: x.id,
+                    width: 25,
+                }
             })
+        }]
+
+        await ExcelGenerator(headers, rows, filters)
     }
 
     return { exporter }

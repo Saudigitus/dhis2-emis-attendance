@@ -5,7 +5,6 @@ import { Modal, ModalTitle, ModalContent } from "@dhis2/ui";
 import { useRecoilValue } from "recoil";
 import { ProgressState } from "../../schema/linearProgress";
 
-
 function ModalComponent(props: ModalProps): React.ReactElement {
   const { title, children, setOpen } = props
   const updateProgress = useRecoilValue(ProgressState)

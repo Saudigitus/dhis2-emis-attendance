@@ -12,12 +12,12 @@ import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import metadataHeaders from '../../utils/constants/exportTemplate/metadataHeaders.json'
 
 export function gererateFile() {
-    const updateProgress = useSetRecoilState(ProgressState)
-    const { unavailableDays } = unavailableSchoolDays()
-    const program = useRecoilValue(ProgramConfigState)
     const { getDataStoreData } = getSelectedKey()
-    const metadata = getMetaData(program, getDataStoreData)
     const password = '#saudigitus_SEMIS_Attendance#'
+    const program = useRecoilValue(ProgramConfigState)
+    const { unavailableDays } = unavailableSchoolDays()
+    const updateProgress = useSetRecoilState(ProgressState)
+    const metadata = getMetaData(program, getDataStoreData)
 
     async function ExcelGenerator(headers: any[], rows: any[], filters: string) {
 

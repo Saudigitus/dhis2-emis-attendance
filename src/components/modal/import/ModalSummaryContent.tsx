@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
 import WithPadding from "../../template/WithPadding";
 import styles from "../modal.module.css";
@@ -53,8 +53,17 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         return result;
     }
 
+    useEffect(() => {
+        if (progress?.progress >= 100) {
+            const timeout = setTimeout(() => {
+                updateProgress({ progress: null, buffer: null });
+            }, 400);
+            return () => clearTimeout(timeout)
+        }
+    }, [progress?.progress])
+
     async function importAttendanceValues(importMode: "VALIDATE" | "COMMIT") {
-        updateProgress((progress: any) => ({ progress: 0, buffer: 15 }))
+        updateProgress((progress: any) => ({ progress: 0, buffer: 10 }))
         setStats({ statsCount: { created: 0, ignored: 0, total: 0, updated: 0 }, errorDetails: [] })
 
         const attData = await getAttendanceData({ dealingWithExcel: true, ...sheetData.dateRange, trackedEntityIds: sheetData.trackedEntityIds })
@@ -62,8 +71,8 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         const separatedEvents = getEventsToUpate(sheetData.attendanceEvents, attData, getDataStoreData.attendance.status)
         const toRegister = splitArrayIntoChunks(separatedEvents.new, 60)
         const toUpdate = splitArrayIntoChunks(separatedEvents.toUpdate, 60)
-        const newTotalLoad = separatedEvents.toUpdate.length > 0 ? 40 : 80
-        const updateTotalLoad = separatedEvents.new.length > 0 ? 40 : 80
+        const newTotalLoad = separatedEvents.toUpdate.length > 0 ? 30 : 60
+        const updateTotalLoad = separatedEvents.new.length > 0 ? 30 : 60
 
         if (toRegister.length > 0) {
             for (const events of toRegister) {
@@ -81,15 +90,13 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             for (const event of toUpdate) {
                 await useUpdateValues(event, importMode).finally(() => {
                     updateProgress((progress: any) => ({
-                        ...progress,
-                        progress: progress.progress + (updateTotalLoad / toUpdate.length),
-                        buffer: progress.buffer + (updateTotalLoad + 5 / toUpdate.length)
+                            ...progress,
+                            progress: progress.progress + (updateTotalLoad / toUpdate.length),
+                            buffer: progress.buffer + (updateTotalLoad + 5 / toUpdate.length)
                     }))
                 })
             }
         }
-
-        updateProgress((progress: any) => ({ progress: 100, buffer: 100 }))
     }
 
     const handleShowDetails = () => { setShowDetails(!showDetails); }
@@ -102,9 +109,6 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             onClick: () => {
                 setDoneProcessing({ validate: true, commit: false })
                 void importAttendanceValues('VALIDATE')
-                    .finally(() => {
-                        updateProgress({ progress: null, buffer: null })
-                    })
             },
             className: progress?.progress != null && styles.remove
         },
@@ -116,9 +120,6 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             onClick: () => {
                 setDoneProcessing((done: any) => ({ ...done, commit: true }))
                 void importAttendanceValues('COMMIT')
-                    .finally(() => {
-                        updateProgress({ progress: null, buffer: null })
-                    })
             },
             className: progress?.progress != null && styles.remove
         },

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ModalActions, Button, ButtonStrip, Tag, IconInfo16 } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import GroupForm from "../../form/GroupForm";
@@ -10,7 +10,7 @@ import { formFields } from "../../../utils/constants/exportTemplate/exportEmptyT
 import { addDays } from "date-fns";
 import { dataExporter } from "../../../hooks/dataExporter/dataExporter";
 import { ProgressState } from "../../../schema/linearProgress";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import styles from '../modal.module.css'
 import ExportProgress from "./exportingProgress";
 
@@ -33,16 +33,25 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
     key: 'selection'
   }])
   const { exporter } = dataExporter({ school: orgUnit as unknown as string, selectedDates: selected })
-  const updateProgress = useRecoilValue(ProgressState)
+  const [updateProgress, setUpdateProgress] = useRecoilState(ProgressState)
 
   const modalActions = [
     { id: "cancel", type: "button", label: updateProgress?.progress != null ? "Close" : "Cancel", onClick: () => { setOpen(false) } },
     { id: "downloadTemplate", type: "submit", label: "Download template", primary: true, className: updateProgress?.progress != null && styles.remove }
   ];
 
+  useEffect(() => {
+    if (updateProgress?.progress >= 100) {
+      const timeout = setTimeout(() => {
+        setUpdateProgress({ progress: null, buffer: null });
+      }, 400);
+      return () => clearTimeout(timeout)
+    }
+  }, [updateProgress?.progress])
+
   function Actions() {
     return (
-      <ModalActions>
+      <ModalActions >
         <ButtonStrip end>
           {modalActions.map((action, i) => {
             return (
@@ -76,7 +85,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
                 return <form
                   onSubmit={async (e) => {
                     e.preventDefault()
-                    await exporter()
+                    void exporter()
                   }}
                 >
                   {
