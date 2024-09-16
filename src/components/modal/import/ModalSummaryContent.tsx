@@ -117,7 +117,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             className: progress?.progress != null && styles.remove
         },
         {
-            label: "Import new students",
+            label: "Import attendance data",
             primary: true,
             loading: false,
             disabled: doneProcessing.commit || summaryData?.summary?.new?.length === 0,
