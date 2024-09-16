@@ -17,6 +17,7 @@ import ImportProgress from "./importProgress";
 import useUploadEvents from "../../../hooks/events/useUploadEvents";
 import { LinearProgress } from "@material-ui/core";
 import { ImportStatsSchema } from "../../../schema/importStatsSchema";
+import { TeiRefetch } from "../../../schema/refecthTeiSchema";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -43,6 +44,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const { getDataStoreData } = getSelectedKey()
     const [progress, updateProgress] = useRecoilState(ProgressState)
     const setStats = useSetRecoilState(ImportStatsSchema)
+    const [refetch, setRefetch] = useRecoilState(TeiRefetch)
 
     function splitArrayIntoChunks(array: any[], chunkSize: number) {
         const result = [];
@@ -55,6 +57,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     useEffect(() => {
         if (progress?.progress >= 100) {
+            setRefetch(!refetch)
             const timeout = setTimeout(() => {
                 updateProgress({ progress: null, buffer: null });
             }, 400);
@@ -90,9 +93,9 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             for (const event of toUpdate) {
                 await useUpdateValues(event, importMode).finally(() => {
                     updateProgress((progress: any) => ({
-                            ...progress,
-                            progress: progress.progress + (updateTotalLoad / toUpdate.length),
-                            buffer: progress.buffer + (updateTotalLoad + 5 / toUpdate.length)
+                        ...progress,
+                        progress: progress.progress + (updateTotalLoad / toUpdate.length),
+                        buffer: progress.buffer + (updateTotalLoad + 5 / toUpdate.length)
                     }))
                 })
             }
