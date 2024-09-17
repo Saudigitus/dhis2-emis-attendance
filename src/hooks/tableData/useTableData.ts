@@ -119,8 +119,6 @@ export function useTableData() {
                 const attendanceValuesByTei: AttendanceFormaterProps[] = []
 
                 if (!excel?.dealingWithExcel) setLoading(true)
-                else updateProgress((progress: any) => ({ ...progress, progress: 10 }))
-
 
                 const trackedEntityIds = excel?.dealingWithExcel ? excel?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
 
@@ -128,8 +126,8 @@ export function useTableData() {
                     await getEvents(startDate, endDate, school, tei).then((resp) => {
                         updateProgress((progress: any) => ({
                             ...progress,
-                            progress: progress.progress + (30 / trackedEntityIds.length),
-                            buffer: progress.buffer + (30 / trackedEntityIds.length)
+                            progress: progress.progress + (40 / trackedEntityIds.length),
+                            buffer: progress.buffer + (40 / trackedEntityIds.length)
                         }))
                         attendanceValuesByTei.push(...resp?.results?.instances)
                     })
