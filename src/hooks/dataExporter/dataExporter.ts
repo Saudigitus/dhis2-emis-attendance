@@ -27,7 +27,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
     const { ExcelGenerator } = gererateFile()
 
     async function exporter() {
-        updateProgress({ buffer: 15, progress: 0, phase: 'attendance' })
+        updateProgress({ buffer: 15, progress: 0, stage: "export" })
 
         const events = await eventsResults(
             false,
@@ -40,7 +40,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
             school != null ? "SELECTED" : "ACCESSIBLE"
         )
 
-        updateProgress({ buffer: 15, progress: 10, phase: 'attendance' })
+        updateProgress({ buffer: 15, progress: 10, stage: "export" })
 
         const response = await getAttendanceData({
             dealingWithExcel: true, trackedEntityIds: events?.map((x: { trackedEntity: string, enrollment: string }) => {

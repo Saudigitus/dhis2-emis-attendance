@@ -125,7 +125,7 @@ export function gererateFile() {
         sheet.protect(password, lock)
 
         const buf = await workbook.xlsx.writeBuffer()
-        saveAs(new Blob([buf]), `teste.xlsx`)
+        saveAs(new Blob([buf]), `Attendance Data.xlsx`)
         updateProgress({ progress: 100 })
     }
 
