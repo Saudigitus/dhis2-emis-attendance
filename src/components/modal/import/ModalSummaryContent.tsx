@@ -13,11 +13,12 @@ import { getEventsToUpate } from "../../../utils/bulkImport/getEventsToUpdate";
 import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
 import { ProgressState } from "../../../schema/linearProgress";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import ImportProgress from "./importProgress";
+import ImportProgress from "../../progress/interactiveProgress";
 import useUploadEvents from "../../../hooks/events/useUploadEvents";
 import { LinearProgress } from "@material-ui/core";
 import { ImportStatsSchema } from "../../../schema/importStatsSchema";
 import { TeiRefetch } from "../../../schema/refecthTeiSchema";
+import IteractiveProgress from "../../progress/interactiveProgress";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -160,7 +161,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             {
                 (progress?.progress != null && doneProcessing.commit) ?
                     <>
-                        <ImportProgress />
+                        <IteractiveProgress />
                         <Actions />
                     </>
                     :

@@ -12,7 +12,7 @@ import { dataExporter } from "../../../hooks/dataExporter/dataExporter";
 import { ProgressState } from "../../../schema/linearProgress";
 import { useRecoilState } from "recoil";
 import styles from '../modal.module.css'
-import ExportProgress from "./exportingProgress";
+import IteractiveProgress from "../../progress/interactiveProgress";
 
 function ModalExportTemplateContent(props: ModalExportTemplateProps): React.ReactElement {
   const { setOpen, sectionName } = props;
@@ -42,11 +42,8 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
 
   useEffect(() => {
     if (updateProgress?.progress >= 100) {
-      const timeout = setTimeout(() => {
-        setUpdateProgress({ progress: null, buffer: null });
-        setOpen(false)
-      }, 400);
-      return () => clearTimeout(timeout)
+      setUpdateProgress({ progress: null, buffer: null });
+      setOpen(false)
     }
   }, [updateProgress?.progress])
 
@@ -71,7 +68,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
       {
         updateProgress?.progress != null ?
           <>
-            <ExportProgress />
+            <IteractiveProgress />
             <Actions />
           </>
           :
