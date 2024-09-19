@@ -2,7 +2,7 @@ import "./dropzone.css"
 import Lottie from "lottie-react";
 import classNames from "classnames";
 import { Form } from "react-final-form";
-import FileInput from "../genericFields/FileInput";
+import FileInput from "../genericFields/fields/FileInput";
 import React, { useState, useRef, useEffect } from "react";
 import Excel from "../../assets/images/bulkImport/excel.svg"
 import { ModalActions, Button, ButtonStrip } from "@dhis2/ui";
