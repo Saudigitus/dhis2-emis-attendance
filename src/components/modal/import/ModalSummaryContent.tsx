@@ -13,11 +13,11 @@ import { getEventsToUpate } from "../../../utils/bulkImport/getEventsToUpdate";
 import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
 import { ProgressState } from "../../../schema/linearProgress";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import ImportProgress from "./importProgress";
 import useUploadEvents from "../../../hooks/events/useUploadEvents";
 import { LinearProgress } from "@material-ui/core";
 import { ImportStatsSchema } from "../../../schema/importStatsSchema";
 import { TeiRefetch } from "../../../schema/refecthTeiSchema";
+import IteractiveProgress from "../../progress/interactiveProgress";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -109,7 +109,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         {
             label: "Dry Run",
             loading: false,
-            disabled: doneProcessing.validate || doneProcessing.commit,
+            disabled: summaryData?.summary?.new?.length === 0 || doneProcessing.validate || doneProcessing.commit,
             onClick: () => {
                 setDoneProcessing({ validate: true, commit: false })
                 void importAttendanceValues('VALIDATE')
@@ -120,7 +120,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             label: "Import attendance data",
             primary: true,
             loading: false,
-            disabled: doneProcessing.commit || summaryData?.summary?.new?.length === 0,
+            disabled: doneProcessing.commit || (summaryData?.summary?.new?.length === 0),
             onClick: () => {
                 setDoneProcessing((done: any) => ({ ...done, commit: true }))
                 void importAttendanceValues('COMMIT')
@@ -160,7 +160,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             {
                 (progress?.progress != null && doneProcessing.commit) ?
                     <>
-                        <ImportProgress />
+                        <IteractiveProgress />
                         <Actions />
                     </>
                     :

@@ -126,7 +126,7 @@ export function gererateFile() {
 
         const buf = await workbook.xlsx.writeBuffer()
         saveAs(new Blob([buf]), `teste.xlsx`)
-        updateProgress({ progress: 100 })
+        updateProgress((progress: any) => ({ ...progress, progress: 100 }))
     }
 
     return { ExcelGenerator }
