@@ -9,12 +9,14 @@ import { DropdownButtonComponent, DropDownCalendar, ImportContent, ModalComponen
 import useGetSectionTypeLabel from '../../../../hooks/commons/useGetSectionTypeLabel';
 import { ProgressState } from '../../../../schema/linearProgress';
 import ModalExportTemplateContent from '../../../modal/export/ModalExportTemplateContent';
+import { useDisableBulkOperations } from '../../../../hooks/commons/useDisableBulkOperations';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();
   const { school: orgUnit, grade, class: section } = urlParamiters()
   const setSelectedDate = useSetRecoilState(SelectedDateState)
   const setSelectedDateAddNew = useSetRecoilState(SelectedDateAddNewState)
+  const { disable } = useDisableBulkOperations()
   const { setAttendanceMode } = useAttendanceMode()
   const [anchorElAddNew, setAnchorElAddNew] = useState<null | HTMLElement>(null);
   const [anchorViewLast, setAnchorViewLast] = useState<null | HTMLElement>(null);
@@ -34,6 +36,7 @@ function EnrollmentActionsButtons() {
     { label: "Download template", divider: false, onClick: () => setOpenExportEmptyTemplate(true) }
   ];
 
+
   return (
     <div>
       <ButtonStrip>
@@ -51,7 +54,7 @@ function EnrollmentActionsButtons() {
 
         <DropdownButtonComponent
           name={<span >Bulk attendance</span> as unknown as string}
-          disabled={!(section != null && grade != null) || progress?.progress1 != null}
+          disabled={disable() || progress?.progress1 != null}
           icon={<IconCalendar24 />}
           options={bulkOptions}
         />

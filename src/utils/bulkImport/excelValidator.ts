@@ -1,14 +1,12 @@
 import { utils } from "xlsx";
 
-export function excelValidate(sheetNames: any[], sheets: any) {
+export function excelValidate(sheetNames: any[], sheets: any, allowedValues: any[]) {
     const regex = /^\d{4}-\d{2}-\d{2}$/
     const regexSheetName = /^(January|February|March|April|May|June|July|August|September|October|November|December)-\d{4}$/;
     let validation_summary: any = { new: [], invalid: [], invalidSheets: [] }
     let invalid = false
 
     function checkMajorHeaders(majorHeaders: string[]) {
-        const allowedValues = ['Student profile', 'Enrollment details', 'Attendance', 'Ids'];
-
         if (majorHeaders.length !== 4) return false;
 
         // Create a Set to ensure uniqueness and check if all values are allowed

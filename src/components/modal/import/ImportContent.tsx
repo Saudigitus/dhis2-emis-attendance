@@ -8,6 +8,7 @@ import ModalSummaryContent from "./ModalSummaryContent";
 import { getSheetData } from "../../../utils/bulkImport/generateEvents";
 import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
 import DropZone from "../../dropzone/DropZone";
+import { generateHeaders } from "../../../utils/exporter/generateExcelHeaders";
 
 const useStyles = makeStyles(() => createStyles({
   previewChip: {
@@ -26,11 +27,13 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
   const [errorDetails, setErrorDetails] = useState({})
   const [sheetData, setSheetData] = useState<{ attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { startDate: string, endDate: string } } | any>({})
   const { getDataStoreData } = getSelectedKey()
+  const { getAllowedMajorHeaders } = generateHeaders()
 
   const handleFileChange = (file: any) => {
     const reader: FileReader = new FileReader();
     reader.onload = async (e: ProgressEvent<FileReader>) => {
       const data: Uint8Array = new Uint8Array(e.target?.result as any);
+      const allowedHeaders = getAllowedMajorHeaders()
 
       const workbook = read(data, {
         type: 'array',
@@ -40,7 +43,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
         cellText: true
       });
 
-      const validation = excelValidate(workbook.SheetNames, workbook.Sheets)
+      const validation = excelValidate(workbook.SheetNames, workbook.Sheets, allowedHeaders)
       const allData = getSheetData(workbook.SheetNames.slice(0, -1), workbook.Sheets, getDataStoreData.program, getDataStoreData.attendance)
       setSheetData(allData)
       setOpenSummaryModal(true)

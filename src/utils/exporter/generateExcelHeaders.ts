@@ -1,6 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { getDataStoreKeys } from "../commons/dataStore/getDataStoreKeys"
+import { useParams } from "../../hooks";
 
 export const dfHeaders = [
     {
@@ -22,6 +23,8 @@ export const dfHeaders = [
 
 export function generateHeaders() {
     const { registration } = getDataStoreKeys()
+    const { urlParamiters } = useParams()
+    const { sectionType } = urlParamiters()
     const programConfigState = useRecoilValue(ProgramConfigState);
 
     function getHeaders() {
@@ -63,7 +66,7 @@ export function generateHeaders() {
         })
 
         formatedHeaders.unshift({
-            name: 'Student profile', headers: [{
+            name: (sectionType ?? '').substring(0, 1).toUpperCase() + (sectionType ?? '').substring(1, (sectionType ?? '').length) + ' profile', headers: [{
                 header: 'Ref',
                 key: 'ref',
                 width: 25,
@@ -73,5 +76,14 @@ export function generateHeaders() {
         return formatedHeaders
     }
 
-    return { getHeaders }
+    function getAllowedMajorHeaders() {
+        
+        return [
+            (sectionType ?? '').substring(0, 1).toUpperCase() + (sectionType ?? '').substring(1, (sectionType ?? '').length) + ' profile',
+            programConfigState.programStages.find(x => x.id == registration.programStage)?.displayName,
+            'Attendance', 'Ids'
+        ]
+    }
+
+    return { getHeaders, getAllowedMajorHeaders }
 }

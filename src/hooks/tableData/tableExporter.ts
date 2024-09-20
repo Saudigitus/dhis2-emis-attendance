@@ -19,7 +19,7 @@ export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
     const metadata = getMetaData(program, getDataStoreData)
 
-    async function ExcelGenerator(headers: any[], rows: any[], filters: string) {
+    async function ExcelGenerator(headers: any[], rows: any[], filters: string, fileName: string) {
 
         const workbook = new Excel.Workbook();
         const workSheets = getWorkSheets(headers.find(x => x.name === 'Attendance').headers)
@@ -125,7 +125,7 @@ export function gererateFile() {
         sheet.protect(password, lock)
 
         const buf = await workbook.xlsx.writeBuffer()
-        saveAs(new Blob([buf]), `teste.xlsx`)
+        saveAs(new Blob([buf]), fileName + ".xlsx")
         updateProgress((progress: any) => ({ ...progress, progress: 100 }))
     }
 
