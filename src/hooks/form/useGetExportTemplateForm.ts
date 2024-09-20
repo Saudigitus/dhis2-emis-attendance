@@ -14,9 +14,10 @@ export default function useGetExportTemplateForm() {
         if (Object.keys(getDataStoreData)?.length && getProgram !== undefined) {
             const { registration } = getDataStoreData
             const { programStages } = getProgram
+            const filterIds = [...getDataStoreData?.filters?.dataElements?.map((x: any) => x.dataElement), registration.academicYear]
 
             const enrollmentDetailProgramStage = programStages.find((element: any) => element.id === registration.programStage) as unknown as ProgramStageConfig
-            const formDataElements = formatResponseEvents(enrollmentDetailProgramStage).map((el: any) => { return { ...el, disabled: true } })
+            const formDataElements = formatResponseEvents(enrollmentDetailProgramStage, filterIds).map((el: any) => { return { ...el, disabled: true } })
             setExportFormFields([formDataElements])
         }
     }

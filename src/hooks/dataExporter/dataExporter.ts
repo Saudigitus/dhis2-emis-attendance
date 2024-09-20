@@ -12,6 +12,7 @@ import { generateAttendanceDays } from "../../utils/table/header/generateAttenda
 import { useTableData } from "../tableData/useTableData"
 import { ProgressState } from "../../schema/linearProgress"
 import { getFilterLables } from "../../utils/exporter/getFilterLables"
+import { useDisableBulkOperations } from "../commons/useDisableBulkOperations"
 
 export function dataExporter({ school, selectedDates }: { school: string, selectedDates: { startDate: Date, endDate: Date, key: string }[] }) {
     const { eventsResults } = useGetEvents()
@@ -25,6 +26,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
     const { getAttendanceData } = useTableData()
     const [, updateProgress] = useRecoilState(ProgressState)
     const { ExcelGenerator } = gererateFile()
+    const { getFileName } = useDisableBulkOperations()
 
     async function exporter() {
         updateProgress({ buffer: 15, progress: 0, stage: 'export' })
@@ -51,6 +53,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
         let headers = getHeaders()
         const rows = await getEnrollmentDetails(events, response)
         let filters = getFilterLables(getDataStoreData.attendance.statusOptions)
+        const fileName = getFileName()
 
         headers = [...headers, {
             name: 'Attendance', headers: getAttendanceDays(getValidDaysToExport(selectedDates?.[0].startDate, selectedDates?.[0].endDate), attendanceMode, programConfigState, getDataStoreData.attendance.programStage).map((x) => {
@@ -65,7 +68,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
             headers: dfHeaders
         }]
 
-        await ExcelGenerator(headers, rows, filters)
+        await ExcelGenerator(headers, rows, filters, fileName)
     }
 
     return { exporter }
