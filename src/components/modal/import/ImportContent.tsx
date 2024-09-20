@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ImportContentProps } from "../../../types/modal/ModalTypes";
-import { CloudUpload } from "@material-ui/icons";
-import { DropzoneDialog } from "material-ui-dropzone";
-import { createStyles, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import { createStyles, createTheme, makeStyles } from "@material-ui/core/styles";
 import { read } from "xlsx";
 import { excelValidate } from "../../../utils/bulkImport/excelValidator";
 import ModalComponent from "../Modal";
@@ -27,7 +25,6 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
   const [openSummaryModal, setOpenSummaryModal] = useState(false)
   const [errorDetails, setErrorDetails] = useState({})
   const [sheetData, setSheetData] = useState<{ attendanceEvents: any[], trackedEntityIds: { tei: string, enrollment: string }[], dateRange: { startDate: string, endDate: string } } | any>({})
-  const classes = useStyles();
   const { getDataStoreData } = getSelectedKey()
 
   const handleFileChange = (file: any) => {
@@ -56,38 +53,7 @@ function ImportContent(props: ImportContentProps): React.ReactElement {
   return (
     <>
       {!openSummaryModal ?
-        <>
-          {/* <MuiThemeProvider theme={theme}>
-            <DropzoneDialog
-              dialogTitle={"Bulk Attendance"}
-              submitButtonText={"Start Import"}
-              dropzoneText={"Drag and drop a file here or Browse"}
-              Icon={CloudUpload as any}
-              filesLimit={1}
-              showPreviews={false}
-              showPreviewsInDropzone={true}
-              previewGridProps={{
-                container: {
-                  spacing: 1,
-                  direction: 'row'
-                }
-              }}
-              previewChipProps={{ classes: { root: classes.previewChip } }}
-              previewText="Selected file:"
-              showFileNames={true}
-              showFileNamesInPreview={true}
-              acceptedFiles={[".xlsx"]}
-              open={open}
-              onClose={() => {
-                setOpen(false)
-              }}
-              onSave={(file: any) => handleFileChange(file)}
-              clearOnUnmount={true}
-            />
-          </MuiThemeProvider> */}
-          <ModalComponent title="Bulk Attendance" children={<DropZone onSave={handleFileChange}/>} open={open} setOpen={setOpen}/>
-
-        </>
+        <ModalComponent title="Bulk Attendance" children={<DropZone onSave={handleFileChange} />} open={open} setOpen={setOpen} />
         : <ModalComponent title={`Bulk attendance summary`} open={openSummaryModal} setOpen={setOpenSummaryModal}>
           <ModalSummaryContent
             setOpen={setOpenSummaryModal}
