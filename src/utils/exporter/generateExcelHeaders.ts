@@ -32,7 +32,7 @@ export function generateHeaders() {
 
                 let section: any = {
                     name: x.displayName,
-                    headers: [...dfHeaders, {
+                    headers: [{
                         header: 'School',
                         key: 'school',
                         width: 25,

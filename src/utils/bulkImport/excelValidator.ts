@@ -7,14 +7,14 @@ export function excelValidate(sheetNames: any[], sheets: any) {
     let invalid = false
 
     function checkMajorHeaders(majorHeaders: string[]) {
-        const allowedValues = ['Student profile', 'Enrollment details', 'Attendance'];
+        const allowedValues = ['Student profile', 'Enrollment details', 'Attendance', 'Ids'];
 
-        if (majorHeaders.length !== 3) return false;
+        if (majorHeaders.length !== 4) return false;
 
         // Create a Set to ensure uniqueness and check if all values are allowed
         const uniqueValues = new Set(majorHeaders);
         // Check if the Set has exactly 3 unique values and all of them are allowed
-        return uniqueValues.size === 3 && [...uniqueValues].every(value => allowedValues.includes(value));
+        return uniqueValues.size === 4 && [...uniqueValues].every(value => allowedValues.includes(value));
     }
 
     for (const sheetName of sheetNames) {
@@ -43,6 +43,7 @@ export function excelValidate(sheetNames: any[], sheets: any) {
         /**
          * Looks for empty attendance cells in each sheet
          */
+
         for (let j = 2; j < rawData.length; j++) {
             for (let i = rawData[j].length - 1; i >= (rawData[j].length - attendanceHeadersLength); i--) {
 
@@ -69,5 +70,5 @@ export function excelValidate(sheetNames: any[], sheets: any) {
 
     }
 
-    return {  summary: validation_summary }
+    return { summary: validation_summary }
 }

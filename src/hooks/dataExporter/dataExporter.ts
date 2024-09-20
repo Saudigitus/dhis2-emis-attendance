@@ -3,7 +3,7 @@ import { HeaderFieldsState } from "../../schema/headersSchema"
 import { useGetEvents } from "../events/useGetEvents"
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey"
 import { useGetEnrollmentData } from "../enrollment/useGetEnrollmentData"
-import { generateHeaders } from "../../utils/exporter/generateExcelHeaders"
+import { dfHeaders, generateHeaders } from "../../utils/exporter/generateExcelHeaders"
 import { gererateFile } from "../tableData/tableExporter"
 import { useAttendanceMode } from "../attendanceMode/useAttendanceMode"
 import { ProgramConfigState } from "../../schema/programSchema"
@@ -60,6 +60,9 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                     width: 25,
                 }
             })
+        }, {
+            name: "Ids",
+            headers: dfHeaders
         }]
 
         await ExcelGenerator(headers, rows, filters)
