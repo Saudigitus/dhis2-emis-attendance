@@ -2,17 +2,17 @@ import { Attribute } from "../../types/generated/models";
 import { ProgramStageConfig } from "../../types/programStageConfig/ProgramStageConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../types/variables/AttributeColumns";
 
-export function formatResponseEvents(programStageObject: ProgramStageConfig): CustomAttributeProps[] {
+export function formatResponseEvents(programStageObject: ProgramStageConfig, filterIds: any[]): CustomAttributeProps[] {
     if (!programStageObject) return [];
 
-    return programStageObject.programStageDataElements.map(programStageDataElement => (
+    return programStageObject.programStageDataElements?.filter(x => filterIds?.includes(x.dataElement.id)).map(programStageDataElement => (
         {
             required: programStageDataElement.compulsory,
             name: programStageDataElement.dataElement.id,
             labelName: programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement.displayName,
             valueType: programStageDataElement.dataElement?.optionSet
                 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
-                : programStageDataElement.dataElement?.valueType as unknown as  CustomAttributeProps["valueType"],
+                : programStageDataElement.dataElement?.valueType as unknown as CustomAttributeProps["valueType"],
             options: { optionSet: programStageDataElement.dataElement?.optionSet },
             initialOptions: { optionSet: programStageDataElement.dataElement?.optionSet },
             disabled: false,
@@ -24,8 +24,8 @@ export function formatResponseEvents(programStageObject: ProgramStageConfig): Cu
             programStage: programStageObject.id,
             content: "",
             id: programStageDataElement.dataElement?.id,
-            displayName:  programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement?.displayName,
-            header:  programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement?.displayName,
+            displayName: programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement?.displayName,
+            header: programStageDataElement.dataElement.formName ?? programStageDataElement.dataElement?.displayName,
             type: VariablesTypes.DataElement,
             assignedValue: undefined
         }
