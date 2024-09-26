@@ -36,7 +36,7 @@ function ModalExportTemplateContent(props: ModalExportTemplateProps): React.Reac
   const [updateProgress, setUpdateProgress] = useRecoilState(ProgressState)
 
   const modalActions = [
-    { id: "cancel", type: "button", label: updateProgress?.progress != null ? "Close" : "Cancel", onClick: () => { setOpen(false) } },
+    { id: "cancel", type: "button", label: updateProgress?.progress != null ? "Hide" : "Cancel", onClick: () => { setOpen(false) } },
     { id: "downloadTemplate", type: "submit", label: "Download template", primary: true, className: updateProgress?.progress != null && styles.remove }
   ];
 

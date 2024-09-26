@@ -15,6 +15,7 @@ import { EnrollmentDetailsTeisState } from "../../schema/enrollmentDetailsSchema
 import { useGetEvents } from "../events/useGetEvents";
 import { getDates } from "../../utils/commons/getDates";
 import { ProgressState } from "../../schema/linearProgress";
+import { InfoState } from "../../schema/infoSchema";
 
 type TableDataProps = Record<string, string>;
 
@@ -50,6 +51,7 @@ export function useTableData() {
     const attendanceConfig = getSelectedKey()?.getDataStoreData?.attendance
     const { getEvents, eventsResults } = useGetEvents()
     const updateProgress = useSetRecoilState(ProgressState)
+    const sysInfo = useRecoilValue(InfoState);
 
     const showError = (error: any) => {
         show({
@@ -65,8 +67,8 @@ export function useTableData() {
             try {
                 setLoading(true)
                 const events = await eventsResults(true, page, pageSize, school, headerFieldsState, getDataStoreData?.registration?.programStage, "trackedEntity,enrollment,orgUnit,program", school != null ? "SELECTED" : "ACCESSIBLE")
-                let startDate = getDates(false, selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
-                    endDate = getDates(false, selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
+                let startDate = getDates(false, selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true, sysInfo),
+                    endDate = getDates(false, selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false, sysInfo)
 
                 const attendanceValuesByTei: AttendanceQueryResults = {
                     results: { instances: [] }
@@ -111,8 +113,8 @@ export function useTableData() {
     async function getAttendanceData(excel?: { dealingWithExcel: boolean, trackedEntityIds: { tei: string, enrollment: string }[], sDate: Date, eDate: Date }) {
         if (enrollmentTeis.enrollmentDetails?.length > 0) {
             try {
-                let startDate = getDates(excel?.dealingWithExcel, excel?.dealingWithExcel ? excel.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true),
-                    endDate = getDates(excel?.dealingWithExcel, excel?.dealingWithExcel ? excel.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false)
+                let startDate = getDates(excel?.dealingWithExcel, excel?.dealingWithExcel ? excel.sDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), true, sysInfo),
+                    endDate = getDates(excel?.dealingWithExcel, excel?.dealingWithExcel ? excel.eDate : selectedDateAddNew.selectedDate ?? selectedDate ?? new Date(), false, sysInfo)
 
                 const localData = [...tableData]
                 let dataToExport: any = {}
