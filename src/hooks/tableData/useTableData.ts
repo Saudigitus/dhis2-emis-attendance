@@ -126,7 +126,7 @@ export function useTableData() {
 
                 for (const tei of trackedEntityIds) {
                     await getEvents(startDate, endDate, school, tei).then((resp) => {
-                        updateProgress((progress: any) => ({
+                        excel?.dealingWithExcel && updateProgress((progress: any) => ({
                             ...progress,
                             progress: progress.progress + (40 / trackedEntityIds.length),
                             buffer: progress.buffer + (40 / trackedEntityIds.length)

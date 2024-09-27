@@ -4,7 +4,6 @@ export function excelValidate(sheetNames: any[], sheets: any, allowedValues: any
     const regex = /^\d{4}-\d{2}-\d{2}$/
     const regexSheetName = /^(January|February|March|April|May|June|July|August|September|October|November|December)-\d{4}$/;
     let validation_summary: any = { new: [], invalid: [], invalidSheets: [] }
-    let invalid = false
 
     function checkMajorHeaders(majorHeaders: string[]) {
         if (majorHeaders.length !== 4) return false;
@@ -20,7 +19,6 @@ export function excelValidate(sheetNames: any[], sheets: any, allowedValues: any
          * Validate sheet names to ensure that the user uploads the downloaded file without new or renamed sheets
          */
         if (!regexSheetName.test(sheetName) && sheetName !== 'Metadata') {
-            invalid = true
             validation_summary.invalidSheets = [...validation_summary.invalidSheets, { sheet: sheetName, description: "You either renamed or added this sheet into you excel file" }]
             continue
         }
@@ -33,7 +31,6 @@ export function excelValidate(sheetNames: any[], sheets: any, allowedValues: any
          * Check if there are only three major headers : Student profile, Enrollment details and Attendance
          */
         if (!checkMajorHeaders(majorHeaders) && sheetName !== 'Metadata') {
-            invalid = true
             validation_summary.invalidSheets = [...validation_summary.invalidSheets, { sheet: sheetName, description: "This sheet contains invalid headers" }]
             continue
         }
@@ -43,7 +40,7 @@ export function excelValidate(sheetNames: any[], sheets: any, allowedValues: any
          */
 
         for (let j = 2; j < rawData.length; j++) {
-            for (let i = rawData[j].length - 1; i >= (rawData[j].length - attendanceHeadersLength); i--) {
+            for (let i = rawData[j].length - 4; i >= ((rawData[j].length - 3) - attendanceHeadersLength); i--) {
 
                 if (!rawData[j][i]) {
                     const index = validation_summary.invalid.findIndex((x: any) => (x.ref == rawData[j][0] && x.sheet == sheetName))
