@@ -44,7 +44,7 @@ export function useGetEnrollmentData() {
                                 headerFieldsState.dataElements,
                                 registration.programStage as string,
                                 "*",
-                                "",
+                                "SELECTED",
                                 tei?.trackedEntity
                             )
 
