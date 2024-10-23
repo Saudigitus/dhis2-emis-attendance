@@ -33,7 +33,7 @@ function EnrollmentActionsButtons() {
 
   const bulkOptions = [
     { label: `Import ${sectionName} attendances`, divider: true, onClick: () => setOpenImportTemplate(true) },
-    { label: "Download template", divider: false, onClick: () => setOpenExportEmptyTemplate(true) }
+    { label: `Export ${sectionName} attendances`, divider: false, onClick: () => setOpenExportEmptyTemplate(true) }
   ];
 
 

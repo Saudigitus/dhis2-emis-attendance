@@ -41,7 +41,7 @@ export function useGetEvents() {
         }) as unknown as AttendanceQueryResults
     }
 
-    async function eventsResults(paging: boolean, page: number, pageSize: number, orgUnit: string, headerFieldsState: any, programStage: string, fields: string, ouMode = "ACCESSIBLE", trackedEntity?: any): Promise<FormatResponseRowsProps["eventsInstances"]> {
+    async function eventsResults(paging: boolean, page: number, pageSize: number, orgUnit: string, headerFieldsState: any, programStage: string, fields: string, ouMode: string, trackedEntity?: any): Promise<FormatResponseRowsProps["eventsInstances"]> {
         // Get the events from the programStage registration
         return await engine.query(EVENT_QUERY({
             ouMode,
