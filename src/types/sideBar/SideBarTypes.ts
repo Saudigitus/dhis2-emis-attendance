@@ -1,5 +1,6 @@
 interface SideBarItemProps {
     title: string
+    displayInMenu?: boolean
     subItems: SideBarSubItemProps[]
 }
 
@@ -9,6 +10,7 @@ interface SideBarItemTitleProps {
 
 interface SideBarSubItemProps {
     label: string
+    displayInMenu?: boolean
     showBadge: boolean
     icon: string
     disabled: boolean

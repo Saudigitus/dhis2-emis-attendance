@@ -8,6 +8,7 @@ import { useOrgUnitsGroups } from '../hooks/orgUnitsGroup/useOrgUnitsGroups';
 import { useGetOptionGroups } from '../hooks/optionGroup/useGetOptionGroups';
 import { useGetSchoolDays } from '../hooks/schoolDays/useGetSchoolDays';
 import { useGetSysInfo } from '../hooks/system/info';
+import { useGetInstanceApps } from '../hooks/appwrapper/useGetInstanceApps';
 
 export default function AppWrapper(props: AppProps) {
     const { children } = props
@@ -18,8 +19,9 @@ export default function AppWrapper(props: AppProps) {
     const { loadingOrgUnitsGroups } = useOrgUnitsGroups()
     const { loadingSchoolDays } = useGetSchoolDays()
     const { loading: loadingInfo, error: infoError } = useGetSysInfo()
+    const { error: errorApps, loading: loadingApps } = useGetInstanceApps();
 
-    if (loadingInfo || loadingSchoolDays || loading || loadingPRulesVariables || loadingPRules || loadingOptionGroups || loadingOrgUnitsGroups) {
+    if (loadingInfo || loadingSchoolDays || loading || loadingPRulesVariables || loadingPRules || loadingOptionGroups || loadingOrgUnitsGroups || loadingApps) {
         return (
             <CenteredContent>
                 <CircularLoader />
