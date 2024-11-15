@@ -14,9 +14,11 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
     return [
         {
             title: "Navigation",
+            displayInMenu: true,
             subItems: [
                 {
                     icon: home,
+                    displayInMenu: true,
                     label: "Home",
                     showBadge: false,
                     disabled: false,
@@ -28,6 +30,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
         },
         {
             title: "Students",
+            displayInMenu: undefined,
             subItems: [
                 {
                     icon: listAdd,
@@ -78,6 +81,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
         },
         {
             title: "Staff",
+            displayInMenu: undefined,
             subItems: [
                 {
                     icon: userGroup,
