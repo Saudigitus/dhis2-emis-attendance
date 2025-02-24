@@ -138,12 +138,20 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                             if (variable.name === programRule.variable) {
                                 const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
                                 const foundOrgUnitGroup = orgUnitsGroups?.filter(x => x.value === orgUnitGroup)
+                                const foundOptionGroup = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)
 
                                 if (foundOrgUnitGroup.length > 0) {
 
                                     if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
                                         const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
+                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter(obj1 => !options.some(obj2 => obj2.value === obj1.value)) } }
+                                    }
+                                }
 
+
+                                if(foundOptionGroup?.length){
+                                    if(executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))){
+                                        const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
                                         variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter(obj1 => !options.some(obj2 => obj2.value === obj1.value)) } }
                                     }
                                 }
