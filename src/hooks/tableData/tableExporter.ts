@@ -19,7 +19,7 @@ export function gererateFile() {
     const updateProgress = useSetRecoilState(ProgressState)
     const metadata = getMetaData(program, getDataStoreData)
 
-    async function ExcelGenerator(headers: any[], rows: any[], filters: string, fileName: string) {
+    async function ExcelGenerator(headers: any[], rows: any[], filters: string, fileName: string, academicYear: string) {
 
         const workbook = new Excel.Workbook();
         const workSheets = getWorkSheets(headers.find(x => x.name === 'Attendance').headers)
@@ -47,6 +47,8 @@ export function gererateFile() {
             // Add the subheaders to the second row
             let secondRow = sheet.getRow(2);
             secondRow.values = columns.map((col: any) => col.subHeader);
+
+            sheet.getRow(1).hidden = true
 
             // Merge cells in the first row for headers with multiple subheaders 
             headers.forEach(section => {
@@ -82,9 +84,9 @@ export function gererateFile() {
             headerRow.eachCell((headerCell: any, colIndex: number) => {
                 const columnHeader = headerCell.value;
                 const colKey = sheet.getColumn(colIndex)._key
-                const index = dfHeaders.findIndex(x => x.key === colKey)
+                const index = dfHeaders.filter(x => x.key != 'studentId').findIndex(x => x.key === colKey)
 
-                if (index !== -1 || colKey === 'dataElements') {
+                if (index !== -1 || colKey === 'dataElements' || colKey === 'ref' || colKey === academicYear) {
                     const col = sheet.getColumn(colIndex)
                     col.hidden = true
                 }
@@ -113,6 +115,7 @@ export function gererateFile() {
                         cell.fill = { fgColor: { argb: 'f8f9fa' }, ...fill as unknown as any }
                         cell.border = border as unknown as any
                     }
+                    cell.alignment = { wrapText: true };
                 });
             });
 

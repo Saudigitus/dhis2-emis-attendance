@@ -60,7 +60,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
                 return {
                     header: x.displayName,
                     key: x.id,
-                    width: 25,
+                    width: 12,
                 }
             })
         }, {
@@ -68,7 +68,7 @@ export function dataExporter({ school, selectedDates }: { school: string, select
             headers: dfHeaders
         }]
 
-        await ExcelGenerator(headers, rows, filters, fileName)
+        await ExcelGenerator(headers, rows, filters, fileName, getDataStoreData?.registration?.academicYear)
     }
 
     return { exporter }

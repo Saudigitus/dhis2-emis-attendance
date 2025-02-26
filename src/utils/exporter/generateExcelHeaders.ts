@@ -7,17 +7,17 @@ export const dfHeaders = [
     {
         "header": "Enrollment",
         "key": "enrollment",
-        "width": 25
+        "width": 18
     },
     {
         "header": "Tracked Entity Id",
         "key": "studentId",
-        "width": 25
+        "width": 16
     },
     {
         "header": "School UID",
         "key": "orgUnit",
-        "width": 25
+        "width": 18
     }
 ]
 
@@ -38,7 +38,7 @@ export function generateHeaders() {
                     headers: [{
                         header: 'School',
                         key: 'school',
-                        width: 25,
+                        width: 12,
                     }],
                     fill: 'FCE5CD'
                 }
@@ -48,7 +48,7 @@ export function generateHeaders() {
                         ...section, headers: [...section.headers, {
                             header: de?.dataElement.displayName,
                             key: de?.dataElement.id,
-                            width: 25,
+                            width: de?.dataElement?.displayName?.length,
                         }]
                     }
                 })
@@ -61,7 +61,7 @@ export function generateHeaders() {
             return {
                 header: x.trackedEntityAttribute.displayName,
                 key: x.trackedEntityAttribute.id,
-                width: 25,
+                width: 15,
             }
         })
 
@@ -77,7 +77,7 @@ export function generateHeaders() {
     }
 
     function getAllowedMajorHeaders() {
-        
+
         return [
             (sectionType ?? '').substring(0, 1).toUpperCase() + (sectionType ?? '').substring(1, (sectionType ?? '').length) + ' profile',
             programConfigState.programStages.find(x => x.id == registration.programStage)?.displayName,

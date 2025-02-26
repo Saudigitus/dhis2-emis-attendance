@@ -1,16 +1,16 @@
 import React from "react";
-import {useParams} from "../../hooks";
-import {Table, InfoPage} from "../../components";
+import { useParams } from "../../hooks";
+import { Table, InfoPage } from "../../components";
 
 function TableComponent() {
-    const {urlParamiters} = useParams()
+    const { urlParamiters } = useParams()
     const school = urlParamiters().school as unknown as string
 
     return (
         <>
             {(school !== null)
-                ? <Table/>
-                : <InfoPage/>
+                ? <Table />
+                : <InfoPage />
             }
         </>
     )
