@@ -6,6 +6,7 @@ interface TeiQueryProps {
     orgUnit?: string
     order?: string
     paging?: boolean
+    skipPaging?: boolean
 }
 
 interface TeiSearchQueryProps {

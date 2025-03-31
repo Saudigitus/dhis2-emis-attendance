@@ -17,6 +17,7 @@ export function useGetTei() {
     async function getTei(program: string, trackedEntity: string[]) {
         return await engine.query(TEI_QUERY({
             paging: false,
+            skipPaging: true,
             program: program,
             trackedEntity: trackedEntity
         })) as unknown as TeiQueryResults
