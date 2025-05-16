@@ -18,6 +18,7 @@ interface EventQueryProps {
     occurredBefore?: string
     fields?: string
     paging?: boolean
+    skipPaging?: boolean
 }
 
 interface GeTDataElementsProps {

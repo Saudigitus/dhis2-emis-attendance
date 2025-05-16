@@ -45,8 +45,10 @@ export function useGetEvents() {
         // Get the events from the programStage registration
         return await engine.query(EVENT_QUERY({
             ouMode,
-            page,
-            pageSize,
+            ...(paging ? {
+                page,
+                pageSize
+            } : {}),
             program: getDataStoreData?.program as unknown as string,
             order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
             programStage: programStage as unknown as string,
@@ -55,7 +57,7 @@ export function useGetEvents() {
             ...(trackedEntity ? { trackedEntity: trackedEntity } : {}),
             orgUnit,
             fields,
-            paging
+            skipPaging: !paging
         })).then((resp: any) => {
             return resp.results?.instances
         })
