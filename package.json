@@ -6,9 +6,10 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start --proxy https://dhis2.mineduc.gov.rw/training",
+    "start": "d2-app-scripts start",
     "test": "d2-app-scripts test",
-    "deploy": "d2-app-scripts deploy"
+    "deploy": "d2-app-scripts deploy",
+    "dev": "concurrently --kill-others \"yarn start\" \"node setupProxy.js\""
   },
   "devDependencies": {
     "@dhis2/cli-app-scripts": "^10.3.9",
@@ -18,7 +19,8 @@
     "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
-    "typescript": "*"
+    "typescript": "*",
+    "concurrently": "^8.1.0"
   },
   "dependencies": {
     "@date-io/date-fns": "1.3.13",
@@ -48,6 +50,10 @@
     "recoil": "^0.7.7",
     "zod": "^3.21.4",
     "xlsx": "^0.18.5",
-    "material-ui-dropzone": "^3.5.0"
+    "material-ui-dropzone": "^3.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "framer-motion": "4.1.17",
+    "http-proxy-middleware": "^2.0.6"
   }
 }
