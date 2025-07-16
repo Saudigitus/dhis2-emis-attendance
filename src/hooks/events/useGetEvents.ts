@@ -20,7 +20,7 @@ export function useGetEvents() {
     const { hide, show } = useShowAlerts()
     const { getDataStoreData } = getSelectedKey()
 
-    async function getEvents(startDate: string, endDate: string, school: string, tei: string): Promise<AttendanceQueryResults> {
+    async function getEvents(startDate: string, endDate: string, school: string, tei: string, skipPaging?: boolean): Promise<AttendanceQueryResults> {
         return engine.query(EVENT_QUERY({
             ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             program: getDataStoreData?.program as unknown as string,
@@ -30,7 +30,8 @@ export function useGetEvents() {
             trackedEntity: tei,
             occurredAfter: startDate,
             occurredBefore: endDate,
-            fields: "event,trackedEntity,occurredAt,enrollment,dataValues[dataElement,value]"
+            fields: "event,trackedEntity,occurredAt,enrollment,dataValues[dataElement,value]",
+            skipPaging: skipPaging ? skipPaging : false
         })).catch((error) => {
             show({
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

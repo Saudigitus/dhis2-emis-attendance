@@ -81,7 +81,7 @@ export function useTableData() {
 
                 // Get events from the programStage attendance for each student
                 for (const tei of trackedEntityIds) {
-                    const attendanceResults: AttendanceQueryResults = await getEvents(startDate, endDate, school, tei)
+                    const attendanceResults: AttendanceQueryResults = await getEvents(startDate, endDate, school, tei, true)
                     attendanceValuesByTei.results.instances.push(...attendanceResults?.results?.instances)
                 }
                 // Get the list of trackedEntityIds attributes from the events
@@ -125,7 +125,7 @@ export function useTableData() {
                 const trackedEntityIds = excel?.dealingWithExcel ? excel?.trackedEntityIds.map(x => x.tei) : enrollmentTeis.enrollmentDetails
 
                 for (const tei of trackedEntityIds) {
-                    await getEvents(startDate, endDate, school, tei).then((resp) => {
+                    await getEvents(startDate, endDate, school, tei, true).then((resp) => {
                         excel?.dealingWithExcel && updateProgress((progress: any) => ({
                             ...progress,
                             progress: progress.progress + (40 / trackedEntityIds.length),
